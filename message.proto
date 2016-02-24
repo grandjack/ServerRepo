@@ -1,0 +1,149 @@
+package MessageStruct;
+
+//definetion here
+message Echo {
+    optional string time_stamp = 1;
+}
+
+message LogOnorOut{
+    required string account = 1;
+    required string password = 2;
+}
+
+message ReplyStatus {
+    required uint32 status = 1;//0 error;1 OK
+}
+
+message Register {
+    required string email_account = 1;
+    required string password = 2;
+    optional string username = 3;
+}
+
+message ChessBoardUser {
+    required bool chess_board_empty=1;
+    optional string user_name=2;
+    optional uint32 score = 3;
+    optional uint32 status = 4;//indicate the user's status, notStarted\playing\ended\exited
+    optional bytes head_image = 5;
+}
+
+message ChessBoardInfo {
+    required uint32 id = 1;
+    required uint32 people_num = 2;
+    required ChessBoardUser left_user = 3;
+    required ChessBoardUser right_user = 4;
+    required ChessBoardUser bottom_user = 5;
+}
+
+message HallInfoReq {
+    required int32 game_hall_id = 1;
+    optional int32 opcode = 2;
+}
+message HallInfo {
+    required int32 game_hall_id = 1;
+    required uint32 total_people = 2;
+    required uint32 curr_people = 3;
+    optional uint32 total_chessboard = 4;
+    repeated ChessBoardInfo chess_board = 5;
+}
+
+message GameHallSumaryReq {
+    optional int32 opcode = 1;
+}
+
+message GameHallSumary {
+    required string username = 1;
+    required uint32 score = 2;
+    required uint32 hall_num = 3;
+    required string head_picture = 4;
+    required string ad_picture1 = 5;
+    optional string ad_picture2 = 6;
+    repeated HallInfo hall_info = 7;
+}
+
+//request play game message definition
+message RequestPlay {
+    required int32 game_hall_id = 1;
+    required int32 chess_board_id = 2;
+    required int32 locate = 3;
+}
+
+message RequestPlayReply {
+    required int32 status = 1;
+    required uint32 first_come_user_locate = 2;
+    optional ChessBoardInfo chessBoard = 3;
+}
+
+//move chess request
+message MoveChess {
+    required int32 src_chess_type = 1;
+    required int32 src_user_locate = 2;
+    required int32 from_pointX = 3;
+    required int32 from_pointY = 4;
+    required int32 des_pointX = 5;
+    required int32 des_pointY = 6;
+    required bool  is_winner = 7;
+    optional int32 eat_target_chess_type = 8;
+    optional uint32 target_user_locate = 9;
+}
+//broadcast move action
+message MoveAction {
+    required uint32 src_user_locate = 1;
+    required MoveChess movechess = 2;
+    required uint32 token_locate = 3;//announce next user who will keep the Token to move chess
+}
+
+//IM Message
+message UserMessage
+{
+    required uint32 src_user_locate = 1;
+    required string msgContent = 2;
+}
+
+message SystemMessage
+{
+    required string msgContent = 1;
+}
+
+// Play Action Qiu He(He Qi)
+message Reconciled
+{
+    required uint32 apply_or_reply = 1; //0 apply ;1 reply
+    required uint32 src_user_locate = 2;
+    required uint32 tar_user_locate = 3;
+    optional string status = 4;
+}
+
+//Give up or off line (Ren Shu)
+message GiveUp
+{
+    required uint32 src_user_locate = 1;
+    optional string opt = 2;
+}
+//(Hui Qi)
+message Undo
+{
+    required uint32 rep_or_respon = 1; //0 apply ;1 reply
+    required uint32 src_user_locate = 2;
+    required uint32 tar_user_locate = 3;
+    optional bool status = 4;
+}
+
+message GameReadyReq
+{
+    required uint32 src_user_locate = 1;
+    optional uint32 opcode = 2;//1=ready
+    optional uint32 total_time = 3;
+    optional uint32 single_step_time = 4;
+}
+//reply or broadcast the game status
+message GameStatusReply
+{
+    required bool left_user_status = 1;//1=ready
+    required bool right_user_status = 2;
+    required bool bottom_user_status = 3;
+    required uint32 token_locate = 4;//announce next user who will keep the Token to move chess
+    required uint32 total_time = 5;
+    required uint32 single_step_time = 6;
+}
