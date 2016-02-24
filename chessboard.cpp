@@ -150,11 +150,6 @@ u_int32 ChessBoard::GetUserNum() const
     return currUserNum;
 }
 
-void ChessBoard::SendIMMessages(const UserSession *sender)
-{
-
-}
-
 void ChessBoard::BroadCastMsg(const string &str)
 {
 
@@ -236,7 +231,7 @@ bool ChessBoard::LeaveOutRoom(const UserSession *user)
         }
     }
 
-    if (user->locate == first_come_user_locate) {
+    if (user->locate == (Location)first_come_user_locate) {
         first_come_user_locate = (u_int32)LOCATION_MAX;
     }
     pthread_mutex_unlock(&mutex);
@@ -282,7 +277,7 @@ bool ChessBoard::LeaveOutRoom(const Location &locate)
                 break;
         }
     }
-    if (locate == first_come_user_locate) {
+    if (locate == (Location)first_come_user_locate) {
         first_come_user_locate = (u_int32)LOCATION_MAX;
     }
     pthread_mutex_unlock(&mutex);

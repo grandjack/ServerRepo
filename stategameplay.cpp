@@ -42,6 +42,7 @@ bool StateGamePlay::MsgHandle(const u_int32 msg_type, const string &msg)
         case MSG_UNDO_REQ:
         case MSG_GIVE_UP:
         case MSG_GAME_READY_REQ:
+        case MSG_SYSTEM_MSG:
             ret = stateMachine->currChessBoard->TranslateMsg(msg_type, msg);
             break;
 

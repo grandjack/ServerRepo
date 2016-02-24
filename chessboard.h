@@ -46,7 +46,6 @@ public:
 
     UserSession *GetUserByLocation(const Location &locate);
     inline bool HasFullUsers();
-    void SendIMMessages(const UserSession *sender);
     void BroadCastMsg(const string &str);
     bool AddUser(UserSession *user);
     u_int32 GetUserNum() const;
