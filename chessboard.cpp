@@ -437,12 +437,15 @@ bool ChessBoard::ReconciledHandle(const string &msg, MessageType type)
 
 bool ChessBoard::UserMessageHandle(const string &msg)
 {
-     UserMessage userMsg;
-
+    UserMessage userMsg;
+    UserSession *user = NULL;
+    
      if (userMsg.ParseFromString(msg)) {
         for (u_int32 locate = (u_int32)LOCATION_UNKNOWN; locate < (u_int32)LOCATION_MAX; ++locate) {
             if (locate != userMsg.src_user_locate()) {
-                GetUserByLocation((Location)locate)->MessageReply(MSG_USER_MSG, msg);
+                if((user=GetUserByLocation((Location)locate)) != NULL) {
+                    user->MessageReply(MSG_USER_MSG, msg);
+                }
             }
         }
      }
