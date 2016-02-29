@@ -510,24 +510,35 @@ class ChessBoardUser : public ::google::protobuf::Message {
   inline ::std::string* mutable_user_name();
   inline ::std::string* release_user_name();
   
-  // optional uint32 score = 3;
+  // optional string account = 3;
+  inline bool has_account() const;
+  inline void clear_account();
+  static const int kAccountFieldNumber = 3;
+  inline const ::std::string& account() const;
+  inline void set_account(const ::std::string& value);
+  inline void set_account(const char* value);
+  inline void set_account(const char* value, size_t size);
+  inline ::std::string* mutable_account();
+  inline ::std::string* release_account();
+  
+  // optional uint32 score = 4;
   inline bool has_score() const;
   inline void clear_score();
-  static const int kScoreFieldNumber = 3;
+  static const int kScoreFieldNumber = 4;
   inline ::google::protobuf::uint32 score() const;
   inline void set_score(::google::protobuf::uint32 value);
   
-  // optional uint32 status = 4;
+  // optional uint32 status = 5;
   inline bool has_status() const;
   inline void clear_status();
-  static const int kStatusFieldNumber = 4;
+  static const int kStatusFieldNumber = 5;
   inline ::google::protobuf::uint32 status() const;
   inline void set_status(::google::protobuf::uint32 value);
   
-  // optional bytes head_image = 5;
+  // optional bytes head_image = 6;
   inline bool has_head_image() const;
   inline void clear_head_image();
-  static const int kHeadImageFieldNumber = 5;
+  static const int kHeadImageFieldNumber = 6;
   inline const ::std::string& head_image() const;
   inline void set_head_image(const ::std::string& value);
   inline void set_head_image(const char* value);
@@ -541,6 +552,8 @@ class ChessBoardUser : public ::google::protobuf::Message {
   inline void clear_has_chess_board_empty();
   inline void set_has_user_name();
   inline void clear_has_user_name();
+  inline void set_has_account();
+  inline void clear_has_account();
   inline void set_has_score();
   inline void clear_has_score();
   inline void set_has_status();
@@ -553,11 +566,12 @@ class ChessBoardUser : public ::google::protobuf::Message {
   ::std::string* user_name_;
   bool chess_board_empty_;
   ::google::protobuf::uint32 score_;
+  ::std::string* account_;
   ::std::string* head_image_;
   ::google::protobuf::uint32 status_;
   
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(5 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(6 + 31) / 32];
   
   friend void  protobuf_AddDesc_message_2eproto();
   friend void protobuf_AssignDesc_message_2eproto();
@@ -1046,10 +1060,21 @@ class GameHallSumary : public ::google::protobuf::Message {
   
   // accessors -------------------------------------------------------
   
-  // required string username = 1;
+  // required string account = 1;
+  inline bool has_account() const;
+  inline void clear_account();
+  static const int kAccountFieldNumber = 1;
+  inline const ::std::string& account() const;
+  inline void set_account(const ::std::string& value);
+  inline void set_account(const char* value);
+  inline void set_account(const char* value, size_t size);
+  inline ::std::string* mutable_account();
+  inline ::std::string* release_account();
+  
+  // required string username = 2;
   inline bool has_username() const;
   inline void clear_username();
-  static const int kUsernameFieldNumber = 1;
+  static const int kUsernameFieldNumber = 2;
   inline const ::std::string& username() const;
   inline void set_username(const ::std::string& value);
   inline void set_username(const char* value);
@@ -1057,24 +1082,24 @@ class GameHallSumary : public ::google::protobuf::Message {
   inline ::std::string* mutable_username();
   inline ::std::string* release_username();
   
-  // required uint32 score = 2;
+  // required uint32 score = 3;
   inline bool has_score() const;
   inline void clear_score();
-  static const int kScoreFieldNumber = 2;
+  static const int kScoreFieldNumber = 3;
   inline ::google::protobuf::uint32 score() const;
   inline void set_score(::google::protobuf::uint32 value);
   
-  // required uint32 hall_num = 3;
+  // required uint32 hall_num = 4;
   inline bool has_hall_num() const;
   inline void clear_hall_num();
-  static const int kHallNumFieldNumber = 3;
+  static const int kHallNumFieldNumber = 4;
   inline ::google::protobuf::uint32 hall_num() const;
   inline void set_hall_num(::google::protobuf::uint32 value);
   
-  // required string head_picture = 4;
+  // required string head_picture = 5;
   inline bool has_head_picture() const;
   inline void clear_head_picture();
-  static const int kHeadPictureFieldNumber = 4;
+  static const int kHeadPictureFieldNumber = 5;
   inline const ::std::string& head_picture() const;
   inline void set_head_picture(const ::std::string& value);
   inline void set_head_picture(const char* value);
@@ -1082,10 +1107,10 @@ class GameHallSumary : public ::google::protobuf::Message {
   inline ::std::string* mutable_head_picture();
   inline ::std::string* release_head_picture();
   
-  // required string ad_picture1 = 5;
+  // required string ad_picture1 = 6;
   inline bool has_ad_picture1() const;
   inline void clear_ad_picture1();
-  static const int kAdPicture1FieldNumber = 5;
+  static const int kAdPicture1FieldNumber = 6;
   inline const ::std::string& ad_picture1() const;
   inline void set_ad_picture1(const ::std::string& value);
   inline void set_ad_picture1(const char* value);
@@ -1093,10 +1118,10 @@ class GameHallSumary : public ::google::protobuf::Message {
   inline ::std::string* mutable_ad_picture1();
   inline ::std::string* release_ad_picture1();
   
-  // optional string ad_picture2 = 6;
+  // optional string ad_picture2 = 7;
   inline bool has_ad_picture2() const;
   inline void clear_ad_picture2();
-  static const int kAdPicture2FieldNumber = 6;
+  static const int kAdPicture2FieldNumber = 7;
   inline const ::std::string& ad_picture2() const;
   inline void set_ad_picture2(const ::std::string& value);
   inline void set_ad_picture2(const char* value);
@@ -1104,10 +1129,10 @@ class GameHallSumary : public ::google::protobuf::Message {
   inline ::std::string* mutable_ad_picture2();
   inline ::std::string* release_ad_picture2();
   
-  // repeated .MessageStruct.HallInfo hall_info = 7;
+  // repeated .MessageStruct.HallInfo hall_info = 8;
   inline int hall_info_size() const;
   inline void clear_hall_info();
-  static const int kHallInfoFieldNumber = 7;
+  static const int kHallInfoFieldNumber = 8;
   inline const ::MessageStruct::HallInfo& hall_info(int index) const;
   inline ::MessageStruct::HallInfo* mutable_hall_info(int index);
   inline ::MessageStruct::HallInfo* add_hall_info();
@@ -1118,6 +1143,8 @@ class GameHallSumary : public ::google::protobuf::Message {
   
   // @@protoc_insertion_point(class_scope:MessageStruct.GameHallSumary)
  private:
+  inline void set_has_account();
+  inline void clear_has_account();
   inline void set_has_username();
   inline void clear_has_username();
   inline void set_has_score();
@@ -1133,6 +1160,7 @@ class GameHallSumary : public ::google::protobuf::Message {
   
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
   
+  ::std::string* account_;
   ::std::string* username_;
   ::google::protobuf::uint32 score_;
   ::google::protobuf::uint32 hall_num_;
@@ -1142,7 +1170,7 @@ class GameHallSumary : public ::google::protobuf::Message {
   ::google::protobuf::RepeatedPtrField< ::MessageStruct::HallInfo > hall_info_;
   
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(7 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(8 + 31) / 32];
   
   friend void  protobuf_AddDesc_message_2eproto();
   friend void protobuf_AssignDesc_message_2eproto();
@@ -2844,15 +2872,73 @@ inline ::std::string* ChessBoardUser::release_user_name() {
   }
 }
 
-// optional uint32 score = 3;
-inline bool ChessBoardUser::has_score() const {
+// optional string account = 3;
+inline bool ChessBoardUser::has_account() const {
   return (_has_bits_[0] & 0x00000004u) != 0;
 }
-inline void ChessBoardUser::set_has_score() {
+inline void ChessBoardUser::set_has_account() {
   _has_bits_[0] |= 0x00000004u;
 }
-inline void ChessBoardUser::clear_has_score() {
+inline void ChessBoardUser::clear_has_account() {
   _has_bits_[0] &= ~0x00000004u;
+}
+inline void ChessBoardUser::clear_account() {
+  if (account_ != &::google::protobuf::internal::kEmptyString) {
+    account_->clear();
+  }
+  clear_has_account();
+}
+inline const ::std::string& ChessBoardUser::account() const {
+  return *account_;
+}
+inline void ChessBoardUser::set_account(const ::std::string& value) {
+  set_has_account();
+  if (account_ == &::google::protobuf::internal::kEmptyString) {
+    account_ = new ::std::string;
+  }
+  account_->assign(value);
+}
+inline void ChessBoardUser::set_account(const char* value) {
+  set_has_account();
+  if (account_ == &::google::protobuf::internal::kEmptyString) {
+    account_ = new ::std::string;
+  }
+  account_->assign(value);
+}
+inline void ChessBoardUser::set_account(const char* value, size_t size) {
+  set_has_account();
+  if (account_ == &::google::protobuf::internal::kEmptyString) {
+    account_ = new ::std::string;
+  }
+  account_->assign(reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* ChessBoardUser::mutable_account() {
+  set_has_account();
+  if (account_ == &::google::protobuf::internal::kEmptyString) {
+    account_ = new ::std::string;
+  }
+  return account_;
+}
+inline ::std::string* ChessBoardUser::release_account() {
+  clear_has_account();
+  if (account_ == &::google::protobuf::internal::kEmptyString) {
+    return NULL;
+  } else {
+    ::std::string* temp = account_;
+    account_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    return temp;
+  }
+}
+
+// optional uint32 score = 4;
+inline bool ChessBoardUser::has_score() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
+}
+inline void ChessBoardUser::set_has_score() {
+  _has_bits_[0] |= 0x00000008u;
+}
+inline void ChessBoardUser::clear_has_score() {
+  _has_bits_[0] &= ~0x00000008u;
 }
 inline void ChessBoardUser::clear_score() {
   score_ = 0u;
@@ -2866,15 +2952,15 @@ inline void ChessBoardUser::set_score(::google::protobuf::uint32 value) {
   score_ = value;
 }
 
-// optional uint32 status = 4;
+// optional uint32 status = 5;
 inline bool ChessBoardUser::has_status() const {
-  return (_has_bits_[0] & 0x00000008u) != 0;
+  return (_has_bits_[0] & 0x00000010u) != 0;
 }
 inline void ChessBoardUser::set_has_status() {
-  _has_bits_[0] |= 0x00000008u;
+  _has_bits_[0] |= 0x00000010u;
 }
 inline void ChessBoardUser::clear_has_status() {
-  _has_bits_[0] &= ~0x00000008u;
+  _has_bits_[0] &= ~0x00000010u;
 }
 inline void ChessBoardUser::clear_status() {
   status_ = 0u;
@@ -2888,15 +2974,15 @@ inline void ChessBoardUser::set_status(::google::protobuf::uint32 value) {
   status_ = value;
 }
 
-// optional bytes head_image = 5;
+// optional bytes head_image = 6;
 inline bool ChessBoardUser::has_head_image() const {
-  return (_has_bits_[0] & 0x00000010u) != 0;
+  return (_has_bits_[0] & 0x00000020u) != 0;
 }
 inline void ChessBoardUser::set_has_head_image() {
-  _has_bits_[0] |= 0x00000010u;
+  _has_bits_[0] |= 0x00000020u;
 }
 inline void ChessBoardUser::clear_has_head_image() {
-  _has_bits_[0] &= ~0x00000010u;
+  _has_bits_[0] &= ~0x00000020u;
 }
 inline void ChessBoardUser::clear_head_image() {
   if (head_image_ != &::google::protobuf::internal::kEmptyString) {
@@ -3276,15 +3362,73 @@ inline void GameHallSumaryReq::set_opcode(::google::protobuf::int32 value) {
 
 // GameHallSumary
 
-// required string username = 1;
-inline bool GameHallSumary::has_username() const {
+// required string account = 1;
+inline bool GameHallSumary::has_account() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline void GameHallSumary::set_has_username() {
+inline void GameHallSumary::set_has_account() {
   _has_bits_[0] |= 0x00000001u;
 }
-inline void GameHallSumary::clear_has_username() {
+inline void GameHallSumary::clear_has_account() {
   _has_bits_[0] &= ~0x00000001u;
+}
+inline void GameHallSumary::clear_account() {
+  if (account_ != &::google::protobuf::internal::kEmptyString) {
+    account_->clear();
+  }
+  clear_has_account();
+}
+inline const ::std::string& GameHallSumary::account() const {
+  return *account_;
+}
+inline void GameHallSumary::set_account(const ::std::string& value) {
+  set_has_account();
+  if (account_ == &::google::protobuf::internal::kEmptyString) {
+    account_ = new ::std::string;
+  }
+  account_->assign(value);
+}
+inline void GameHallSumary::set_account(const char* value) {
+  set_has_account();
+  if (account_ == &::google::protobuf::internal::kEmptyString) {
+    account_ = new ::std::string;
+  }
+  account_->assign(value);
+}
+inline void GameHallSumary::set_account(const char* value, size_t size) {
+  set_has_account();
+  if (account_ == &::google::protobuf::internal::kEmptyString) {
+    account_ = new ::std::string;
+  }
+  account_->assign(reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* GameHallSumary::mutable_account() {
+  set_has_account();
+  if (account_ == &::google::protobuf::internal::kEmptyString) {
+    account_ = new ::std::string;
+  }
+  return account_;
+}
+inline ::std::string* GameHallSumary::release_account() {
+  clear_has_account();
+  if (account_ == &::google::protobuf::internal::kEmptyString) {
+    return NULL;
+  } else {
+    ::std::string* temp = account_;
+    account_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    return temp;
+  }
+}
+
+// required string username = 2;
+inline bool GameHallSumary::has_username() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void GameHallSumary::set_has_username() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void GameHallSumary::clear_has_username() {
+  _has_bits_[0] &= ~0x00000002u;
 }
 inline void GameHallSumary::clear_username() {
   if (username_ != &::google::protobuf::internal::kEmptyString) {
@@ -3334,15 +3478,15 @@ inline ::std::string* GameHallSumary::release_username() {
   }
 }
 
-// required uint32 score = 2;
+// required uint32 score = 3;
 inline bool GameHallSumary::has_score() const {
-  return (_has_bits_[0] & 0x00000002u) != 0;
+  return (_has_bits_[0] & 0x00000004u) != 0;
 }
 inline void GameHallSumary::set_has_score() {
-  _has_bits_[0] |= 0x00000002u;
+  _has_bits_[0] |= 0x00000004u;
 }
 inline void GameHallSumary::clear_has_score() {
-  _has_bits_[0] &= ~0x00000002u;
+  _has_bits_[0] &= ~0x00000004u;
 }
 inline void GameHallSumary::clear_score() {
   score_ = 0u;
@@ -3356,15 +3500,15 @@ inline void GameHallSumary::set_score(::google::protobuf::uint32 value) {
   score_ = value;
 }
 
-// required uint32 hall_num = 3;
+// required uint32 hall_num = 4;
 inline bool GameHallSumary::has_hall_num() const {
-  return (_has_bits_[0] & 0x00000004u) != 0;
+  return (_has_bits_[0] & 0x00000008u) != 0;
 }
 inline void GameHallSumary::set_has_hall_num() {
-  _has_bits_[0] |= 0x00000004u;
+  _has_bits_[0] |= 0x00000008u;
 }
 inline void GameHallSumary::clear_has_hall_num() {
-  _has_bits_[0] &= ~0x00000004u;
+  _has_bits_[0] &= ~0x00000008u;
 }
 inline void GameHallSumary::clear_hall_num() {
   hall_num_ = 0u;
@@ -3378,15 +3522,15 @@ inline void GameHallSumary::set_hall_num(::google::protobuf::uint32 value) {
   hall_num_ = value;
 }
 
-// required string head_picture = 4;
+// required string head_picture = 5;
 inline bool GameHallSumary::has_head_picture() const {
-  return (_has_bits_[0] & 0x00000008u) != 0;
+  return (_has_bits_[0] & 0x00000010u) != 0;
 }
 inline void GameHallSumary::set_has_head_picture() {
-  _has_bits_[0] |= 0x00000008u;
+  _has_bits_[0] |= 0x00000010u;
 }
 inline void GameHallSumary::clear_has_head_picture() {
-  _has_bits_[0] &= ~0x00000008u;
+  _has_bits_[0] &= ~0x00000010u;
 }
 inline void GameHallSumary::clear_head_picture() {
   if (head_picture_ != &::google::protobuf::internal::kEmptyString) {
@@ -3436,15 +3580,15 @@ inline ::std::string* GameHallSumary::release_head_picture() {
   }
 }
 
-// required string ad_picture1 = 5;
+// required string ad_picture1 = 6;
 inline bool GameHallSumary::has_ad_picture1() const {
-  return (_has_bits_[0] & 0x00000010u) != 0;
+  return (_has_bits_[0] & 0x00000020u) != 0;
 }
 inline void GameHallSumary::set_has_ad_picture1() {
-  _has_bits_[0] |= 0x00000010u;
+  _has_bits_[0] |= 0x00000020u;
 }
 inline void GameHallSumary::clear_has_ad_picture1() {
-  _has_bits_[0] &= ~0x00000010u;
+  _has_bits_[0] &= ~0x00000020u;
 }
 inline void GameHallSumary::clear_ad_picture1() {
   if (ad_picture1_ != &::google::protobuf::internal::kEmptyString) {
@@ -3494,15 +3638,15 @@ inline ::std::string* GameHallSumary::release_ad_picture1() {
   }
 }
 
-// optional string ad_picture2 = 6;
+// optional string ad_picture2 = 7;
 inline bool GameHallSumary::has_ad_picture2() const {
-  return (_has_bits_[0] & 0x00000020u) != 0;
+  return (_has_bits_[0] & 0x00000040u) != 0;
 }
 inline void GameHallSumary::set_has_ad_picture2() {
-  _has_bits_[0] |= 0x00000020u;
+  _has_bits_[0] |= 0x00000040u;
 }
 inline void GameHallSumary::clear_has_ad_picture2() {
-  _has_bits_[0] &= ~0x00000020u;
+  _has_bits_[0] &= ~0x00000040u;
 }
 inline void GameHallSumary::clear_ad_picture2() {
   if (ad_picture2_ != &::google::protobuf::internal::kEmptyString) {
@@ -3552,7 +3696,7 @@ inline ::std::string* GameHallSumary::release_ad_picture2() {
   }
 }
 
-// repeated .MessageStruct.HallInfo hall_info = 7;
+// repeated .MessageStruct.HallInfo hall_info = 8;
 inline int GameHallSumary::hall_info_size() const {
   return hall_info_.size();
 }

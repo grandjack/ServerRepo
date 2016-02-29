@@ -67,6 +67,7 @@ public:
     bool EchoMsgHandle(const string &msg);
     bool GameHallSumaryHandle(const string &msg);
     bool HallInfoReqHandle(const string &msg);
+    bool WrapHallInfo(const u_int32 hall_id, string &data);
     
 protected:
     StateMachine *stateMachine;

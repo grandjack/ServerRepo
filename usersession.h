@@ -37,6 +37,7 @@ struct UsersInfo
     u_int32 score;
     string email;
     string head_photo;
+    string user_name;
 };
 
 class UserSession
@@ -66,6 +67,7 @@ public:
     string account;
     string password;
     string email;
+    string user_name;
     ChessBoard *currChessBoard;
 
     State *stateMachine;

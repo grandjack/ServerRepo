@@ -23,9 +23,10 @@ message Register {
 message ChessBoardUser {
     required bool chess_board_empty=1;
     optional string user_name=2;
-    optional uint32 score = 3;
-    optional uint32 status = 4;//indicate the user's status, notStarted\playing\ended\exited
-    optional bytes head_image = 5;
+    optional string account = 3;
+    optional uint32 score = 4;
+    optional uint32 status = 5;//indicate the user's status, notStarted\playing\ended\exited
+    optional bytes head_image = 6;
 }
 
 message ChessBoardInfo {
@@ -53,13 +54,14 @@ message GameHallSumaryReq {
 }
 
 message GameHallSumary {
-    required string username = 1;
-    required uint32 score = 2;
-    required uint32 hall_num = 3;
-    required string head_picture = 4;
-    required string ad_picture1 = 5;
-    optional string ad_picture2 = 6;
-    repeated HallInfo hall_info = 7;
+    required string account = 1;
+    required string username = 2;
+    required uint32 score = 3;
+    required uint32 hall_num = 4;
+    required string head_picture = 5;
+    required string ad_picture1 = 6;
+    optional string ad_picture2 = 7;
+    repeated HallInfo hall_info = 8;
 }
 
 //request play game message definition

@@ -83,6 +83,8 @@ public:
     bool UpdateUserScoreToDB(const std::string &account, u_int32 score);
     
     bool UpdateUserPasswordToDB(const std::string &account, const std::string &pswd);
+    
+    bool UpdateUserNameToDB(const std::string &account, const std::string &name);
 
     bool GetIndividualUser(const std::string &account);
     

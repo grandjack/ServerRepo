@@ -456,17 +456,29 @@ bool ChessBoard::UserMessageHandle(const string &msg)
 bool ChessBoard::GiveUpHandle(const string &msg)
 {
     GiveUp giveup;
+    UserSession *user = NULL;
+    string data;
     
      if (giveup.ParseFromString(msg)) {
-        for (u_int32 locate = (u_int32)LOCATION_UNKNOWN; locate < (u_int32)LOCATION_MAX; ++locate) {
-            if (locate != giveup.src_user_locate()) {
-                GetUserByLocation((Location)locate)->MessageReply(MSG_GIVE_UP, msg);
-            }
+        if ((user = GetUserByLocation((Location)giveup.src_user_locate())) != NULL ) {
+            //do other job here to notify the sender user what state he will go.
+            user->MessageReply(MSG_HALL_INFO, data);
+            
+            user->ReduceScore();
+            LeaveOutRoom((Location)giveup.src_user_locate());
+            user->SetNextState(new StateGameReady(user));
+            user->stateMachine->WrapHallInfo(this->chessBoardID, data);
+            
         }
 
-        GetUserByLocation((Location)giveup.src_user_locate())->ReduceScore();
-        LeaveOutRoom((Location)giveup.src_user_locate());
-        //do other job here to notify the sender user what state he will go.
+        for (u_int32 locate = (u_int32)LOCATION_UNKNOWN; locate < (u_int32)LOCATION_MAX; ++locate) {
+            if (locate != giveup.src_user_locate()) 
+            {
+                if ((user = GetUserByLocation((Location)locate)) != NULL ) {
+                    user->MessageReply(MSG_GIVE_UP, msg);
+                }
+            }
+        }
      }
 
      return true;
@@ -534,6 +546,7 @@ bool ChessBoard::GameReadyHandle(const string &msg)
 
         status.set_total_time(this->total_time);
         status.set_single_step_time(this->single_step_time);
+        LOG_DEBUG(MODULE_COMMON, "total_time [%d]  single_step_time[%d]", total_time,single_step_time);
 
         if ((user = GetUserByLocation(LOCATION_LEFT)) != NULL) {
             status.set_left_user_status(user->gameReady);

@@ -154,9 +154,10 @@ void protobuf_AssignDesc_message_2eproto() {
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(Register));
   ChessBoardUser_descriptor_ = file->message_type(4);
-  static const int ChessBoardUser_offsets_[5] = {
+  static const int ChessBoardUser_offsets_[6] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ChessBoardUser, chess_board_empty_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ChessBoardUser, user_name_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ChessBoardUser, account_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ChessBoardUser, score_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ChessBoardUser, status_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ChessBoardUser, head_image_),
@@ -242,7 +243,8 @@ void protobuf_AssignDesc_message_2eproto() {
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(GameHallSumaryReq));
   GameHallSumary_descriptor_ = file->message_type(9);
-  static const int GameHallSumary_offsets_[7] = {
+  static const int GameHallSumary_offsets_[8] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(GameHallSumary, account_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(GameHallSumary, username_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(GameHallSumary, score_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(GameHallSumary, hall_num_),
@@ -572,54 +574,55 @@ void protobuf_AddDesc_message_2eproto() {
     "unt\030\001 \002(\t\022\020\n\010password\030\002 \002(\t\"\035\n\013ReplyStat"
     "us\022\016\n\006status\030\001 \002(\r\"E\n\010Register\022\025\n\remail_"
     "account\030\001 \002(\t\022\020\n\010password\030\002 \002(\t\022\020\n\010usern"
-    "ame\030\003 \001(\t\"q\n\016ChessBoardUser\022\031\n\021chess_boa"
-    "rd_empty\030\001 \002(\010\022\021\n\tuser_name\030\002 \001(\t\022\r\n\005sco"
-    "re\030\003 \001(\r\022\016\n\006status\030\004 \001(\r\022\022\n\nhead_image\030\005"
-    " \001(\014\"\311\001\n\016ChessBoardInfo\022\n\n\002id\030\001 \002(\r\022\022\n\np"
-    "eople_num\030\002 \002(\r\0220\n\tleft_user\030\003 \002(\0132\035.Mes"
-    "sageStruct.ChessBoardUser\0221\n\nright_user\030"
-    "\004 \002(\0132\035.MessageStruct.ChessBoardUser\0222\n\013"
-    "bottom_user\030\005 \002(\0132\035.MessageStruct.ChessB"
-    "oardUser\"3\n\013HallInfoReq\022\024\n\014game_hall_id\030"
-    "\001 \002(\005\022\016\n\006opcode\030\002 \001(\005\"\231\001\n\010HallInfo\022\024\n\014ga"
-    "me_hall_id\030\001 \002(\005\022\024\n\014total_people\030\002 \002(\r\022\023"
-    "\n\013curr_people\030\003 \002(\r\022\030\n\020total_chessboard\030"
-    "\004 \001(\r\0222\n\013chess_board\030\005 \003(\0132\035.MessageStru"
-    "ct.ChessBoardInfo\"#\n\021GameHallSumaryReq\022\016"
-    "\n\006opcode\030\001 \001(\005\"\257\001\n\016GameHallSumary\022\020\n\010use"
-    "rname\030\001 \002(\t\022\r\n\005score\030\002 \002(\r\022\020\n\010hall_num\030\003"
-    " \002(\r\022\024\n\014head_picture\030\004 \002(\t\022\023\n\013ad_picture"
-    "1\030\005 \002(\t\022\023\n\013ad_picture2\030\006 \001(\t\022*\n\thall_inf"
-    "o\030\007 \003(\0132\027.MessageStruct.HallInfo\"K\n\013Requ"
-    "estPlay\022\024\n\014game_hall_id\030\001 \002(\005\022\026\n\016chess_b"
-    "oard_id\030\002 \002(\005\022\016\n\006locate\030\003 \002(\005\"u\n\020Request"
-    "PlayReply\022\016\n\006status\030\001 \002(\005\022\036\n\026first_come_"
-    "user_locate\030\002 \002(\r\0221\n\nchessBoard\030\003 \001(\0132\035."
-    "MessageStruct.ChessBoardInfo\"\334\001\n\tMoveChe"
-    "ss\022\026\n\016src_chess_type\030\001 \002(\005\022\027\n\017src_user_l"
-    "ocate\030\002 \002(\005\022\023\n\013from_pointX\030\003 \002(\005\022\023\n\013from"
-    "_pointY\030\004 \002(\005\022\022\n\ndes_pointX\030\005 \002(\005\022\022\n\ndes"
-    "_pointY\030\006 \002(\005\022\021\n\tis_winner\030\007 \002(\010\022\035\n\025eat_"
-    "target_chess_type\030\010 \001(\005\022\032\n\022target_user_l"
-    "ocate\030\t \001(\r\"h\n\nMoveAction\022\027\n\017src_user_lo"
-    "cate\030\001 \002(\r\022+\n\tmovechess\030\002 \002(\0132\030.MessageS"
-    "truct.MoveChess\022\024\n\014token_locate\030\003 \002(\r\":\n"
-    "\013UserMessage\022\027\n\017src_user_locate\030\001 \002(\r\022\022\n"
-    "\nmsgContent\030\002 \002(\t\"#\n\rSystemMessage\022\022\n\nms"
-    "gContent\030\001 \002(\t\"f\n\nReconciled\022\026\n\016apply_or"
-    "_reply\030\001 \002(\r\022\027\n\017src_user_locate\030\002 \002(\r\022\027\n"
-    "\017tar_user_locate\030\003 \002(\r\022\016\n\006status\030\004 \001(\t\"."
-    "\n\006GiveUp\022\027\n\017src_user_locate\030\001 \002(\r\022\013\n\003opt"
-    "\030\002 \001(\t\"_\n\004Undo\022\025\n\rrep_or_respon\030\001 \002(\r\022\027\n"
-    "\017src_user_locate\030\002 \002(\r\022\027\n\017tar_user_locat"
-    "e\030\003 \002(\r\022\016\n\006status\030\004 \001(\010\"e\n\014GameReadyReq\022"
-    "\027\n\017src_user_locate\030\001 \002(\r\022\016\n\006opcode\030\002 \001(\r"
-    "\022\022\n\ntotal_time\030\003 \001(\r\022\030\n\020single_step_time"
-    "\030\004 \001(\r\"\246\001\n\017GameStatusReply\022\030\n\020left_user_"
-    "status\030\001 \002(\010\022\031\n\021right_user_status\030\002 \002(\010\022"
-    "\032\n\022bottom_user_status\030\003 \002(\010\022\024\n\014token_loc"
-    "ate\030\004 \002(\r\022\022\n\ntotal_time\030\005 \002(\r\022\030\n\020single_"
-    "step_time\030\006 \002(\r", 2095);
+    "ame\030\003 \001(\t\"\202\001\n\016ChessBoardUser\022\031\n\021chess_bo"
+    "ard_empty\030\001 \002(\010\022\021\n\tuser_name\030\002 \001(\t\022\017\n\007ac"
+    "count\030\003 \001(\t\022\r\n\005score\030\004 \001(\r\022\016\n\006status\030\005 \001"
+    "(\r\022\022\n\nhead_image\030\006 \001(\014\"\311\001\n\016ChessBoardInf"
+    "o\022\n\n\002id\030\001 \002(\r\022\022\n\npeople_num\030\002 \002(\r\0220\n\tlef"
+    "t_user\030\003 \002(\0132\035.MessageStruct.ChessBoardU"
+    "ser\0221\n\nright_user\030\004 \002(\0132\035.MessageStruct."
+    "ChessBoardUser\0222\n\013bottom_user\030\005 \002(\0132\035.Me"
+    "ssageStruct.ChessBoardUser\"3\n\013HallInfoRe"
+    "q\022\024\n\014game_hall_id\030\001 \002(\005\022\016\n\006opcode\030\002 \001(\005\""
+    "\231\001\n\010HallInfo\022\024\n\014game_hall_id\030\001 \002(\005\022\024\n\014to"
+    "tal_people\030\002 \002(\r\022\023\n\013curr_people\030\003 \002(\r\022\030\n"
+    "\020total_chessboard\030\004 \001(\r\0222\n\013chess_board\030\005"
+    " \003(\0132\035.MessageStruct.ChessBoardInfo\"#\n\021G"
+    "ameHallSumaryReq\022\016\n\006opcode\030\001 \001(\005\"\300\001\n\016Gam"
+    "eHallSumary\022\017\n\007account\030\001 \002(\t\022\020\n\010username"
+    "\030\002 \002(\t\022\r\n\005score\030\003 \002(\r\022\020\n\010hall_num\030\004 \002(\r\022"
+    "\024\n\014head_picture\030\005 \002(\t\022\023\n\013ad_picture1\030\006 \002"
+    "(\t\022\023\n\013ad_picture2\030\007 \001(\t\022*\n\thall_info\030\010 \003"
+    "(\0132\027.MessageStruct.HallInfo\"K\n\013RequestPl"
+    "ay\022\024\n\014game_hall_id\030\001 \002(\005\022\026\n\016chess_board_"
+    "id\030\002 \002(\005\022\016\n\006locate\030\003 \002(\005\"u\n\020RequestPlayR"
+    "eply\022\016\n\006status\030\001 \002(\005\022\036\n\026first_come_user_"
+    "locate\030\002 \002(\r\0221\n\nchessBoard\030\003 \001(\0132\035.Messa"
+    "geStruct.ChessBoardInfo\"\334\001\n\tMoveChess\022\026\n"
+    "\016src_chess_type\030\001 \002(\005\022\027\n\017src_user_locate"
+    "\030\002 \002(\005\022\023\n\013from_pointX\030\003 \002(\005\022\023\n\013from_poin"
+    "tY\030\004 \002(\005\022\022\n\ndes_pointX\030\005 \002(\005\022\022\n\ndes_poin"
+    "tY\030\006 \002(\005\022\021\n\tis_winner\030\007 \002(\010\022\035\n\025eat_targe"
+    "t_chess_type\030\010 \001(\005\022\032\n\022target_user_locate"
+    "\030\t \001(\r\"h\n\nMoveAction\022\027\n\017src_user_locate\030"
+    "\001 \002(\r\022+\n\tmovechess\030\002 \002(\0132\030.MessageStruct"
+    ".MoveChess\022\024\n\014token_locate\030\003 \002(\r\":\n\013User"
+    "Message\022\027\n\017src_user_locate\030\001 \002(\r\022\022\n\nmsgC"
+    "ontent\030\002 \002(\t\"#\n\rSystemMessage\022\022\n\nmsgCont"
+    "ent\030\001 \002(\t\"f\n\nReconciled\022\026\n\016apply_or_repl"
+    "y\030\001 \002(\r\022\027\n\017src_user_locate\030\002 \002(\r\022\027\n\017tar_"
+    "user_locate\030\003 \002(\r\022\016\n\006status\030\004 \001(\t\".\n\006Giv"
+    "eUp\022\027\n\017src_user_locate\030\001 \002(\r\022\013\n\003opt\030\002 \001("
+    "\t\"_\n\004Undo\022\025\n\rrep_or_respon\030\001 \002(\r\022\027\n\017src_"
+    "user_locate\030\002 \002(\r\022\027\n\017tar_user_locate\030\003 \002"
+    "(\r\022\016\n\006status\030\004 \001(\010\"e\n\014GameReadyReq\022\027\n\017sr"
+    "c_user_locate\030\001 \002(\r\022\016\n\006opcode\030\002 \001(\r\022\022\n\nt"
+    "otal_time\030\003 \001(\r\022\030\n\020single_step_time\030\004 \001("
+    "\r\"\246\001\n\017GameStatusReply\022\030\n\020left_user_statu"
+    "s\030\001 \002(\010\022\031\n\021right_user_status\030\002 \002(\010\022\032\n\022bo"
+    "ttom_user_status\030\003 \002(\010\022\024\n\014token_locate\030\004"
+    " \002(\r\022\022\n\ntotal_time\030\005 \002(\r\022\030\n\020single_step_"
+    "time\030\006 \002(\r", 2130);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "message.proto", &protobuf_RegisterTypes);
   Echo::default_instance_ = new Echo();
@@ -1733,6 +1736,7 @@ void Register::Swap(Register* other) {
 #ifndef _MSC_VER
 const int ChessBoardUser::kChessBoardEmptyFieldNumber;
 const int ChessBoardUser::kUserNameFieldNumber;
+const int ChessBoardUser::kAccountFieldNumber;
 const int ChessBoardUser::kScoreFieldNumber;
 const int ChessBoardUser::kStatusFieldNumber;
 const int ChessBoardUser::kHeadImageFieldNumber;
@@ -1756,6 +1760,7 @@ void ChessBoardUser::SharedCtor() {
   _cached_size_ = 0;
   chess_board_empty_ = false;
   user_name_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+  account_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
   score_ = 0u;
   status_ = 0u;
   head_image_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
@@ -1769,6 +1774,9 @@ ChessBoardUser::~ChessBoardUser() {
 void ChessBoardUser::SharedDtor() {
   if (user_name_ != &::google::protobuf::internal::kEmptyString) {
     delete user_name_;
+  }
+  if (account_ != &::google::protobuf::internal::kEmptyString) {
+    delete account_;
   }
   if (head_image_ != &::google::protobuf::internal::kEmptyString) {
     delete head_image_;
@@ -1803,6 +1811,11 @@ void ChessBoardUser::Clear() {
     if (has_user_name()) {
       if (user_name_ != &::google::protobuf::internal::kEmptyString) {
         user_name_->clear();
+      }
+    }
+    if (has_account()) {
+      if (account_ != &::google::protobuf::internal::kEmptyString) {
+        account_->clear();
       }
     }
     score_ = 0u;
@@ -1851,12 +1864,29 @@ bool ChessBoardUser::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(24)) goto parse_score;
+        if (input->ExpectTag(26)) goto parse_account;
         break;
       }
       
-      // optional uint32 score = 3;
+      // optional string account = 3;
       case 3: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
+         parse_account:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_account()));
+          ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+            this->account().data(), this->account().length(),
+            ::google::protobuf::internal::WireFormat::PARSE);
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(32)) goto parse_score;
+        break;
+      }
+      
+      // optional uint32 score = 4;
+      case 4: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
          parse_score:
@@ -1867,12 +1897,12 @@ bool ChessBoardUser::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(32)) goto parse_status;
+        if (input->ExpectTag(40)) goto parse_status;
         break;
       }
       
-      // optional uint32 status = 4;
-      case 4: {
+      // optional uint32 status = 5;
+      case 5: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
          parse_status:
@@ -1883,12 +1913,12 @@ bool ChessBoardUser::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(42)) goto parse_head_image;
+        if (input->ExpectTag(50)) goto parse_head_image;
         break;
       }
       
-      // optional bytes head_image = 5;
-      case 5: {
+      // optional bytes head_image = 6;
+      case 6: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
          parse_head_image:
@@ -1933,20 +1963,29 @@ void ChessBoardUser::SerializeWithCachedSizes(
       2, this->user_name(), output);
   }
   
-  // optional uint32 score = 3;
+  // optional string account = 3;
+  if (has_account()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->account().data(), this->account().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    ::google::protobuf::internal::WireFormatLite::WriteString(
+      3, this->account(), output);
+  }
+  
+  // optional uint32 score = 4;
   if (has_score()) {
-    ::google::protobuf::internal::WireFormatLite::WriteUInt32(3, this->score(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(4, this->score(), output);
   }
   
-  // optional uint32 status = 4;
+  // optional uint32 status = 5;
   if (has_status()) {
-    ::google::protobuf::internal::WireFormatLite::WriteUInt32(4, this->status(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(5, this->status(), output);
   }
   
-  // optional bytes head_image = 5;
+  // optional bytes head_image = 6;
   if (has_head_image()) {
     ::google::protobuf::internal::WireFormatLite::WriteBytes(
-      5, this->head_image(), output);
+      6, this->head_image(), output);
   }
   
   if (!unknown_fields().empty()) {
@@ -1972,21 +2011,31 @@ void ChessBoardUser::SerializeWithCachedSizes(
         2, this->user_name(), target);
   }
   
-  // optional uint32 score = 3;
+  // optional string account = 3;
+  if (has_account()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->account().data(), this->account().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+        3, this->account(), target);
+  }
+  
+  // optional uint32 score = 4;
   if (has_score()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(3, this->score(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(4, this->score(), target);
   }
   
-  // optional uint32 status = 4;
+  // optional uint32 status = 5;
   if (has_status()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(4, this->status(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(5, this->status(), target);
   }
   
-  // optional bytes head_image = 5;
+  // optional bytes head_image = 6;
   if (has_head_image()) {
     target =
       ::google::protobuf::internal::WireFormatLite::WriteBytesToArray(
-        5, this->head_image(), target);
+        6, this->head_image(), target);
   }
   
   if (!unknown_fields().empty()) {
@@ -2012,21 +2061,28 @@ int ChessBoardUser::ByteSize() const {
           this->user_name());
     }
     
-    // optional uint32 score = 3;
+    // optional string account = 3;
+    if (has_account()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::StringSize(
+          this->account());
+    }
+    
+    // optional uint32 score = 4;
     if (has_score()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::UInt32Size(
           this->score());
     }
     
-    // optional uint32 status = 4;
+    // optional uint32 status = 5;
     if (has_status()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::UInt32Size(
           this->status());
     }
     
-    // optional bytes head_image = 5;
+    // optional bytes head_image = 6;
     if (has_head_image()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::BytesSize(
@@ -2066,6 +2122,9 @@ void ChessBoardUser::MergeFrom(const ChessBoardUser& from) {
     if (from.has_user_name()) {
       set_user_name(from.user_name());
     }
+    if (from.has_account()) {
+      set_account(from.account());
+    }
     if (from.has_score()) {
       set_score(from.score());
     }
@@ -2101,6 +2160,7 @@ void ChessBoardUser::Swap(ChessBoardUser* other) {
   if (other != this) {
     std::swap(chess_board_empty_, other->chess_board_empty_);
     std::swap(user_name_, other->user_name_);
+    std::swap(account_, other->account_);
     std::swap(score_, other->score_);
     std::swap(status_, other->status_);
     std::swap(head_image_, other->head_image_);
@@ -3340,6 +3400,7 @@ void GameHallSumaryReq::Swap(GameHallSumaryReq* other) {
 // ===================================================================
 
 #ifndef _MSC_VER
+const int GameHallSumary::kAccountFieldNumber;
 const int GameHallSumary::kUsernameFieldNumber;
 const int GameHallSumary::kScoreFieldNumber;
 const int GameHallSumary::kHallNumFieldNumber;
@@ -3365,6 +3426,7 @@ GameHallSumary::GameHallSumary(const GameHallSumary& from)
 
 void GameHallSumary::SharedCtor() {
   _cached_size_ = 0;
+  account_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
   username_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
   score_ = 0u;
   hall_num_ = 0u;
@@ -3379,6 +3441,9 @@ GameHallSumary::~GameHallSumary() {
 }
 
 void GameHallSumary::SharedDtor() {
+  if (account_ != &::google::protobuf::internal::kEmptyString) {
+    delete account_;
+  }
   if (username_ != &::google::protobuf::internal::kEmptyString) {
     delete username_;
   }
@@ -3417,6 +3482,11 @@ GameHallSumary* GameHallSumary::New() const {
 
 void GameHallSumary::Clear() {
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    if (has_account()) {
+      if (account_ != &::google::protobuf::internal::kEmptyString) {
+        account_->clear();
+      }
+    }
     if (has_username()) {
       if (username_ != &::google::protobuf::internal::kEmptyString) {
         username_->clear();
@@ -3451,10 +3521,27 @@ bool GameHallSumary::MergePartialFromCodedStream(
   ::google::protobuf::uint32 tag;
   while ((tag = input->ReadTag()) != 0) {
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // required string username = 1;
+      // required string account = 1;
       case 1: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_account()));
+          ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+            this->account().data(), this->account().length(),
+            ::google::protobuf::internal::WireFormat::PARSE);
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(18)) goto parse_username;
+        break;
+      }
+      
+      // required string username = 2;
+      case 2: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
+         parse_username:
           DO_(::google::protobuf::internal::WireFormatLite::ReadString(
                 input, this->mutable_username()));
           ::google::protobuf::internal::WireFormat::VerifyUTF8String(
@@ -3463,12 +3550,12 @@ bool GameHallSumary::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(16)) goto parse_score;
+        if (input->ExpectTag(24)) goto parse_score;
         break;
       }
       
-      // required uint32 score = 2;
-      case 2: {
+      // required uint32 score = 3;
+      case 3: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
          parse_score:
@@ -3479,12 +3566,12 @@ bool GameHallSumary::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(24)) goto parse_hall_num;
+        if (input->ExpectTag(32)) goto parse_hall_num;
         break;
       }
       
-      // required uint32 hall_num = 3;
-      case 3: {
+      // required uint32 hall_num = 4;
+      case 4: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
          parse_hall_num:
@@ -3495,12 +3582,12 @@ bool GameHallSumary::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(34)) goto parse_head_picture;
+        if (input->ExpectTag(42)) goto parse_head_picture;
         break;
       }
       
-      // required string head_picture = 4;
-      case 4: {
+      // required string head_picture = 5;
+      case 5: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
          parse_head_picture:
@@ -3512,12 +3599,12 @@ bool GameHallSumary::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(42)) goto parse_ad_picture1;
+        if (input->ExpectTag(50)) goto parse_ad_picture1;
         break;
       }
       
-      // required string ad_picture1 = 5;
-      case 5: {
+      // required string ad_picture1 = 6;
+      case 6: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
          parse_ad_picture1:
@@ -3529,12 +3616,12 @@ bool GameHallSumary::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(50)) goto parse_ad_picture2;
+        if (input->ExpectTag(58)) goto parse_ad_picture2;
         break;
       }
       
-      // optional string ad_picture2 = 6;
-      case 6: {
+      // optional string ad_picture2 = 7;
+      case 7: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
          parse_ad_picture2:
@@ -3546,12 +3633,12 @@ bool GameHallSumary::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(58)) goto parse_hall_info;
+        if (input->ExpectTag(66)) goto parse_hall_info;
         break;
       }
       
-      // repeated .MessageStruct.HallInfo hall_info = 7;
-      case 7: {
+      // repeated .MessageStruct.HallInfo hall_info = 8;
+      case 8: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
          parse_hall_info:
@@ -3560,7 +3647,7 @@ bool GameHallSumary::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(58)) goto parse_hall_info;
+        if (input->ExpectTag(66)) goto parse_hall_info;
         if (input->ExpectAtEnd()) return true;
         break;
       }
@@ -3583,56 +3670,65 @@ bool GameHallSumary::MergePartialFromCodedStream(
 
 void GameHallSumary::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // required string username = 1;
+  // required string account = 1;
+  if (has_account()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->account().data(), this->account().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    ::google::protobuf::internal::WireFormatLite::WriteString(
+      1, this->account(), output);
+  }
+  
+  // required string username = 2;
   if (has_username()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8String(
       this->username().data(), this->username().length(),
       ::google::protobuf::internal::WireFormat::SERIALIZE);
     ::google::protobuf::internal::WireFormatLite::WriteString(
-      1, this->username(), output);
+      2, this->username(), output);
   }
   
-  // required uint32 score = 2;
+  // required uint32 score = 3;
   if (has_score()) {
-    ::google::protobuf::internal::WireFormatLite::WriteUInt32(2, this->score(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(3, this->score(), output);
   }
   
-  // required uint32 hall_num = 3;
+  // required uint32 hall_num = 4;
   if (has_hall_num()) {
-    ::google::protobuf::internal::WireFormatLite::WriteUInt32(3, this->hall_num(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(4, this->hall_num(), output);
   }
   
-  // required string head_picture = 4;
+  // required string head_picture = 5;
   if (has_head_picture()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8String(
       this->head_picture().data(), this->head_picture().length(),
       ::google::protobuf::internal::WireFormat::SERIALIZE);
     ::google::protobuf::internal::WireFormatLite::WriteString(
-      4, this->head_picture(), output);
+      5, this->head_picture(), output);
   }
   
-  // required string ad_picture1 = 5;
+  // required string ad_picture1 = 6;
   if (has_ad_picture1()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8String(
       this->ad_picture1().data(), this->ad_picture1().length(),
       ::google::protobuf::internal::WireFormat::SERIALIZE);
     ::google::protobuf::internal::WireFormatLite::WriteString(
-      5, this->ad_picture1(), output);
+      6, this->ad_picture1(), output);
   }
   
-  // optional string ad_picture2 = 6;
+  // optional string ad_picture2 = 7;
   if (has_ad_picture2()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8String(
       this->ad_picture2().data(), this->ad_picture2().length(),
       ::google::protobuf::internal::WireFormat::SERIALIZE);
     ::google::protobuf::internal::WireFormatLite::WriteString(
-      6, this->ad_picture2(), output);
+      7, this->ad_picture2(), output);
   }
   
-  // repeated .MessageStruct.HallInfo hall_info = 7;
+  // repeated .MessageStruct.HallInfo hall_info = 8;
   for (int i = 0; i < this->hall_info_size(); i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-      7, this->hall_info(i), output);
+      8, this->hall_info(i), output);
   }
   
   if (!unknown_fields().empty()) {
@@ -3643,61 +3739,71 @@ void GameHallSumary::SerializeWithCachedSizes(
 
 ::google::protobuf::uint8* GameHallSumary::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
-  // required string username = 1;
+  // required string account = 1;
+  if (has_account()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->account().data(), this->account().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+        1, this->account(), target);
+  }
+  
+  // required string username = 2;
   if (has_username()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8String(
       this->username().data(), this->username().length(),
       ::google::protobuf::internal::WireFormat::SERIALIZE);
     target =
       ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
-        1, this->username(), target);
+        2, this->username(), target);
   }
   
-  // required uint32 score = 2;
+  // required uint32 score = 3;
   if (has_score()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(2, this->score(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(3, this->score(), target);
   }
   
-  // required uint32 hall_num = 3;
+  // required uint32 hall_num = 4;
   if (has_hall_num()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(3, this->hall_num(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(4, this->hall_num(), target);
   }
   
-  // required string head_picture = 4;
+  // required string head_picture = 5;
   if (has_head_picture()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8String(
       this->head_picture().data(), this->head_picture().length(),
       ::google::protobuf::internal::WireFormat::SERIALIZE);
     target =
       ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
-        4, this->head_picture(), target);
+        5, this->head_picture(), target);
   }
   
-  // required string ad_picture1 = 5;
+  // required string ad_picture1 = 6;
   if (has_ad_picture1()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8String(
       this->ad_picture1().data(), this->ad_picture1().length(),
       ::google::protobuf::internal::WireFormat::SERIALIZE);
     target =
       ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
-        5, this->ad_picture1(), target);
+        6, this->ad_picture1(), target);
   }
   
-  // optional string ad_picture2 = 6;
+  // optional string ad_picture2 = 7;
   if (has_ad_picture2()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8String(
       this->ad_picture2().data(), this->ad_picture2().length(),
       ::google::protobuf::internal::WireFormat::SERIALIZE);
     target =
       ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
-        6, this->ad_picture2(), target);
+        7, this->ad_picture2(), target);
   }
   
-  // repeated .MessageStruct.HallInfo hall_info = 7;
+  // repeated .MessageStruct.HallInfo hall_info = 8;
   for (int i = 0; i < this->hall_info_size(); i++) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
-        7, this->hall_info(i), target);
+        8, this->hall_info(i), target);
   }
   
   if (!unknown_fields().empty()) {
@@ -3711,42 +3817,49 @@ int GameHallSumary::ByteSize() const {
   int total_size = 0;
   
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    // required string username = 1;
+    // required string account = 1;
+    if (has_account()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::StringSize(
+          this->account());
+    }
+    
+    // required string username = 2;
     if (has_username()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::StringSize(
           this->username());
     }
     
-    // required uint32 score = 2;
+    // required uint32 score = 3;
     if (has_score()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::UInt32Size(
           this->score());
     }
     
-    // required uint32 hall_num = 3;
+    // required uint32 hall_num = 4;
     if (has_hall_num()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::UInt32Size(
           this->hall_num());
     }
     
-    // required string head_picture = 4;
+    // required string head_picture = 5;
     if (has_head_picture()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::StringSize(
           this->head_picture());
     }
     
-    // required string ad_picture1 = 5;
+    // required string ad_picture1 = 6;
     if (has_ad_picture1()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::StringSize(
           this->ad_picture1());
     }
     
-    // optional string ad_picture2 = 6;
+    // optional string ad_picture2 = 7;
     if (has_ad_picture2()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::StringSize(
@@ -3754,7 +3867,7 @@ int GameHallSumary::ByteSize() const {
     }
     
   }
-  // repeated .MessageStruct.HallInfo hall_info = 7;
+  // repeated .MessageStruct.HallInfo hall_info = 8;
   total_size += 1 * this->hall_info_size();
   for (int i = 0; i < this->hall_info_size(); i++) {
     total_size +=
@@ -3789,6 +3902,9 @@ void GameHallSumary::MergeFrom(const GameHallSumary& from) {
   GOOGLE_CHECK_NE(&from, this);
   hall_info_.MergeFrom(from.hall_info_);
   if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    if (from.has_account()) {
+      set_account(from.account());
+    }
     if (from.has_username()) {
       set_username(from.username());
     }
@@ -3824,7 +3940,7 @@ void GameHallSumary::CopyFrom(const GameHallSumary& from) {
 }
 
 bool GameHallSumary::IsInitialized() const {
-  if ((_has_bits_[0] & 0x0000001f) != 0x0000001f) return false;
+  if ((_has_bits_[0] & 0x0000003f) != 0x0000003f) return false;
   
   for (int i = 0; i < hall_info_size(); i++) {
     if (!this->hall_info(i).IsInitialized()) return false;
@@ -3834,6 +3950,7 @@ bool GameHallSumary::IsInitialized() const {
 
 void GameHallSumary::Swap(GameHallSumary* other) {
   if (other != this) {
+    std::swap(account_, other->account_);
     std::swap(username_, other->username_);
     std::swap(score_, other->score_);
     std::swap(hall_num_, other->hall_num_);
