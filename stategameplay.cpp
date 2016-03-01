@@ -34,6 +34,14 @@ bool StateGamePlay::MsgHandle(const u_int32 msg_type, const string &msg)
         
         case MSG_ECHO:
             ret = EchoMsgHandle(msg);
+            break;            
+
+        case MSG_CHESS_BOARD_REQ:
+            ret = ChessBoardReq(msg);
+            break;
+
+        case MSG_UPDATE_USER_INFO:
+            ret = UpdateUserInfos(msg);
             break;
             
         case MSG_MOVE_CHESS:
@@ -59,4 +67,14 @@ bool StateGamePlay::MsgHandle(const u_int32 msg_type, const string &msg)
     return ret;
 }
 
+bool StateGamePlay::ChessBoardReq(const string &msg)
+{
+    ChessBoardInfoReq chessboard;
+    
+    if (chessboard.ParseFromString(msg)) {
+        WrapChessBoardInfo();
+    }
+
+    return true;
+}
 

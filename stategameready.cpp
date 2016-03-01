@@ -39,6 +39,10 @@ bool StateGameReady::MsgHandle(const u_int32 msg_type, const string &msg)
         case MSG_ECHO:
             ret = EchoMsgHandle(msg);
             break;
+            
+        case MSG_UPDATE_USER_INFO:
+            ret = UpdateUserInfos(msg);
+            break;
 
         default:
             break;

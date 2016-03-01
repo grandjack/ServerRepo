@@ -524,6 +524,11 @@ u_int32 ChessBoard::GetActiveUsersNum() const
     return num;
 }
 
+u_int32 ChessBoard::GetChessBoardID() const
+{
+    return chessBoardID;
+}
+
 bool ChessBoard::GameReadyHandle(const string &msg)
 {
     GameReadyReq gameReady;

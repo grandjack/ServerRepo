@@ -37,6 +37,7 @@ class LogOnorOut;
 class ReplyStatus;
 class Register;
 class ChessBoardUser;
+class ChessBoardInfoReq;
 class ChessBoardInfo;
 class HallInfoReq;
 class HallInfo;
@@ -53,6 +54,8 @@ class GiveUp;
 class Undo;
 class GameReadyReq;
 class GameStatusReply;
+class FindPassword;
+class UpdateUserInfo;
 
 // ===================================================================
 
@@ -521,12 +524,12 @@ class ChessBoardUser : public ::google::protobuf::Message {
   inline ::std::string* mutable_account();
   inline ::std::string* release_account();
   
-  // optional uint32 score = 4;
+  // optional int32 score = 4;
   inline bool has_score() const;
   inline void clear_score();
   static const int kScoreFieldNumber = 4;
-  inline ::google::protobuf::uint32 score() const;
-  inline void set_score(::google::protobuf::uint32 value);
+  inline ::google::protobuf::int32 score() const;
+  inline void set_score(::google::protobuf::int32 value);
   
   // optional uint32 status = 5;
   inline bool has_status() const;
@@ -565,7 +568,7 @@ class ChessBoardUser : public ::google::protobuf::Message {
   
   ::std::string* user_name_;
   bool chess_board_empty_;
-  ::google::protobuf::uint32 score_;
+  ::google::protobuf::int32 score_;
   ::std::string* account_;
   ::std::string* head_image_;
   ::google::protobuf::uint32 status_;
@@ -579,6 +582,98 @@ class ChessBoardUser : public ::google::protobuf::Message {
   
   void InitAsDefaultInstance();
   static ChessBoardUser* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class ChessBoardInfoReq : public ::google::protobuf::Message {
+ public:
+  ChessBoardInfoReq();
+  virtual ~ChessBoardInfoReq();
+  
+  ChessBoardInfoReq(const ChessBoardInfoReq& from);
+  
+  inline ChessBoardInfoReq& operator=(const ChessBoardInfoReq& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const ChessBoardInfoReq& default_instance();
+  
+  void Swap(ChessBoardInfoReq* other);
+  
+  // implements Message ----------------------------------------------
+  
+  ChessBoardInfoReq* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const ChessBoardInfoReq& from);
+  void MergeFrom(const ChessBoardInfoReq& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // required int32 chess_board_id = 1;
+  inline bool has_chess_board_id() const;
+  inline void clear_chess_board_id();
+  static const int kChessBoardIdFieldNumber = 1;
+  inline ::google::protobuf::int32 chess_board_id() const;
+  inline void set_chess_board_id(::google::protobuf::int32 value);
+  
+  // optional int32 opcode = 2;
+  inline bool has_opcode() const;
+  inline void clear_opcode();
+  static const int kOpcodeFieldNumber = 2;
+  inline ::google::protobuf::int32 opcode() const;
+  inline void set_opcode(::google::protobuf::int32 value);
+  
+  // @@protoc_insertion_point(class_scope:MessageStruct.ChessBoardInfoReq)
+ private:
+  inline void set_has_chess_board_id();
+  inline void clear_has_chess_board_id();
+  inline void set_has_opcode();
+  inline void clear_has_opcode();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::google::protobuf::int32 chess_board_id_;
+  ::google::protobuf::int32 opcode_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(2 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_message_2eproto();
+  friend void protobuf_AssignDesc_message_2eproto();
+  friend void protobuf_ShutdownFile_message_2eproto();
+  
+  void InitAsDefaultInstance();
+  static ChessBoardInfoReq* default_instance_;
 };
 // -------------------------------------------------------------------
 
@@ -1082,12 +1177,12 @@ class GameHallSumary : public ::google::protobuf::Message {
   inline ::std::string* mutable_username();
   inline ::std::string* release_username();
   
-  // required uint32 score = 3;
+  // required int32 score = 3;
   inline bool has_score() const;
   inline void clear_score();
   static const int kScoreFieldNumber = 3;
-  inline ::google::protobuf::uint32 score() const;
-  inline void set_score(::google::protobuf::uint32 value);
+  inline ::google::protobuf::int32 score() const;
+  inline void set_score(::google::protobuf::int32 value);
   
   // required uint32 hall_num = 4;
   inline bool has_hall_num() const;
@@ -1162,7 +1257,7 @@ class GameHallSumary : public ::google::protobuf::Message {
   
   ::std::string* account_;
   ::std::string* username_;
-  ::google::protobuf::uint32 score_;
+  ::google::protobuf::int32 score_;
   ::google::protobuf::uint32 hall_num_;
   ::std::string* head_picture_;
   ::std::string* ad_picture1_;
@@ -2399,6 +2494,262 @@ class GameStatusReply : public ::google::protobuf::Message {
   void InitAsDefaultInstance();
   static GameStatusReply* default_instance_;
 };
+// -------------------------------------------------------------------
+
+class FindPassword : public ::google::protobuf::Message {
+ public:
+  FindPassword();
+  virtual ~FindPassword();
+  
+  FindPassword(const FindPassword& from);
+  
+  inline FindPassword& operator=(const FindPassword& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const FindPassword& default_instance();
+  
+  void Swap(FindPassword* other);
+  
+  // implements Message ----------------------------------------------
+  
+  FindPassword* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const FindPassword& from);
+  void MergeFrom(const FindPassword& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // required string email = 1;
+  inline bool has_email() const;
+  inline void clear_email();
+  static const int kEmailFieldNumber = 1;
+  inline const ::std::string& email() const;
+  inline void set_email(const ::std::string& value);
+  inline void set_email(const char* value);
+  inline void set_email(const char* value, size_t size);
+  inline ::std::string* mutable_email();
+  inline ::std::string* release_email();
+  
+  // optional string opt = 2;
+  inline bool has_opt() const;
+  inline void clear_opt();
+  static const int kOptFieldNumber = 2;
+  inline const ::std::string& opt() const;
+  inline void set_opt(const ::std::string& value);
+  inline void set_opt(const char* value);
+  inline void set_opt(const char* value, size_t size);
+  inline ::std::string* mutable_opt();
+  inline ::std::string* release_opt();
+  
+  // @@protoc_insertion_point(class_scope:MessageStruct.FindPassword)
+ private:
+  inline void set_has_email();
+  inline void clear_has_email();
+  inline void set_has_opt();
+  inline void clear_has_opt();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::std::string* email_;
+  ::std::string* opt_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(2 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_message_2eproto();
+  friend void protobuf_AssignDesc_message_2eproto();
+  friend void protobuf_ShutdownFile_message_2eproto();
+  
+  void InitAsDefaultInstance();
+  static FindPassword* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class UpdateUserInfo : public ::google::protobuf::Message {
+ public:
+  UpdateUserInfo();
+  virtual ~UpdateUserInfo();
+  
+  UpdateUserInfo(const UpdateUserInfo& from);
+  
+  inline UpdateUserInfo& operator=(const UpdateUserInfo& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const UpdateUserInfo& default_instance();
+  
+  void Swap(UpdateUserInfo* other);
+  
+  // implements Message ----------------------------------------------
+  
+  UpdateUserInfo* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const UpdateUserInfo& from);
+  void MergeFrom(const UpdateUserInfo& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // required string user_name = 1;
+  inline bool has_user_name() const;
+  inline void clear_user_name();
+  static const int kUserNameFieldNumber = 1;
+  inline const ::std::string& user_name() const;
+  inline void set_user_name(const ::std::string& value);
+  inline void set_user_name(const char* value);
+  inline void set_user_name(const char* value, size_t size);
+  inline ::std::string* mutable_user_name();
+  inline ::std::string* release_user_name();
+  
+  // required string account = 2;
+  inline bool has_account() const;
+  inline void clear_account();
+  static const int kAccountFieldNumber = 2;
+  inline const ::std::string& account() const;
+  inline void set_account(const ::std::string& value);
+  inline void set_account(const char* value);
+  inline void set_account(const char* value, size_t size);
+  inline ::std::string* mutable_account();
+  inline ::std::string* release_account();
+  
+  // required string password = 3;
+  inline bool has_password() const;
+  inline void clear_password();
+  static const int kPasswordFieldNumber = 3;
+  inline const ::std::string& password() const;
+  inline void set_password(const ::std::string& value);
+  inline void set_password(const char* value);
+  inline void set_password(const char* value, size_t size);
+  inline ::std::string* mutable_password();
+  inline ::std::string* release_password();
+  
+  // optional string ex_email = 4;
+  inline bool has_ex_email() const;
+  inline void clear_ex_email();
+  static const int kExEmailFieldNumber = 4;
+  inline const ::std::string& ex_email() const;
+  inline void set_ex_email(const ::std::string& value);
+  inline void set_ex_email(const char* value);
+  inline void set_ex_email(const char* value, size_t size);
+  inline ::std::string* mutable_ex_email();
+  inline ::std::string* release_ex_email();
+  
+  // optional string phone = 5;
+  inline bool has_phone() const;
+  inline void clear_phone();
+  static const int kPhoneFieldNumber = 5;
+  inline const ::std::string& phone() const;
+  inline void set_phone(const ::std::string& value);
+  inline void set_phone(const char* value);
+  inline void set_phone(const char* value, size_t size);
+  inline ::std::string* mutable_phone();
+  inline ::std::string* release_phone();
+  
+  // optional bytes head_image = 6;
+  inline bool has_head_image() const;
+  inline void clear_head_image();
+  static const int kHeadImageFieldNumber = 6;
+  inline const ::std::string& head_image() const;
+  inline void set_head_image(const ::std::string& value);
+  inline void set_head_image(const char* value);
+  inline void set_head_image(const void* value, size_t size);
+  inline ::std::string* mutable_head_image();
+  inline ::std::string* release_head_image();
+  
+  // @@protoc_insertion_point(class_scope:MessageStruct.UpdateUserInfo)
+ private:
+  inline void set_has_user_name();
+  inline void clear_has_user_name();
+  inline void set_has_account();
+  inline void clear_has_account();
+  inline void set_has_password();
+  inline void clear_has_password();
+  inline void set_has_ex_email();
+  inline void clear_has_ex_email();
+  inline void set_has_phone();
+  inline void clear_has_phone();
+  inline void set_has_head_image();
+  inline void clear_has_head_image();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::std::string* user_name_;
+  ::std::string* account_;
+  ::std::string* password_;
+  ::std::string* ex_email_;
+  ::std::string* phone_;
+  ::std::string* head_image_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(6 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_message_2eproto();
+  friend void protobuf_AssignDesc_message_2eproto();
+  friend void protobuf_ShutdownFile_message_2eproto();
+  
+  void InitAsDefaultInstance();
+  static UpdateUserInfo* default_instance_;
+};
 // ===================================================================
 
 
@@ -2930,7 +3281,7 @@ inline ::std::string* ChessBoardUser::release_account() {
   }
 }
 
-// optional uint32 score = 4;
+// optional int32 score = 4;
 inline bool ChessBoardUser::has_score() const {
   return (_has_bits_[0] & 0x00000008u) != 0;
 }
@@ -2941,13 +3292,13 @@ inline void ChessBoardUser::clear_has_score() {
   _has_bits_[0] &= ~0x00000008u;
 }
 inline void ChessBoardUser::clear_score() {
-  score_ = 0u;
+  score_ = 0;
   clear_has_score();
 }
-inline ::google::protobuf::uint32 ChessBoardUser::score() const {
+inline ::google::protobuf::int32 ChessBoardUser::score() const {
   return score_;
 }
-inline void ChessBoardUser::set_score(::google::protobuf::uint32 value) {
+inline void ChessBoardUser::set_score(::google::protobuf::int32 value) {
   set_has_score();
   score_ = value;
 }
@@ -3030,6 +3381,54 @@ inline ::std::string* ChessBoardUser::release_head_image() {
     head_image_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
     return temp;
   }
+}
+
+// -------------------------------------------------------------------
+
+// ChessBoardInfoReq
+
+// required int32 chess_board_id = 1;
+inline bool ChessBoardInfoReq::has_chess_board_id() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void ChessBoardInfoReq::set_has_chess_board_id() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void ChessBoardInfoReq::clear_has_chess_board_id() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void ChessBoardInfoReq::clear_chess_board_id() {
+  chess_board_id_ = 0;
+  clear_has_chess_board_id();
+}
+inline ::google::protobuf::int32 ChessBoardInfoReq::chess_board_id() const {
+  return chess_board_id_;
+}
+inline void ChessBoardInfoReq::set_chess_board_id(::google::protobuf::int32 value) {
+  set_has_chess_board_id();
+  chess_board_id_ = value;
+}
+
+// optional int32 opcode = 2;
+inline bool ChessBoardInfoReq::has_opcode() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void ChessBoardInfoReq::set_has_opcode() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void ChessBoardInfoReq::clear_has_opcode() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void ChessBoardInfoReq::clear_opcode() {
+  opcode_ = 0;
+  clear_has_opcode();
+}
+inline ::google::protobuf::int32 ChessBoardInfoReq::opcode() const {
+  return opcode_;
+}
+inline void ChessBoardInfoReq::set_opcode(::google::protobuf::int32 value) {
+  set_has_opcode();
+  opcode_ = value;
 }
 
 // -------------------------------------------------------------------
@@ -3478,7 +3877,7 @@ inline ::std::string* GameHallSumary::release_username() {
   }
 }
 
-// required uint32 score = 3;
+// required int32 score = 3;
 inline bool GameHallSumary::has_score() const {
   return (_has_bits_[0] & 0x00000004u) != 0;
 }
@@ -3489,13 +3888,13 @@ inline void GameHallSumary::clear_has_score() {
   _has_bits_[0] &= ~0x00000004u;
 }
 inline void GameHallSumary::clear_score() {
-  score_ = 0u;
+  score_ = 0;
   clear_has_score();
 }
-inline ::google::protobuf::uint32 GameHallSumary::score() const {
+inline ::google::protobuf::int32 GameHallSumary::score() const {
   return score_;
 }
-inline void GameHallSumary::set_score(::google::protobuf::uint32 value) {
+inline void GameHallSumary::set_score(::google::protobuf::int32 value) {
   set_has_score();
   score_ = value;
 }
@@ -4823,6 +5222,478 @@ inline ::google::protobuf::uint32 GameStatusReply::single_step_time() const {
 inline void GameStatusReply::set_single_step_time(::google::protobuf::uint32 value) {
   set_has_single_step_time();
   single_step_time_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// FindPassword
+
+// required string email = 1;
+inline bool FindPassword::has_email() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void FindPassword::set_has_email() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void FindPassword::clear_has_email() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void FindPassword::clear_email() {
+  if (email_ != &::google::protobuf::internal::kEmptyString) {
+    email_->clear();
+  }
+  clear_has_email();
+}
+inline const ::std::string& FindPassword::email() const {
+  return *email_;
+}
+inline void FindPassword::set_email(const ::std::string& value) {
+  set_has_email();
+  if (email_ == &::google::protobuf::internal::kEmptyString) {
+    email_ = new ::std::string;
+  }
+  email_->assign(value);
+}
+inline void FindPassword::set_email(const char* value) {
+  set_has_email();
+  if (email_ == &::google::protobuf::internal::kEmptyString) {
+    email_ = new ::std::string;
+  }
+  email_->assign(value);
+}
+inline void FindPassword::set_email(const char* value, size_t size) {
+  set_has_email();
+  if (email_ == &::google::protobuf::internal::kEmptyString) {
+    email_ = new ::std::string;
+  }
+  email_->assign(reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* FindPassword::mutable_email() {
+  set_has_email();
+  if (email_ == &::google::protobuf::internal::kEmptyString) {
+    email_ = new ::std::string;
+  }
+  return email_;
+}
+inline ::std::string* FindPassword::release_email() {
+  clear_has_email();
+  if (email_ == &::google::protobuf::internal::kEmptyString) {
+    return NULL;
+  } else {
+    ::std::string* temp = email_;
+    email_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    return temp;
+  }
+}
+
+// optional string opt = 2;
+inline bool FindPassword::has_opt() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void FindPassword::set_has_opt() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void FindPassword::clear_has_opt() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void FindPassword::clear_opt() {
+  if (opt_ != &::google::protobuf::internal::kEmptyString) {
+    opt_->clear();
+  }
+  clear_has_opt();
+}
+inline const ::std::string& FindPassword::opt() const {
+  return *opt_;
+}
+inline void FindPassword::set_opt(const ::std::string& value) {
+  set_has_opt();
+  if (opt_ == &::google::protobuf::internal::kEmptyString) {
+    opt_ = new ::std::string;
+  }
+  opt_->assign(value);
+}
+inline void FindPassword::set_opt(const char* value) {
+  set_has_opt();
+  if (opt_ == &::google::protobuf::internal::kEmptyString) {
+    opt_ = new ::std::string;
+  }
+  opt_->assign(value);
+}
+inline void FindPassword::set_opt(const char* value, size_t size) {
+  set_has_opt();
+  if (opt_ == &::google::protobuf::internal::kEmptyString) {
+    opt_ = new ::std::string;
+  }
+  opt_->assign(reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* FindPassword::mutable_opt() {
+  set_has_opt();
+  if (opt_ == &::google::protobuf::internal::kEmptyString) {
+    opt_ = new ::std::string;
+  }
+  return opt_;
+}
+inline ::std::string* FindPassword::release_opt() {
+  clear_has_opt();
+  if (opt_ == &::google::protobuf::internal::kEmptyString) {
+    return NULL;
+  } else {
+    ::std::string* temp = opt_;
+    opt_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    return temp;
+  }
+}
+
+// -------------------------------------------------------------------
+
+// UpdateUserInfo
+
+// required string user_name = 1;
+inline bool UpdateUserInfo::has_user_name() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void UpdateUserInfo::set_has_user_name() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void UpdateUserInfo::clear_has_user_name() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void UpdateUserInfo::clear_user_name() {
+  if (user_name_ != &::google::protobuf::internal::kEmptyString) {
+    user_name_->clear();
+  }
+  clear_has_user_name();
+}
+inline const ::std::string& UpdateUserInfo::user_name() const {
+  return *user_name_;
+}
+inline void UpdateUserInfo::set_user_name(const ::std::string& value) {
+  set_has_user_name();
+  if (user_name_ == &::google::protobuf::internal::kEmptyString) {
+    user_name_ = new ::std::string;
+  }
+  user_name_->assign(value);
+}
+inline void UpdateUserInfo::set_user_name(const char* value) {
+  set_has_user_name();
+  if (user_name_ == &::google::protobuf::internal::kEmptyString) {
+    user_name_ = new ::std::string;
+  }
+  user_name_->assign(value);
+}
+inline void UpdateUserInfo::set_user_name(const char* value, size_t size) {
+  set_has_user_name();
+  if (user_name_ == &::google::protobuf::internal::kEmptyString) {
+    user_name_ = new ::std::string;
+  }
+  user_name_->assign(reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* UpdateUserInfo::mutable_user_name() {
+  set_has_user_name();
+  if (user_name_ == &::google::protobuf::internal::kEmptyString) {
+    user_name_ = new ::std::string;
+  }
+  return user_name_;
+}
+inline ::std::string* UpdateUserInfo::release_user_name() {
+  clear_has_user_name();
+  if (user_name_ == &::google::protobuf::internal::kEmptyString) {
+    return NULL;
+  } else {
+    ::std::string* temp = user_name_;
+    user_name_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    return temp;
+  }
+}
+
+// required string account = 2;
+inline bool UpdateUserInfo::has_account() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void UpdateUserInfo::set_has_account() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void UpdateUserInfo::clear_has_account() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void UpdateUserInfo::clear_account() {
+  if (account_ != &::google::protobuf::internal::kEmptyString) {
+    account_->clear();
+  }
+  clear_has_account();
+}
+inline const ::std::string& UpdateUserInfo::account() const {
+  return *account_;
+}
+inline void UpdateUserInfo::set_account(const ::std::string& value) {
+  set_has_account();
+  if (account_ == &::google::protobuf::internal::kEmptyString) {
+    account_ = new ::std::string;
+  }
+  account_->assign(value);
+}
+inline void UpdateUserInfo::set_account(const char* value) {
+  set_has_account();
+  if (account_ == &::google::protobuf::internal::kEmptyString) {
+    account_ = new ::std::string;
+  }
+  account_->assign(value);
+}
+inline void UpdateUserInfo::set_account(const char* value, size_t size) {
+  set_has_account();
+  if (account_ == &::google::protobuf::internal::kEmptyString) {
+    account_ = new ::std::string;
+  }
+  account_->assign(reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* UpdateUserInfo::mutable_account() {
+  set_has_account();
+  if (account_ == &::google::protobuf::internal::kEmptyString) {
+    account_ = new ::std::string;
+  }
+  return account_;
+}
+inline ::std::string* UpdateUserInfo::release_account() {
+  clear_has_account();
+  if (account_ == &::google::protobuf::internal::kEmptyString) {
+    return NULL;
+  } else {
+    ::std::string* temp = account_;
+    account_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    return temp;
+  }
+}
+
+// required string password = 3;
+inline bool UpdateUserInfo::has_password() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void UpdateUserInfo::set_has_password() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void UpdateUserInfo::clear_has_password() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void UpdateUserInfo::clear_password() {
+  if (password_ != &::google::protobuf::internal::kEmptyString) {
+    password_->clear();
+  }
+  clear_has_password();
+}
+inline const ::std::string& UpdateUserInfo::password() const {
+  return *password_;
+}
+inline void UpdateUserInfo::set_password(const ::std::string& value) {
+  set_has_password();
+  if (password_ == &::google::protobuf::internal::kEmptyString) {
+    password_ = new ::std::string;
+  }
+  password_->assign(value);
+}
+inline void UpdateUserInfo::set_password(const char* value) {
+  set_has_password();
+  if (password_ == &::google::protobuf::internal::kEmptyString) {
+    password_ = new ::std::string;
+  }
+  password_->assign(value);
+}
+inline void UpdateUserInfo::set_password(const char* value, size_t size) {
+  set_has_password();
+  if (password_ == &::google::protobuf::internal::kEmptyString) {
+    password_ = new ::std::string;
+  }
+  password_->assign(reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* UpdateUserInfo::mutable_password() {
+  set_has_password();
+  if (password_ == &::google::protobuf::internal::kEmptyString) {
+    password_ = new ::std::string;
+  }
+  return password_;
+}
+inline ::std::string* UpdateUserInfo::release_password() {
+  clear_has_password();
+  if (password_ == &::google::protobuf::internal::kEmptyString) {
+    return NULL;
+  } else {
+    ::std::string* temp = password_;
+    password_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    return temp;
+  }
+}
+
+// optional string ex_email = 4;
+inline bool UpdateUserInfo::has_ex_email() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
+}
+inline void UpdateUserInfo::set_has_ex_email() {
+  _has_bits_[0] |= 0x00000008u;
+}
+inline void UpdateUserInfo::clear_has_ex_email() {
+  _has_bits_[0] &= ~0x00000008u;
+}
+inline void UpdateUserInfo::clear_ex_email() {
+  if (ex_email_ != &::google::protobuf::internal::kEmptyString) {
+    ex_email_->clear();
+  }
+  clear_has_ex_email();
+}
+inline const ::std::string& UpdateUserInfo::ex_email() const {
+  return *ex_email_;
+}
+inline void UpdateUserInfo::set_ex_email(const ::std::string& value) {
+  set_has_ex_email();
+  if (ex_email_ == &::google::protobuf::internal::kEmptyString) {
+    ex_email_ = new ::std::string;
+  }
+  ex_email_->assign(value);
+}
+inline void UpdateUserInfo::set_ex_email(const char* value) {
+  set_has_ex_email();
+  if (ex_email_ == &::google::protobuf::internal::kEmptyString) {
+    ex_email_ = new ::std::string;
+  }
+  ex_email_->assign(value);
+}
+inline void UpdateUserInfo::set_ex_email(const char* value, size_t size) {
+  set_has_ex_email();
+  if (ex_email_ == &::google::protobuf::internal::kEmptyString) {
+    ex_email_ = new ::std::string;
+  }
+  ex_email_->assign(reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* UpdateUserInfo::mutable_ex_email() {
+  set_has_ex_email();
+  if (ex_email_ == &::google::protobuf::internal::kEmptyString) {
+    ex_email_ = new ::std::string;
+  }
+  return ex_email_;
+}
+inline ::std::string* UpdateUserInfo::release_ex_email() {
+  clear_has_ex_email();
+  if (ex_email_ == &::google::protobuf::internal::kEmptyString) {
+    return NULL;
+  } else {
+    ::std::string* temp = ex_email_;
+    ex_email_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    return temp;
+  }
+}
+
+// optional string phone = 5;
+inline bool UpdateUserInfo::has_phone() const {
+  return (_has_bits_[0] & 0x00000010u) != 0;
+}
+inline void UpdateUserInfo::set_has_phone() {
+  _has_bits_[0] |= 0x00000010u;
+}
+inline void UpdateUserInfo::clear_has_phone() {
+  _has_bits_[0] &= ~0x00000010u;
+}
+inline void UpdateUserInfo::clear_phone() {
+  if (phone_ != &::google::protobuf::internal::kEmptyString) {
+    phone_->clear();
+  }
+  clear_has_phone();
+}
+inline const ::std::string& UpdateUserInfo::phone() const {
+  return *phone_;
+}
+inline void UpdateUserInfo::set_phone(const ::std::string& value) {
+  set_has_phone();
+  if (phone_ == &::google::protobuf::internal::kEmptyString) {
+    phone_ = new ::std::string;
+  }
+  phone_->assign(value);
+}
+inline void UpdateUserInfo::set_phone(const char* value) {
+  set_has_phone();
+  if (phone_ == &::google::protobuf::internal::kEmptyString) {
+    phone_ = new ::std::string;
+  }
+  phone_->assign(value);
+}
+inline void UpdateUserInfo::set_phone(const char* value, size_t size) {
+  set_has_phone();
+  if (phone_ == &::google::protobuf::internal::kEmptyString) {
+    phone_ = new ::std::string;
+  }
+  phone_->assign(reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* UpdateUserInfo::mutable_phone() {
+  set_has_phone();
+  if (phone_ == &::google::protobuf::internal::kEmptyString) {
+    phone_ = new ::std::string;
+  }
+  return phone_;
+}
+inline ::std::string* UpdateUserInfo::release_phone() {
+  clear_has_phone();
+  if (phone_ == &::google::protobuf::internal::kEmptyString) {
+    return NULL;
+  } else {
+    ::std::string* temp = phone_;
+    phone_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    return temp;
+  }
+}
+
+// optional bytes head_image = 6;
+inline bool UpdateUserInfo::has_head_image() const {
+  return (_has_bits_[0] & 0x00000020u) != 0;
+}
+inline void UpdateUserInfo::set_has_head_image() {
+  _has_bits_[0] |= 0x00000020u;
+}
+inline void UpdateUserInfo::clear_has_head_image() {
+  _has_bits_[0] &= ~0x00000020u;
+}
+inline void UpdateUserInfo::clear_head_image() {
+  if (head_image_ != &::google::protobuf::internal::kEmptyString) {
+    head_image_->clear();
+  }
+  clear_has_head_image();
+}
+inline const ::std::string& UpdateUserInfo::head_image() const {
+  return *head_image_;
+}
+inline void UpdateUserInfo::set_head_image(const ::std::string& value) {
+  set_has_head_image();
+  if (head_image_ == &::google::protobuf::internal::kEmptyString) {
+    head_image_ = new ::std::string;
+  }
+  head_image_->assign(value);
+}
+inline void UpdateUserInfo::set_head_image(const char* value) {
+  set_has_head_image();
+  if (head_image_ == &::google::protobuf::internal::kEmptyString) {
+    head_image_ = new ::std::string;
+  }
+  head_image_->assign(value);
+}
+inline void UpdateUserInfo::set_head_image(const void* value, size_t size) {
+  set_has_head_image();
+  if (head_image_ == &::google::protobuf::internal::kEmptyString) {
+    head_image_ = new ::std::string;
+  }
+  head_image_->assign(reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* UpdateUserInfo::mutable_head_image() {
+  set_has_head_image();
+  if (head_image_ == &::google::protobuf::internal::kEmptyString) {
+    head_image_ = new ::std::string;
+  }
+  return head_image_;
+}
+inline ::std::string* UpdateUserInfo::release_head_image() {
+  clear_has_head_image();
+  if (head_image_ == &::google::protobuf::internal::kEmptyString) {
+    return NULL;
+  } else {
+    ::std::string* temp = head_image_;
+    head_image_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    return temp;
+  }
 }
 
 

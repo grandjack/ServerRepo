@@ -35,6 +35,7 @@ typedef enum
     MSG_REGISTER,
     MSG_REGISTER_REPLY,
     MSG_CHESS_BOARD_USER,
+    MSG_CHESS_BOARD_REQ,
     MSG_CHESS_BOARD,
     MSG_HALL_INFO_REQ,
     MSG_HALL_INFO,
@@ -53,6 +54,8 @@ typedef enum
     MSG_UNDO_REPS,
     MSG_GAME_READY_REQ,
     MSG_GAME_STATUS,
+    MSG_FIND_PASSWORD,
+    MSG_UPDATE_USER_INFO,
     MSG_TYPE_MAX
 }MessageType;
 
@@ -68,6 +71,8 @@ public:
     bool GameHallSumaryHandle(const string &msg);
     bool HallInfoReqHandle(const string &msg);
     bool WrapHallInfo(const u_int32 hall_id, string &data);
+    void WrapChessBoardInfo();
+    bool UpdateUserInfos(const string &msg);
     
 protected:
     StateMachine *stateMachine;
@@ -86,6 +91,7 @@ private:
     bool HandleRegister(const string &msg);
     bool HandleLogin(const string &msg);
     bool HandleLogout(const string &msg);
+    bool HandleFindPwd(const string &msg);
 
 };
 
@@ -107,6 +113,7 @@ public:
     ~StateGamePlay();
 
     bool MsgHandle(const u_int32 msg_type, const string &msg);
+    bool ChessBoardReq(const string &msg);
 
 };
 

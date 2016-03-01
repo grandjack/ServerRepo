@@ -64,7 +64,6 @@ int mysql_db_query(MYSQL *connection, const char * sql, UsersInfo &user_info) {
             user_info.email = row[2];
             user_info.score = atoi(row[3]);
             user_info.head_photo = row[4];
-            //user_info.user_name = (row[5] != NULL) ? row[5] : "";
             user_info.user_name = row[5] ;
 			n++; 
 		} 

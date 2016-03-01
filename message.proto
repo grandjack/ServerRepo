@@ -24,9 +24,14 @@ message ChessBoardUser {
     required bool chess_board_empty=1;
     optional string user_name=2;
     optional string account = 3;
-    optional uint32 score = 4;
+    optional int32 score = 4;
     optional uint32 status = 5;//indicate the user's status, notStarted\playing\ended\exited
     optional bytes head_image = 6;
+}
+
+message ChessBoardInfoReq {
+    required int32 chess_board_id = 1;
+    optional int32 opcode = 2;
 }
 
 message ChessBoardInfo {
@@ -41,6 +46,7 @@ message HallInfoReq {
     required int32 game_hall_id = 1;
     optional int32 opcode = 2;
 }
+
 message HallInfo {
     required int32 game_hall_id = 1;
     required uint32 total_people = 2;
@@ -56,7 +62,7 @@ message GameHallSumaryReq {
 message GameHallSumary {
     required string account = 1;
     required string username = 2;
-    required uint32 score = 3;
+    required int32 score = 3;
     required uint32 hall_num = 4;
     required string head_picture = 5;
     required string ad_picture1 = 6;
@@ -148,4 +154,20 @@ message GameStatusReply
     required uint32 token_locate = 4;//announce next user who will keep the Token to move chess
     required uint32 total_time = 5;
     required uint32 single_step_time = 6;
+}
+
+message FindPassword
+{
+    required string email = 1;
+    optional string opt = 2;
+}
+
+message UpdateUserInfo
+{
+    required string user_name = 1;
+    required string account = 2;
+    required string password = 3;
+    optional string ex_email = 4;
+    optional string phone = 5;
+    optional bytes head_image = 6;
 }

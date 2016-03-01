@@ -43,7 +43,11 @@ bool StateAuth::MsgHandle(const u_int32 msg_type, const string &msg)
         case MSG_ECHO:
             ret = EchoMsgHandle(msg);
             break;
-        
+
+        case MSG_FIND_PASSWORD:
+            ret = HandleFindPwd(msg);
+            break;
+            
         default:
             break;
     }
@@ -107,6 +111,7 @@ bool StateAuth::HandleLogin(const string &msg)
                 stateMachine->account = user_info->account;
                 stateMachine->email = user_info->account;
                 stateMachine->score = user_info->score;
+                stateMachine->user_name = user_info->user_name;
                 
                 status.set_status(1);
                 ret = true;
@@ -140,4 +145,15 @@ bool StateAuth::HandleLogout(const string &msg)
     return true;
 }
 
+
+bool StateAuth::HandleFindPwd(const string &msg)
+{
+    FindPassword pwd;
+
+    if (pwd.ParseFromString(msg)) {
+        LOG_DEBUG(MODULE_COMMON, "To find the lost password!!");
+    }
+
+    return true;
+}
 

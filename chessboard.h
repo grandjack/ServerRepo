@@ -59,6 +59,7 @@ public:
     bool UndoHandle(const string &msg, MessageType type);
     bool GameReadyHandle(const string &msg);
     u_int32 GetActiveUsersNum() const;
+    u_int32 GetChessBoardID() const;
 
 private:
     UserSession *leftUser;

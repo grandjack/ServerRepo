@@ -163,3 +163,68 @@ bool State::WrapHallInfo(const u_int32 hall_id, string &data)
     return ret;
 }
 
+void State::WrapChessBoardInfo()
+{
+    ChessBoardInfo chessBoard;
+    string data;
+    ChessBoard *chess = stateMachine->currChessBoard;
+        
+    chessBoard.set_id(chess->GetChessBoardID());
+    chessBoard.set_people_num(chess->GetUserNum());
+    
+    ChessBoardUser *left = chessBoard.mutable_left_user();
+    left->set_chess_board_empty((chess->GetUserByLocation(LOCATION_LEFT)==NULL) ? true : false);
+                    
+    if (!left->chess_board_empty()) {
+        left->set_account(chess->GetUserByLocation(LOCATION_LEFT)->account);
+        left->set_user_name(chess->GetUserByLocation(LOCATION_LEFT)->user_name);
+        left->set_score(chess->GetUserByLocation(LOCATION_LEFT)->score);
+        left->set_status(chess->GetUserByLocation(LOCATION_LEFT)->stateMachine->GetType());
+        left->set_head_image("Unknown head image");
+    }
+        
+    ChessBoardUser *right = chessBoard.mutable_right_user();
+    right->set_chess_board_empty((chess->GetUserByLocation(LOCATION_RIGHT)==NULL) ? true : false);
+    if (!right->chess_board_empty()) {
+        right->set_account(chess->GetUserByLocation(LOCATION_RIGHT)->account);
+        right->set_user_name(chess->GetUserByLocation(LOCATION_RIGHT)->user_name);
+        right->set_score(chess->GetUserByLocation(LOCATION_RIGHT)->score);
+        right->set_status(chess->GetUserByLocation(LOCATION_RIGHT)->stateMachine->GetType());
+        right->set_head_image("Unknown head image");
+    }
+        
+    ChessBoardUser *bottom = chessBoard.mutable_bottom_user();
+    bottom->set_chess_board_empty((chess->GetUserByLocation(LOCATION_BOTTOM)==NULL) ? true : false);
+    if (!bottom->chess_board_empty()) {
+        bottom->set_account(chess->GetUserByLocation(LOCATION_BOTTOM)->account);
+        bottom->set_user_name(chess->GetUserByLocation(LOCATION_BOTTOM)->user_name);
+        bottom->set_score(chess->GetUserByLocation(LOCATION_BOTTOM)->score);
+        bottom->set_status(chess->GetUserByLocation(LOCATION_BOTTOM)->stateMachine->GetType());
+        bottom->set_head_image("Unknown head image");
+    }
+
+    chessBoard.SerializeToString(&data);
+    stateMachine->MessageReply(MSG_CHESS_BOARD, data);
+
+}
+
+bool State::UpdateUserInfos(const string &msg)
+{
+    UpdateUserInfo info;
+    
+    if (info.ParseFromString(msg)) {
+        stateMachine->user_name = info.user_name();
+        stateMachine->password = info.password();
+        stateMachine->email = info.ex_email();
+
+        stateMachine->user_info.user_name= stateMachine->user_name;
+        stateMachine->user_info.email = stateMachine->email;
+        stateMachine->user_info.password = stateMachine->password;
+        stateMachine->user_info.head_photo = info.head_image();
+
+        //TODO other things here!! Update the info to database
+    }
+
+    return true;
+}
+
