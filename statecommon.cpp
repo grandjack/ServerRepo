@@ -130,7 +130,7 @@ bool State::WrapHallInfo(const u_int32 hall_id, string &data)
                 left->set_user_name(chessBoard->GetUserByLocation(LOCATION_LEFT)->user_name);
                 left->set_score(chessBoard->GetUserByLocation(LOCATION_LEFT)->score);
                 left->set_status(chessBoard->GetUserByLocation(LOCATION_LEFT)->stateMachine->GetType());
-                left->set_head_image("Unknown head image");
+                left->set_head_image(chessBoard->GetUserByLocation(LOCATION_LEFT)->user_info.head_photo);
             }
     
             ChessBoardUser *right = chessBoardInfo->mutable_right_user();
@@ -140,7 +140,7 @@ bool State::WrapHallInfo(const u_int32 hall_id, string &data)
                 right->set_user_name(chessBoard->GetUserByLocation(LOCATION_RIGHT)->user_name);
                 right->set_score(chessBoard->GetUserByLocation(LOCATION_RIGHT)->score);
                 right->set_status(chessBoard->GetUserByLocation(LOCATION_RIGHT)->stateMachine->GetType());
-                right->set_head_image("Unknown head image");
+                right->set_head_image(chessBoard->GetUserByLocation(LOCATION_RIGHT)->user_info.head_photo);
             }
     
             ChessBoardUser *bottom = chessBoardInfo->mutable_bottom_user();
@@ -150,7 +150,7 @@ bool State::WrapHallInfo(const u_int32 hall_id, string &data)
                 bottom->set_user_name(chessBoard->GetUserByLocation(LOCATION_BOTTOM)->user_name);
                 bottom->set_score(chessBoard->GetUserByLocation(LOCATION_BOTTOM)->score);
                 bottom->set_status(chessBoard->GetUserByLocation(LOCATION_BOTTOM)->stateMachine->GetType());
-                bottom->set_head_image("Unknown head image");
+                bottom->set_head_image(chessBoard->GetUserByLocation(LOCATION_BOTTOM)->user_info.head_photo);
             }
         }
 
@@ -180,7 +180,7 @@ void State::WrapChessBoardInfo()
         left->set_user_name(chess->GetUserByLocation(LOCATION_LEFT)->user_name);
         left->set_score(chess->GetUserByLocation(LOCATION_LEFT)->score);
         left->set_status(chess->GetUserByLocation(LOCATION_LEFT)->stateMachine->GetType());
-        left->set_head_image("Unknown head image");
+        left->set_head_image(stateMachine->user_info.head_photo);
     }
         
     ChessBoardUser *right = chessBoard.mutable_right_user();
@@ -190,7 +190,7 @@ void State::WrapChessBoardInfo()
         right->set_user_name(chess->GetUserByLocation(LOCATION_RIGHT)->user_name);
         right->set_score(chess->GetUserByLocation(LOCATION_RIGHT)->score);
         right->set_status(chess->GetUserByLocation(LOCATION_RIGHT)->stateMachine->GetType());
-        right->set_head_image("Unknown head image");
+        right->set_head_image(stateMachine->user_info.head_photo);
     }
         
     ChessBoardUser *bottom = chessBoard.mutable_bottom_user();
@@ -200,7 +200,7 @@ void State::WrapChessBoardInfo()
         bottom->set_user_name(chess->GetUserByLocation(LOCATION_BOTTOM)->user_name);
         bottom->set_score(chess->GetUserByLocation(LOCATION_BOTTOM)->score);
         bottom->set_status(chess->GetUserByLocation(LOCATION_BOTTOM)->stateMachine->GetType());
-        bottom->set_head_image("Unknown head image");
+        bottom->set_head_image(stateMachine->user_info.head_photo);
     }
 
     chessBoard.SerializeToString(&data);
@@ -211,7 +211,9 @@ void State::WrapChessBoardInfo()
 bool State::UpdateUserInfos(const string &msg)
 {
     UpdateUserInfo info;
-    
+    LOG_DEBUG(MODULE_COMMON, "UpdateUserInfos ...");
+
+    try {
     if (info.ParseFromString(msg)) {
         stateMachine->user_name = info.user_name();
         stateMachine->password = info.password();
@@ -221,8 +223,20 @@ bool State::UpdateUserInfos(const string &msg)
         stateMachine->user_info.email = stateMachine->email;
         stateMachine->user_info.password = stateMachine->password;
         stateMachine->user_info.head_photo = info.head_image();
+        
+        LOG_DEBUG(MODULE_COMMON, "account :%s", stateMachine->user_info.account.c_str());
+        LOG_DEBUG(MODULE_COMMON, "user_name :%s", stateMachine->user_info.user_name.c_str());
+        LOG_DEBUG(MODULE_COMMON, "email :%s", stateMachine->user_info.email.c_str());
+        LOG_DEBUG(MODULE_COMMON, "password :%s", stateMachine->user_info.password.c_str());
+        LOG_DEBUG(MODULE_COMMON, "head_photo.size :%d", info.head_image().size());
 
         //TODO other things here!! Update the info to database
+        stateMachine->thread->UpdateUserNameToDB(stateMachine->account, stateMachine->user_info.user_name);
+        stateMachine->thread->UpdateUserPasswordToDB(stateMachine->account, stateMachine->user_info.password);
+        stateMachine->thread->UpdateHeadImageToDB(stateMachine->account, stateMachine->user_info.head_photo);
+    }
+    } catch(exception &e) {
+        LOG_ERROR(MODULE_COMMON, "Parse user info failed!");
     }
 
     return true;

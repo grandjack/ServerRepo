@@ -19,4 +19,6 @@ int mysql_db_excute(MYSQL *mysql, const char * query_string, int len);
 
 int creat_users_info_table(MYSQL *mysql);
 
+int mysql_get_binary_data(MYSQL *mysql, const char * query_string, int len, string &data);
+
 #endif /*__MYSQL_DB_HEAD__*/

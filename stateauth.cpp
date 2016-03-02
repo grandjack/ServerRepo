@@ -112,6 +112,8 @@ bool StateAuth::HandleLogin(const string &msg)
                 stateMachine->email = user_info->account;
                 stateMachine->score = user_info->score;
                 stateMachine->user_name = user_info->user_name;
+
+                stateMachine->thread->GetHeadImageFromDB(user_info->account, user_info->head_photo);
                 
                 status.set_status(1);
                 ret = true;

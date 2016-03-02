@@ -85,6 +85,10 @@ public:
     bool UpdateUserPasswordToDB(const std::string &account, const std::string &pswd);
     
     bool UpdateUserNameToDB(const std::string &account, const std::string &name);
+    
+    bool UpdateHeadImageToDB(const std::string &account, const std::string &data);
+
+    bool GetHeadImageFromDB(const std::string &account, std::string &data);    
 
     bool GetIndividualUser(const std::string &account);
     

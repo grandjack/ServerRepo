@@ -174,14 +174,18 @@ void WorkThread::ResetTimer(UserSession *session)
     if (session == NULL) {
         return;
     }
-    
-    event_del(&session->timer_ev);
 
-    LOG_DEBUG(MODULE_COMMON, "ResetTimer for user[%s]...", session->user_info.account.c_str());
-    
-    evtimer_set(&session->timer_ev, TimerOutHandle, (void*)session);
-    event_base_set(session->thread->base, &session->timer_ev);
-    evtimer_add(&session->timer_ev, &session->tv);
+    try {
+        event_del(&session->timer_ev);
+
+        LOG_DEBUG(MODULE_COMMON, "ResetTimer for user[%s]...", session->user_info.account.c_str());
+        
+        evtimer_set(&session->timer_ev, TimerOutHandle, (void*)session);
+        event_base_set(session->thread->base, &session->timer_ev);
+        evtimer_add(&session->timer_ev, &session->tv);
+    } catch(exception &e) {
+        LOG_ERROR(MODULE_COMMON, "Update timer failed.");
+    }
 }
 
 void WorkThread::NotifyReceivedProcess(int fd, short which, void *arg)
@@ -360,13 +364,14 @@ void WorkThread::OnRead(int iCliFd, short iEvent, void *arg)
     }
 
     const string data((char *)&buf[DATA_HEAD_LENGTH], totalSize - DATA_HEAD_LENGTH);
+    
+    if (pBuf != NULL) {
+        delete []pBuf;
+        pBuf = NULL;
+        LOG_DEBUG(MODULE_COMMON, "Freed the dynamic buffer successfully!");
+    }
 
     pThread->MessageHandle(iCliFd, msg_type, data);
-
-    if (pBuf != NULL) {
-        delete pBuf;
-        pBuf = NULL;
-    }
 } 
 
 int WorkThread::GetSessionsNum() const
@@ -530,7 +535,7 @@ bool WorkThread::UpdateUserPasswordToDB(const std::string &account, const std::s
     char select_cmd[255] = { 0 };
     int ret = -1;
 
-    snprintf(select_cmd, sizeof(select_cmd)-1, "UPDATE users_info SET pswd='%s' where account='%s'",
+    snprintf(select_cmd, sizeof(select_cmd)-1, "UPDATE users_info SET password='%s' WHERE account='%s'",
              pswd.c_str(), account.c_str());
 
     LOG_DEBUG(MODULE_DB, "select_cmd[%s]", select_cmd);
@@ -549,7 +554,7 @@ bool WorkThread::UpdateUserNameToDB(const std::string &account, const std::strin
     char select_cmd[255] = { 0 };
     int ret = -1;
 
-    snprintf(select_cmd, sizeof(select_cmd)-1, "UPDATE users_info SET user_name='%s' where account='%s'",
+    snprintf(select_cmd, sizeof(select_cmd)-1, "UPDATE users_info SET user_name='%s' WHERE account='%s'",
              name.c_str(), account.c_str());
 
     LOG_DEBUG(MODULE_DB, "select_cmd[%s]", select_cmd);
@@ -557,6 +562,54 @@ bool WorkThread::UpdateUserNameToDB(const std::string &account, const std::strin
     ret = mysql_db_excute(pdb_con, select_cmd, strlen(select_cmd));
     if (ret != 0) {
         LOG_ERROR(MODULE_DB, "mysql_db_excute failed, ret[%d]", ret);
+        return false;
+    }
+    
+    return true;
+}
+
+bool WorkThread::UpdateHeadImageToDB(const std::string &account, const std::string &data)
+{
+    char *select_cmd = NULL;
+    //char select_cmd[9750];
+    int ret = -1;
+    char *end = NULL;
+    bool retV = true;
+
+    select_cmd = new char[data.size() + 255];
+    if (select_cmd != NULL) {    
+        end = strcpy(select_cmd, "UPDATE users_info SET head_photo='");
+        end += strlen(select_cmd);
+        end += mysql_real_escape_string_quote(pdb_con, end, data.c_str(), data.size(), '\'');
+        end += sprintf(end, "' WHERE account='%s'", account.c_str());
+        
+        LOG_DEBUG(MODULE_DB, "select_cmd length[%d]  data legth[%d]", (end - select_cmd), data.size());
+
+        ret = mysql_db_excute(pdb_con, select_cmd, (end - select_cmd));
+        if (ret != 0) {
+            LOG_ERROR(MODULE_DB, "mysql_db_excute failed, ret[%d]", ret);
+            retV = false;
+        }
+
+        delete []select_cmd;
+        select_cmd = NULL;
+    }
+    
+    return retV;
+}
+
+bool WorkThread::GetHeadImageFromDB(const std::string &account, std::string &data)
+{
+    char select_cmd[255] = { 0 };
+    int ret = -1;
+
+    snprintf(select_cmd, sizeof(select_cmd)-1, "SELECT head_photo FROM users_info WHERE account='%s'", account.c_str());
+
+    LOG_DEBUG(MODULE_DB, "select_cmd[%s]", select_cmd);
+
+    ret = mysql_get_binary_data(pdb_con, select_cmd, strlen(select_cmd), data);
+    if (ret != 0) {
+        LOG_ERROR(MODULE_DB, "mysql_get_binary_data failed, ret[%d]", ret);
         return false;
     }
     
