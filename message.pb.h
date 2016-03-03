@@ -306,17 +306,28 @@ class ReplyStatus : public ::google::protobuf::Message {
   inline ::google::protobuf::uint32 status() const;
   inline void set_status(::google::protobuf::uint32 value);
   
+  // optional .MessageStruct.ChessBoardUser user = 2;
+  inline bool has_user() const;
+  inline void clear_user();
+  static const int kUserFieldNumber = 2;
+  inline const ::MessageStruct::ChessBoardUser& user() const;
+  inline ::MessageStruct::ChessBoardUser* mutable_user();
+  inline ::MessageStruct::ChessBoardUser* release_user();
+  
   // @@protoc_insertion_point(class_scope:MessageStruct.ReplyStatus)
  private:
   inline void set_has_status();
   inline void clear_has_status();
+  inline void set_has_user();
+  inline void clear_has_user();
   
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
   
+  ::MessageStruct::ChessBoardUser* user_;
   ::google::protobuf::uint32 status_;
   
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(1 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(2 + 31) / 32];
   
   friend void  protobuf_AddDesc_message_2eproto();
   friend void protobuf_AssignDesc_message_2eproto();
@@ -531,23 +542,45 @@ class ChessBoardUser : public ::google::protobuf::Message {
   inline ::google::protobuf::int32 score() const;
   inline void set_score(::google::protobuf::int32 value);
   
-  // optional uint32 status = 5;
-  inline bool has_status() const;
-  inline void clear_status();
-  static const int kStatusFieldNumber = 5;
-  inline ::google::protobuf::uint32 status() const;
-  inline void set_status(::google::protobuf::uint32 value);
+  // optional string ex_email = 5;
+  inline bool has_ex_email() const;
+  inline void clear_ex_email();
+  static const int kExEmailFieldNumber = 5;
+  inline const ::std::string& ex_email() const;
+  inline void set_ex_email(const ::std::string& value);
+  inline void set_ex_email(const char* value);
+  inline void set_ex_email(const char* value, size_t size);
+  inline ::std::string* mutable_ex_email();
+  inline ::std::string* release_ex_email();
   
-  // optional bytes head_image = 6;
+  // optional string phone = 6;
+  inline bool has_phone() const;
+  inline void clear_phone();
+  static const int kPhoneFieldNumber = 6;
+  inline const ::std::string& phone() const;
+  inline void set_phone(const ::std::string& value);
+  inline void set_phone(const char* value);
+  inline void set_phone(const char* value, size_t size);
+  inline ::std::string* mutable_phone();
+  inline ::std::string* release_phone();
+  
+  // optional bytes head_image = 7;
   inline bool has_head_image() const;
   inline void clear_head_image();
-  static const int kHeadImageFieldNumber = 6;
+  static const int kHeadImageFieldNumber = 7;
   inline const ::std::string& head_image() const;
   inline void set_head_image(const ::std::string& value);
   inline void set_head_image(const char* value);
   inline void set_head_image(const void* value, size_t size);
   inline ::std::string* mutable_head_image();
   inline ::std::string* release_head_image();
+  
+  // optional uint32 status = 8;
+  inline bool has_status() const;
+  inline void clear_status();
+  static const int kStatusFieldNumber = 8;
+  inline ::google::protobuf::uint32 status() const;
+  inline void set_status(::google::protobuf::uint32 value);
   
   // @@protoc_insertion_point(class_scope:MessageStruct.ChessBoardUser)
  private:
@@ -559,10 +592,14 @@ class ChessBoardUser : public ::google::protobuf::Message {
   inline void clear_has_account();
   inline void set_has_score();
   inline void clear_has_score();
-  inline void set_has_status();
-  inline void clear_has_status();
+  inline void set_has_ex_email();
+  inline void clear_has_ex_email();
+  inline void set_has_phone();
+  inline void clear_has_phone();
   inline void set_has_head_image();
   inline void clear_has_head_image();
+  inline void set_has_status();
+  inline void clear_has_status();
   
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
   
@@ -570,11 +607,13 @@ class ChessBoardUser : public ::google::protobuf::Message {
   bool chess_board_empty_;
   ::google::protobuf::int32 score_;
   ::std::string* account_;
+  ::std::string* ex_email_;
+  ::std::string* phone_;
   ::std::string* head_image_;
   ::google::protobuf::uint32 status_;
   
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(6 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(8 + 31) / 32];
   
   friend void  protobuf_AddDesc_message_2eproto();
   friend void protobuf_AssignDesc_message_2eproto();
@@ -2961,6 +3000,35 @@ inline void ReplyStatus::set_status(::google::protobuf::uint32 value) {
   status_ = value;
 }
 
+// optional .MessageStruct.ChessBoardUser user = 2;
+inline bool ReplyStatus::has_user() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void ReplyStatus::set_has_user() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void ReplyStatus::clear_has_user() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void ReplyStatus::clear_user() {
+  if (user_ != NULL) user_->::MessageStruct::ChessBoardUser::Clear();
+  clear_has_user();
+}
+inline const ::MessageStruct::ChessBoardUser& ReplyStatus::user() const {
+  return user_ != NULL ? *user_ : *default_instance_->user_;
+}
+inline ::MessageStruct::ChessBoardUser* ReplyStatus::mutable_user() {
+  set_has_user();
+  if (user_ == NULL) user_ = new ::MessageStruct::ChessBoardUser;
+  return user_;
+}
+inline ::MessageStruct::ChessBoardUser* ReplyStatus::release_user() {
+  clear_has_user();
+  ::MessageStruct::ChessBoardUser* temp = user_;
+  user_ = NULL;
+  return temp;
+}
+
 // -------------------------------------------------------------------
 
 // Register
@@ -3303,37 +3371,131 @@ inline void ChessBoardUser::set_score(::google::protobuf::int32 value) {
   score_ = value;
 }
 
-// optional uint32 status = 5;
-inline bool ChessBoardUser::has_status() const {
+// optional string ex_email = 5;
+inline bool ChessBoardUser::has_ex_email() const {
   return (_has_bits_[0] & 0x00000010u) != 0;
 }
-inline void ChessBoardUser::set_has_status() {
+inline void ChessBoardUser::set_has_ex_email() {
   _has_bits_[0] |= 0x00000010u;
 }
-inline void ChessBoardUser::clear_has_status() {
+inline void ChessBoardUser::clear_has_ex_email() {
   _has_bits_[0] &= ~0x00000010u;
 }
-inline void ChessBoardUser::clear_status() {
-  status_ = 0u;
-  clear_has_status();
+inline void ChessBoardUser::clear_ex_email() {
+  if (ex_email_ != &::google::protobuf::internal::kEmptyString) {
+    ex_email_->clear();
+  }
+  clear_has_ex_email();
 }
-inline ::google::protobuf::uint32 ChessBoardUser::status() const {
-  return status_;
+inline const ::std::string& ChessBoardUser::ex_email() const {
+  return *ex_email_;
 }
-inline void ChessBoardUser::set_status(::google::protobuf::uint32 value) {
-  set_has_status();
-  status_ = value;
+inline void ChessBoardUser::set_ex_email(const ::std::string& value) {
+  set_has_ex_email();
+  if (ex_email_ == &::google::protobuf::internal::kEmptyString) {
+    ex_email_ = new ::std::string;
+  }
+  ex_email_->assign(value);
+}
+inline void ChessBoardUser::set_ex_email(const char* value) {
+  set_has_ex_email();
+  if (ex_email_ == &::google::protobuf::internal::kEmptyString) {
+    ex_email_ = new ::std::string;
+  }
+  ex_email_->assign(value);
+}
+inline void ChessBoardUser::set_ex_email(const char* value, size_t size) {
+  set_has_ex_email();
+  if (ex_email_ == &::google::protobuf::internal::kEmptyString) {
+    ex_email_ = new ::std::string;
+  }
+  ex_email_->assign(reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* ChessBoardUser::mutable_ex_email() {
+  set_has_ex_email();
+  if (ex_email_ == &::google::protobuf::internal::kEmptyString) {
+    ex_email_ = new ::std::string;
+  }
+  return ex_email_;
+}
+inline ::std::string* ChessBoardUser::release_ex_email() {
+  clear_has_ex_email();
+  if (ex_email_ == &::google::protobuf::internal::kEmptyString) {
+    return NULL;
+  } else {
+    ::std::string* temp = ex_email_;
+    ex_email_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    return temp;
+  }
 }
 
-// optional bytes head_image = 6;
-inline bool ChessBoardUser::has_head_image() const {
+// optional string phone = 6;
+inline bool ChessBoardUser::has_phone() const {
   return (_has_bits_[0] & 0x00000020u) != 0;
 }
-inline void ChessBoardUser::set_has_head_image() {
+inline void ChessBoardUser::set_has_phone() {
   _has_bits_[0] |= 0x00000020u;
 }
-inline void ChessBoardUser::clear_has_head_image() {
+inline void ChessBoardUser::clear_has_phone() {
   _has_bits_[0] &= ~0x00000020u;
+}
+inline void ChessBoardUser::clear_phone() {
+  if (phone_ != &::google::protobuf::internal::kEmptyString) {
+    phone_->clear();
+  }
+  clear_has_phone();
+}
+inline const ::std::string& ChessBoardUser::phone() const {
+  return *phone_;
+}
+inline void ChessBoardUser::set_phone(const ::std::string& value) {
+  set_has_phone();
+  if (phone_ == &::google::protobuf::internal::kEmptyString) {
+    phone_ = new ::std::string;
+  }
+  phone_->assign(value);
+}
+inline void ChessBoardUser::set_phone(const char* value) {
+  set_has_phone();
+  if (phone_ == &::google::protobuf::internal::kEmptyString) {
+    phone_ = new ::std::string;
+  }
+  phone_->assign(value);
+}
+inline void ChessBoardUser::set_phone(const char* value, size_t size) {
+  set_has_phone();
+  if (phone_ == &::google::protobuf::internal::kEmptyString) {
+    phone_ = new ::std::string;
+  }
+  phone_->assign(reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* ChessBoardUser::mutable_phone() {
+  set_has_phone();
+  if (phone_ == &::google::protobuf::internal::kEmptyString) {
+    phone_ = new ::std::string;
+  }
+  return phone_;
+}
+inline ::std::string* ChessBoardUser::release_phone() {
+  clear_has_phone();
+  if (phone_ == &::google::protobuf::internal::kEmptyString) {
+    return NULL;
+  } else {
+    ::std::string* temp = phone_;
+    phone_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    return temp;
+  }
+}
+
+// optional bytes head_image = 7;
+inline bool ChessBoardUser::has_head_image() const {
+  return (_has_bits_[0] & 0x00000040u) != 0;
+}
+inline void ChessBoardUser::set_has_head_image() {
+  _has_bits_[0] |= 0x00000040u;
+}
+inline void ChessBoardUser::clear_has_head_image() {
+  _has_bits_[0] &= ~0x00000040u;
 }
 inline void ChessBoardUser::clear_head_image() {
   if (head_image_ != &::google::protobuf::internal::kEmptyString) {
@@ -3381,6 +3543,28 @@ inline ::std::string* ChessBoardUser::release_head_image() {
     head_image_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
     return temp;
   }
+}
+
+// optional uint32 status = 8;
+inline bool ChessBoardUser::has_status() const {
+  return (_has_bits_[0] & 0x00000080u) != 0;
+}
+inline void ChessBoardUser::set_has_status() {
+  _has_bits_[0] |= 0x00000080u;
+}
+inline void ChessBoardUser::clear_has_status() {
+  _has_bits_[0] &= ~0x00000080u;
+}
+inline void ChessBoardUser::clear_status() {
+  status_ = 0u;
+  clear_has_status();
+}
+inline ::google::protobuf::uint32 ChessBoardUser::status() const {
+  return status_;
+}
+inline void ChessBoardUser::set_status(::google::protobuf::uint32 value) {
+  set_has_status();
+  status_ = value;
 }
 
 // -------------------------------------------------------------------

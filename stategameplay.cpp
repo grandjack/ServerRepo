@@ -7,10 +7,6 @@
 #include "thread.h"
 #include "chessboard.h"
 
-using namespace std;
-using namespace MessageStruct;
-
-
 StateGamePlay::StateGamePlay(StateMachine *machine):State(machine)
 {
     type = STATE_GAME_PLAY;
@@ -70,9 +66,14 @@ bool StateGamePlay::MsgHandle(const u_int32 msg_type, const string &msg)
 bool StateGamePlay::ChessBoardReq(const string &msg)
 {
     ChessBoardInfoReq chessboard;
+    ChessBoardInfo chess;
+    string data;
     
     if (chessboard.ParseFromString(msg)) {
-        WrapChessBoardInfo();
+        stateMachine->currChessBoard->WrapChessBoardInfo(chess);
+        
+        chess.SerializeToString(&data);
+        stateMachine->MessageReply(MSG_CHESS_BOARD, data);
     }
 
     return true;

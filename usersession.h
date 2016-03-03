@@ -38,6 +38,7 @@ struct UsersInfo
     string email;
     string head_photo;
     string user_name;
+    string phone;
 };
 
 class UserSession
@@ -61,13 +62,8 @@ public:
     struct timeval tv;
     WorkThread *thread;
 
-
     Location locate;
     u_int32 score;
-    string account;
-    string password;
-    string email;
-    string user_name;
     ChessBoard *currChessBoard;
 
     State *stateMachine;

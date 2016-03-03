@@ -328,8 +328,8 @@ void WorkThread::OnRead(int iCliFd, short iEvent, void *arg)
                     totalSize = *((u_int32 *)(buf));
                     msg_type = *(((u_int32 *)(buf))+1);
                     
-                    LOG_DEBUG(MODULE_COMMON, "message total size : %u msg_type %u current recv Len %u", totalSize, msg_type, recvLen);
-                    if ( msg_type > MSG_TYPE_MAX || totalSize > 10*MAX_DATA_LENGTH) {
+                    LOG_DEBUG(MODULE_COMMON, "message total size : %u msg_type %u", totalSize, msg_type);
+                    if ( msg_type > MSG_TYPE_MAX || totalSize > 500*MAX_DATA_LENGTH) {
                         LOG_ERROR(MODULE_COMMON, "Received invalid message, ignore it!");
                         return;
                     }
@@ -349,6 +349,8 @@ void WorkThread::OnRead(int iCliFd, short iEvent, void *arg)
                 }
             }
 
+            LOG_DEBUG(MODULE_COMMON, "Current recv Len %u", recvLen);
+            
             leftLen = totalSize - recvLen;
             
         } else if (iLen <= 0) {
@@ -463,7 +465,7 @@ bool WorkThread::GetIndividualUser(const string &account)
 
     for (l_it = fdSessionMap.begin(); l_it != fdSessionMap.end(); l_it++) {
         session = static_cast<UserSession *>(l_it->second);
-        if (session->account == account) {
+        if (session->user_info.account == account) {
             found = true;
             break;
         }
@@ -472,17 +474,17 @@ bool WorkThread::GetIndividualUser(const string &account)
     return (!found);
 }
 
-bool WorkThread::GetUsersInfoFromDB(UsersInfo &user_info)
+bool WorkThread::GetUsersInfoFromDB(const string account, UsersInfo &user_info)
 {
     char select_cmd[255] = { 0 };
     int ret = -1;
 
-    if (user_info.account.empty()) {
+    if (account.empty()) {
         LOG_ERROR(MODULE_DB, "Account is empty.");
         return false;
     }
     
-    snprintf(select_cmd, sizeof(select_cmd)-1, "SELECT * FROM users_info WHERE account='%s'",user_info.account.c_str());
+    snprintf(select_cmd, sizeof(select_cmd)-1, "SELECT * FROM users_info WHERE account='%s'",account.c_str());
     
     ret = mysql_db_query(pdb_con, select_cmd, user_info);
     if (ret <= 0) {
@@ -571,17 +573,18 @@ bool WorkThread::UpdateUserNameToDB(const std::string &account, const std::strin
 bool WorkThread::UpdateHeadImageToDB(const std::string &account, const std::string &data)
 {
     char *select_cmd = NULL;
-    //char select_cmd[9750];
     int ret = -1;
     char *end = NULL;
     bool retV = true;
 
-    select_cmd = new char[data.size() + 255];
+    select_cmd = new char[data.size() + data.size()*2/3 + 255];
     if (select_cmd != NULL) {    
-        end = strcpy(select_cmd, "UPDATE users_info SET head_photo='");
+        end = strcpy(select_cmd, "UPDATE users_info SET head_photo=");
         end += strlen(select_cmd);
-        end += mysql_real_escape_string_quote(pdb_con, end, data.c_str(), data.size(), '\'');
-        end += sprintf(end, "' WHERE account='%s'", account.c_str());
+        *end++ = '\'';
+        end += mysql_real_escape_string(pdb_con, end, data.c_str(), data.size());
+        *end++ = '\'';
+        end += sprintf(end, " WHERE account='%s'", account.c_str());
         
         LOG_DEBUG(MODULE_DB, "select_cmd length[%d]  data legth[%d]", (end - select_cmd), data.size());
 
@@ -593,6 +596,7 @@ bool WorkThread::UpdateHeadImageToDB(const std::string &account, const std::stri
 
         delete []select_cmd;
         select_cmd = NULL;
+        end = NULL;
     }
     
     return retV;
