@@ -76,7 +76,7 @@ public:
 
     void MessageHandle(int fd, const u_int32 msg_type, const std::string &msg);
 
-    bool GetUsersInfoFromDB(UsersInfo &user_info);
+    bool GetUsersInfoFromDB(const string account, UsersInfo &user_info);
 
     bool InsertUsersInfoToDB(const UsersInfo &user_info);
 

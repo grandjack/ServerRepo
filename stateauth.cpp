@@ -6,9 +6,6 @@
 #include "debug.h"
 #include "thread.h"
 
-using namespace std;
-using namespace MessageStruct;
-
 StateAuth::StateAuth(StateMachine *machine):State(machine)
 {
     type = STATE_AUTH;
@@ -100,22 +97,25 @@ bool StateAuth::HandleLogin(const string &msg)
         LOG_DEBUG(MODULE_COMMON, "account %s", login.account().c_str());
         LOG_DEBUG(MODULE_COMMON, "password %s", login.password().c_str());
 
-        user_info->account = login.account();
-
-        if (!(stateMachine->thread->GetIndividualUser(user_info->account))) {
+        if (!(stateMachine->thread->GetIndividualUser(login.account()))) {
             LOG_ERROR(MODULE_COMMON, "This user has already online.");
             status.set_status(0);
             ret = false;
-        } else if (stateMachine->thread->GetUsersInfoFromDB(*user_info)) {
+        } else if (stateMachine->thread->GetUsersInfoFromDB(login.account(), *user_info)) {
             if (user_info->password.compare(login.password()) == 0) {
-                stateMachine->account = user_info->account;
-                stateMachine->email = user_info->account;
-                stateMachine->score = user_info->score;
-                stateMachine->user_name = user_info->user_name;
 
                 stateMachine->thread->GetHeadImageFromDB(user_info->account, user_info->head_photo);
                 
                 status.set_status(1);
+                ChessBoardUser *user = status.mutable_user();
+                user->set_chess_board_empty(false);
+                user->set_account(user_info->account);
+                user->set_user_name(user_info->user_name);
+                user->set_score(user_info->score);
+                user->set_ex_email(user_info->email);
+                user->set_phone(user_info->phone);
+                user->set_head_image(user_info->head_photo);
+                
                 ret = true;
             } else {
                 status.set_status(0);
@@ -153,7 +153,7 @@ bool StateAuth::HandleFindPwd(const string &msg)
     FindPassword pwd;
 
     if (pwd.ParseFromString(msg)) {
-        LOG_DEBUG(MODULE_COMMON, "To find the lost password!!");
+        LOG_DEBUG(MODULE_COMMON, "To find the lost password for [%s]!!", pwd.email().c_str());
     }
 
     return true;

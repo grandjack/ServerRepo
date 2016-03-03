@@ -77,12 +77,12 @@ void UserSession::IncreaseScore()
 {
     this->score += 30;
     user_info.score = this->score;
-    thread->UpdateUserScoreToDB(this->account, this->score);
+    thread->UpdateUserScoreToDB(this->user_info.account, this->user_info.score);
 }
 void UserSession::ReduceScore()
 {
     this->score -= 30;
     user_info.score = this->score;
-    thread->UpdateUserScoreToDB(this->account, this->score);
+    thread->UpdateUserScoreToDB(this->user_info.account, this->user_info.score);
 }
 

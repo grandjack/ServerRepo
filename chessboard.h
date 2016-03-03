@@ -7,8 +7,10 @@
 #include "usersession.h"
 #include <pthread.h>
 #include "state.h"
+#include "message.pb.h"
 
 using namespace std;
+using namespace MessageStruct;
 
 class ChessBoard;
 class UserSession;
@@ -60,6 +62,7 @@ public:
     bool GameReadyHandle(const string &msg);
     u_int32 GetActiveUsersNum() const;
     u_int32 GetChessBoardID() const;
+    void WrapChessBoardInfo(ChessBoardInfo &chessBoard);
 
 private:
     UserSession *leftUser;

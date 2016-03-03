@@ -8,9 +8,6 @@
 #include "mainthread.h"
 #include "chessboard.h"
 
-using namespace std;
-using namespace MessageStruct;
-
 
 State::State(StateMachine *machine):stateMachine(machine){}
 State::~State(){}
@@ -54,9 +51,9 @@ bool State::GameHallSumaryHandle(const string &msg)
         return false;
     }
 
-    sumary.set_account(stateMachine->account);
-    sumary.set_username(stateMachine->user_name);
-    sumary.set_score(stateMachine->score);
+    sumary.set_account(stateMachine->user_info.account);
+    sumary.set_username(stateMachine->user_info.user_name);
+    sumary.set_score(stateMachine->user_info.score);
     sumary.set_hall_num(MainThread::gameHallMaxNum);
     sumary.set_head_picture("Unknown head_picture");
     sumary.set_ad_picture1("Unknown ad_picture1");
@@ -117,40 +114,11 @@ bool State::WrapHallInfo(const u_int32 hall_id, string &data)
         hallInfo.set_total_chessboard(MainThread::chessBoardMaxNum);
         for (u_int32 j=1; j <= hallInfo.total_chessboard(); ++j) {
             chessBoard = gameHall->GetChessBoardByID(j);
+            if (chessBoard != NULL) {
                 
-            chessBoardInfo = hallInfo.add_chess_board();
-            chessBoardInfo->set_id(j);
-            chessBoardInfo->set_people_num(gameHall->GetChessBoardByID(j)->GetUserNum());
+                chessBoardInfo = hallInfo.add_chess_board();
 
-            ChessBoardUser *left = chessBoardInfo->mutable_left_user();
-            left->set_chess_board_empty((chessBoard->GetUserByLocation(LOCATION_LEFT)==NULL) ? true : false);
-                
-            if (!left->chess_board_empty()) {
-                left->set_account(chessBoard->GetUserByLocation(LOCATION_LEFT)->account);
-                left->set_user_name(chessBoard->GetUserByLocation(LOCATION_LEFT)->user_name);
-                left->set_score(chessBoard->GetUserByLocation(LOCATION_LEFT)->score);
-                left->set_status(chessBoard->GetUserByLocation(LOCATION_LEFT)->stateMachine->GetType());
-                left->set_head_image(chessBoard->GetUserByLocation(LOCATION_LEFT)->user_info.head_photo);
-            }
-    
-            ChessBoardUser *right = chessBoardInfo->mutable_right_user();
-            right->set_chess_board_empty((chessBoard->GetUserByLocation(LOCATION_RIGHT)==NULL) ? true : false);
-            if (!right->chess_board_empty()) {
-                right->set_account(chessBoard->GetUserByLocation(LOCATION_RIGHT)->account);
-                right->set_user_name(chessBoard->GetUserByLocation(LOCATION_RIGHT)->user_name);
-                right->set_score(chessBoard->GetUserByLocation(LOCATION_RIGHT)->score);
-                right->set_status(chessBoard->GetUserByLocation(LOCATION_RIGHT)->stateMachine->GetType());
-                right->set_head_image(chessBoard->GetUserByLocation(LOCATION_RIGHT)->user_info.head_photo);
-            }
-    
-            ChessBoardUser *bottom = chessBoardInfo->mutable_bottom_user();
-            bottom->set_chess_board_empty((chessBoard->GetUserByLocation(LOCATION_BOTTOM)==NULL) ? true : false);
-            if (!bottom->chess_board_empty()) {
-                bottom->set_account(chessBoard->GetUserByLocation(LOCATION_BOTTOM)->account);
-                bottom->set_user_name(chessBoard->GetUserByLocation(LOCATION_BOTTOM)->user_name);
-                bottom->set_score(chessBoard->GetUserByLocation(LOCATION_BOTTOM)->score);
-                bottom->set_status(chessBoard->GetUserByLocation(LOCATION_BOTTOM)->stateMachine->GetType());
-                bottom->set_head_image(chessBoard->GetUserByLocation(LOCATION_BOTTOM)->user_info.head_photo);
+                chessBoard->WrapChessBoardInfo(*chessBoardInfo);
             }
         }
 
@@ -163,51 +131,6 @@ bool State::WrapHallInfo(const u_int32 hall_id, string &data)
     return ret;
 }
 
-void State::WrapChessBoardInfo()
-{
-    ChessBoardInfo chessBoard;
-    string data;
-    ChessBoard *chess = stateMachine->currChessBoard;
-        
-    chessBoard.set_id(chess->GetChessBoardID());
-    chessBoard.set_people_num(chess->GetUserNum());
-    
-    ChessBoardUser *left = chessBoard.mutable_left_user();
-    left->set_chess_board_empty((chess->GetUserByLocation(LOCATION_LEFT)==NULL) ? true : false);
-                    
-    if (!left->chess_board_empty()) {
-        left->set_account(chess->GetUserByLocation(LOCATION_LEFT)->account);
-        left->set_user_name(chess->GetUserByLocation(LOCATION_LEFT)->user_name);
-        left->set_score(chess->GetUserByLocation(LOCATION_LEFT)->score);
-        left->set_status(chess->GetUserByLocation(LOCATION_LEFT)->stateMachine->GetType());
-        left->set_head_image(stateMachine->user_info.head_photo);
-    }
-        
-    ChessBoardUser *right = chessBoard.mutable_right_user();
-    right->set_chess_board_empty((chess->GetUserByLocation(LOCATION_RIGHT)==NULL) ? true : false);
-    if (!right->chess_board_empty()) {
-        right->set_account(chess->GetUserByLocation(LOCATION_RIGHT)->account);
-        right->set_user_name(chess->GetUserByLocation(LOCATION_RIGHT)->user_name);
-        right->set_score(chess->GetUserByLocation(LOCATION_RIGHT)->score);
-        right->set_status(chess->GetUserByLocation(LOCATION_RIGHT)->stateMachine->GetType());
-        right->set_head_image(stateMachine->user_info.head_photo);
-    }
-        
-    ChessBoardUser *bottom = chessBoard.mutable_bottom_user();
-    bottom->set_chess_board_empty((chess->GetUserByLocation(LOCATION_BOTTOM)==NULL) ? true : false);
-    if (!bottom->chess_board_empty()) {
-        bottom->set_account(chess->GetUserByLocation(LOCATION_BOTTOM)->account);
-        bottom->set_user_name(chess->GetUserByLocation(LOCATION_BOTTOM)->user_name);
-        bottom->set_score(chess->GetUserByLocation(LOCATION_BOTTOM)->score);
-        bottom->set_status(chess->GetUserByLocation(LOCATION_BOTTOM)->stateMachine->GetType());
-        bottom->set_head_image(stateMachine->user_info.head_photo);
-    }
-
-    chessBoard.SerializeToString(&data);
-    stateMachine->MessageReply(MSG_CHESS_BOARD, data);
-
-}
-
 bool State::UpdateUserInfos(const string &msg)
 {
     UpdateUserInfo info;
@@ -215,25 +138,21 @@ bool State::UpdateUserInfos(const string &msg)
 
     try {
     if (info.ParseFromString(msg)) {
-        stateMachine->user_name = info.user_name();
-        stateMachine->password = info.password();
-        stateMachine->email = info.ex_email();
-
-        stateMachine->user_info.user_name= stateMachine->user_name;
-        stateMachine->user_info.email = stateMachine->email;
-        stateMachine->user_info.password = stateMachine->password;
+        stateMachine->user_info.user_name= info.user_name();
+        stateMachine->user_info.email = info.ex_email();
+        stateMachine->user_info.password = info.password();
         stateMachine->user_info.head_photo = info.head_image();
         
         LOG_DEBUG(MODULE_COMMON, "account :%s", stateMachine->user_info.account.c_str());
         LOG_DEBUG(MODULE_COMMON, "user_name :%s", stateMachine->user_info.user_name.c_str());
         LOG_DEBUG(MODULE_COMMON, "email :%s", stateMachine->user_info.email.c_str());
         LOG_DEBUG(MODULE_COMMON, "password :%s", stateMachine->user_info.password.c_str());
-        LOG_DEBUG(MODULE_COMMON, "head_photo.size :%d", info.head_image().size());
+        LOG_DEBUG(MODULE_COMMON, "head_photo.size :%d", stateMachine->user_info.head_photo.size());
 
         //TODO other things here!! Update the info to database
-        stateMachine->thread->UpdateUserNameToDB(stateMachine->account, stateMachine->user_info.user_name);
-        stateMachine->thread->UpdateUserPasswordToDB(stateMachine->account, stateMachine->user_info.password);
-        stateMachine->thread->UpdateHeadImageToDB(stateMachine->account, stateMachine->user_info.head_photo);
+        stateMachine->thread->UpdateUserNameToDB(stateMachine->user_info.account, stateMachine->user_info.user_name);
+        stateMachine->thread->UpdateUserPasswordToDB(stateMachine->user_info.account, stateMachine->user_info.password);
+        stateMachine->thread->UpdateHeadImageToDB(stateMachine->user_info.account, stateMachine->user_info.head_photo);
     }
     } catch(exception &e) {
         LOG_ERROR(MODULE_COMMON, "Parse user info failed!");

@@ -351,7 +351,7 @@ bool ChessBoard::MoveChessHandle(const string &msg)
                 LOG_ERROR(MODULE_COMMON,"Get target user failed.");
             }
             
-            LOG_DEBUG(MODULE_COMMON, "User[%s] won user locate[%d]", src_user->account.c_str(), moveChess.target_user_locate());
+            LOG_DEBUG(MODULE_COMMON, "User[%s] won user locate[%d]", src_user->user_info.account.c_str(), moveChess.target_user_locate());
         }
         LOG_DEBUG(MODULE_COMMON, "src user locate: %d, current user locate: %d", moveChess.src_user_locate(),src_user->locate);
 
@@ -386,7 +386,7 @@ bool ChessBoard::MoveChessHandle(const string &msg)
         } else {
             // src_user is the last winner!!
             announceAction.set_token_locate((u_int32)LOCATION_MAX);
-            LOG_DEBUG(MODULE_COMMON, "######## The last winner is %s", src_user->account.c_str());
+            LOG_DEBUG(MODULE_COMMON, "######## The last winner is %s", src_user->user_info.account.c_str());
         }
         
         pmoveChess = announceAction.mutable_movechess();
@@ -586,5 +586,48 @@ bool ChessBoard::GameReadyHandle(const string &msg)
     }
 
     return true;
+}
+
+void ChessBoard::WrapChessBoardInfo(ChessBoardInfo &chessBoard)
+{
+    //ChessBoardInfo chessBoard;
+    string data;
+    ChessBoard *chess = this;
+    UserSession *user = NULL;
+        
+    chessBoard.set_id(chess->GetChessBoardID());
+    chessBoard.set_people_num(chess->GetUserNum());
+    
+    ChessBoardUser *left = chessBoard.mutable_left_user();
+    left->set_chess_board_empty(((user=chess->GetUserByLocation(LOCATION_LEFT))==NULL) ? true : false);
+                    
+    if (!left->chess_board_empty()) {
+        left->set_account(user->user_info.account);
+        left->set_user_name(user->user_info.user_name);
+        left->set_score(user->user_info.score);
+        left->set_status(user->stateMachine->GetType());
+        left->set_head_image(user->user_info.head_photo);
+    }
+        
+    ChessBoardUser *right = chessBoard.mutable_right_user();
+    right->set_chess_board_empty(((user=chess->GetUserByLocation(LOCATION_RIGHT))==NULL) ? true : false);
+    if (!right->chess_board_empty()) {
+        right->set_account(user->user_info.account);
+        right->set_user_name(user->user_info.user_name);
+        right->set_score(user->user_info.score);
+        right->set_status(user->stateMachine->GetType());
+        right->set_head_image(user->user_info.head_photo);
+    }
+        
+    ChessBoardUser *bottom = chessBoard.mutable_bottom_user();
+    bottom->set_chess_board_empty(((user=chess->GetUserByLocation(LOCATION_BOTTOM))==NULL) ? true : false);
+    if (!bottom->chess_board_empty()) {
+        bottom->set_account(user->user_info.account);
+        bottom->set_user_name(user->user_info.user_name);
+        bottom->set_score(user->user_info.score);
+        bottom->set_status(user->stateMachine->GetType());
+        bottom->set_head_image(user->user_info.head_photo);
+    }
+
 }
 

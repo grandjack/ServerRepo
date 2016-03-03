@@ -7,6 +7,7 @@
 #include "message.pb.h"
 
 using namespace std;
+using namespace MessageStruct;
 
 class UserSession;
 class ChessBoard;
@@ -71,7 +72,6 @@ public:
     bool GameHallSumaryHandle(const string &msg);
     bool HallInfoReqHandle(const string &msg);
     bool WrapHallInfo(const u_int32 hall_id, string &data);
-    void WrapChessBoardInfo();
     bool UpdateUserInfos(const string &msg);
     
 protected:

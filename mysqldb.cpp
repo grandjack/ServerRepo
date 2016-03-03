@@ -60,11 +60,13 @@ int mysql_db_query(MYSQL *connection, const char * sql, UsersInfo &user_info) {
 			for(j=0; j < num_fileds; ++j) {
 				LOG_DEBUG(MODULE_DB, "%s", row[j]);
 			}
+            user_info.account = row[0];
             user_info.password = row[1];
-            user_info.email = row[2];
+            user_info.email = row[2] ? row[2] : "";
             user_info.score = atoi(row[3]);
-            user_info.head_photo = row[4];
-            user_info.user_name = row[5] ;
+            //user_info.head_photo = row[4];
+            user_info.user_name = row[5] ? row[5] : "";
+            user_info.phone = row[6] ? row[6] : ""; ;
 			n++; 
 		} 
 		ret = n;
@@ -145,12 +147,13 @@ again:
                    lengths = mysql_fetch_lengths(result);
                    for(i = 0; i < num_fields; i++)
                    {
-                       LOG_INFO(MODULE_DB, "[%.*s] ", (int) lengths[i],
-                              row[i] ? row[i] : "NULL");
-                       string tmp((char*)row[i], lengths[i]);
-                       data = tmp;
+                       LOG_INFO(MODULE_DB, "Length[%ld] [%s] ", lengths[i],
+                              row[i] ? "Binary Image(can NOT display)" : "NULL");
+                       if (row[i] != NULL) {
+                           string tmp((char*)row[i], lengths[i]);
+                           data = tmp;
+                       }
                    }
-                   LOG_INFO(MODULE_DB, "\n");
                 }
                 mysql_free_result(result);
 
@@ -174,8 +177,9 @@ int creat_users_info_table(MYSQL *mysql) {
 		password varchar(50) NOT NULL,\
 		email varchar(50) NOT NULL,\
 		score int,\
-		user_name varchar(50),\
 		head_photo mediumblob,\
+		user_name varchar(50),\
+		phone varchar(20),\
 		PRIMARY KEY (account)\
 		)ENGINE=InnoDB;");
 

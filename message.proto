@@ -12,6 +12,7 @@ message LogOnorOut{
 
 message ReplyStatus {
     required uint32 status = 1;//0 error;1 OK
+    optional ChessBoardUser user = 2;
 }
 
 message Register {
@@ -21,12 +22,14 @@ message Register {
 }
 
 message ChessBoardUser {
-    required bool chess_board_empty=1;
-    optional string user_name=2;
+    required bool chess_board_empty = 1;
+    optional string user_name = 2;
     optional string account = 3;
     optional int32 score = 4;
-    optional uint32 status = 5;//indicate the user's status, notStarted\playing\ended\exited
-    optional bytes head_image = 6;
+    optional string ex_email = 5;
+    optional string phone = 6; 
+    optional bytes head_image = 7;    
+    optional uint32 status = 8;//indicate the user's status, notStarted\playing\ended\exited
 }
 
 message ChessBoardInfoReq {
