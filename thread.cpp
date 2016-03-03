@@ -571,17 +571,18 @@ bool WorkThread::UpdateUserNameToDB(const std::string &account, const std::strin
 bool WorkThread::UpdateHeadImageToDB(const std::string &account, const std::string &data)
 {
     char *select_cmd = NULL;
-    //char select_cmd[9750];
     int ret = -1;
     char *end = NULL;
     bool retV = true;
 
-    select_cmd = new char[data.size() + 255];
+    select_cmd = new char[data.size() + data.size()*2/3 + 255];
     if (select_cmd != NULL) {    
-        end = strcpy(select_cmd, "UPDATE users_info SET head_photo='");
+        end = strcpy(select_cmd, "UPDATE users_info SET head_photo=");
         end += strlen(select_cmd);
-        end += mysql_real_escape_string_quote(pdb_con, end, data.c_str(), data.size(), '\'');
-        end += sprintf(end, "' WHERE account='%s'", account.c_str());
+        *end++ = '\'';
+        end += mysql_real_escape_string(pdb_con, end, data.c_str(), data.size());
+        *end++ = '\'';
+        end += sprintf(end, " WHERE account='%s'", account.c_str());
         
         LOG_DEBUG(MODULE_DB, "select_cmd length[%d]  data legth[%d]", (end - select_cmd), data.size());
 
@@ -593,6 +594,7 @@ bool WorkThread::UpdateHeadImageToDB(const std::string &account, const std::stri
 
         delete []select_cmd;
         select_cmd = NULL;
+        end = NULL;
     }
     
     return retV;
