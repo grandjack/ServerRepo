@@ -92,6 +92,10 @@ public:
 
     bool GetIndividualUser(const std::string &account);
     
+    bool UpdateUserPhoneToDB(const std::string &account, std::string &phoneNo);
+
+    bool UpdateUserEmailToDB(const std::string &account, std::string &email);
+    
 private:
     struct event_base *base;    /* libevent handle this thread uses */
     struct event notify_event;  /* listen event for notify pipe */

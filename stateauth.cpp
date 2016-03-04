@@ -49,7 +49,7 @@ bool StateAuth::MsgHandle(const u_int32 msg_type, const string &msg)
             break;
     }
 
-    return true;;
+    return ret;
 }
 
 bool StateAuth::HandleRegister(const string &msg)
