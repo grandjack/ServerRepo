@@ -7,7 +7,7 @@
 #include "thread.h"
 #include "mainthread.h"
 #include "chessboard.h"
-
+#include "md5.h"
 
 State::State(StateMachine *machine):stateMachine(machine){}
 State::~State(){}
@@ -138,21 +138,46 @@ bool State::UpdateUserInfos(const string &msg)
 
     try {
     if (info.ParseFromString(msg)) {
-        stateMachine->user_info.user_name= info.user_name();
-        stateMachine->user_info.email = info.ex_email();
-        stateMachine->user_info.password = info.password();
-        stateMachine->user_info.head_photo = info.head_image();
+        
+
+        //TODO other things here!! Update the info to database
+        if (info.user_name().compare(stateMachine->user_info.user_name)) {
+            stateMachine->user_info.user_name = info.user_name();
+            stateMachine->thread->UpdateUserNameToDB(stateMachine->user_info.account, stateMachine->user_info.user_name);
+        }
+
+        if (info.password().compare(stateMachine->user_info.password)) {
+            stateMachine->user_info.password = info.password();
+            stateMachine->thread->UpdateUserPasswordToDB(stateMachine->user_info.account, stateMachine->user_info.password);
+        }
+
+        if (info.has_ex_email()) {
+            if (info.ex_email().compare(stateMachine->user_info.email)) {
+                stateMachine->user_info.email = info.ex_email();
+                stateMachine->thread->UpdateUserEmailToDB(stateMachine->user_info.account, stateMachine->user_info.password);
+            }
+        }
+
+        if (info.has_phone()) {
+            if (info.phone().compare(stateMachine->user_info.phone)) {
+                stateMachine->user_info.phone = info.phone();
+                stateMachine->thread->UpdateUserPhoneToDB(stateMachine->user_info.account, stateMachine->user_info.password);
+            }
+        }
+
+        if (info.has_head_image()) {
+            if (info.head_image().size() > 0) {
+                stateMachine->user_info.head_photo = info.head_image();
+                stateMachine->thread->UpdateHeadImageToDB(stateMachine->user_info.account, stateMachine->user_info.head_photo);
+            }
+        }
         
         LOG_DEBUG(MODULE_COMMON, "account :%s", stateMachine->user_info.account.c_str());
         LOG_DEBUG(MODULE_COMMON, "user_name :%s", stateMachine->user_info.user_name.c_str());
         LOG_DEBUG(MODULE_COMMON, "email :%s", stateMachine->user_info.email.c_str());
         LOG_DEBUG(MODULE_COMMON, "password :%s", stateMachine->user_info.password.c_str());
         LOG_DEBUG(MODULE_COMMON, "head_photo.size :%d", stateMachine->user_info.head_photo.size());
-
-        //TODO other things here!! Update the info to database
-        stateMachine->thread->UpdateUserNameToDB(stateMachine->user_info.account, stateMachine->user_info.user_name);
-        stateMachine->thread->UpdateUserPasswordToDB(stateMachine->user_info.account, stateMachine->user_info.password);
-        stateMachine->thread->UpdateHeadImageToDB(stateMachine->user_info.account, stateMachine->user_info.head_photo);
+        
     }
     } catch(exception &e) {
         LOG_ERROR(MODULE_COMMON, "Parse user info failed!");

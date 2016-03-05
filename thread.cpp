@@ -500,8 +500,8 @@ bool WorkThread::InsertUsersInfoToDB(const UsersInfo &user_info)
     char select_cmd[512] = { 0 };
     int ret = -1;
 
-    snprintf(select_cmd, sizeof(select_cmd)-1, "INSERT INTO users_info (account,password,email,score,head_photo,user_name) VALUES ('%s','%s','%s',%d,'%s','%s')",\
-            user_info.account.c_str(), user_info.password.c_str(), user_info.email.c_str(),user_info.score, user_info.head_photo.c_str(), user_info.user_name.c_str());
+    snprintf(select_cmd, sizeof(select_cmd)-1, "INSERT INTO users_info (account,password,email,score,head_photo,user_name,phone) VALUES ('%s','%s','%s',%d,'%s','%s','%s')",\
+            user_info.account.c_str(), user_info.password.c_str(), user_info.email.c_str(),user_info.score, user_info.head_photo.c_str(), user_info.user_name.c_str(), user_info.phone.c_str());
 
     LOG_DEBUG(MODULE_DB, "select_cmd[%s]", select_cmd);
     ret = mysql_db_excute(pdb_con, select_cmd, strlen(select_cmd));
@@ -578,7 +578,7 @@ bool WorkThread::UpdateHeadImageToDB(const std::string &account, const std::stri
     bool retV = true;
 
     select_cmd = new char[data.size() + data.size()*2/3 + 255];
-    if (select_cmd != NULL) {    
+    if (select_cmd != NULL) {
         end = strcpy(select_cmd, "UPDATE users_info SET head_photo=");
         end += strlen(select_cmd);
         *end++ = '\'';
@@ -600,6 +600,44 @@ bool WorkThread::UpdateHeadImageToDB(const std::string &account, const std::stri
     }
     
     return retV;
+}
+
+bool WorkThread::UpdateUserPhoneToDB(const std::string &account, std::string &phoneNo)
+{
+    char select_cmd[255] = { 0 };
+    int ret = -1;
+
+    snprintf(select_cmd, sizeof(select_cmd)-1, "UPDATE users_info SET phone='%s' WHERE account='%s'",
+             phoneNo.c_str(), account.c_str());
+
+    LOG_DEBUG(MODULE_DB, "select_cmd[%s]", select_cmd);
+
+    ret = mysql_db_excute(pdb_con, select_cmd, strlen(select_cmd));
+    if (ret != 0) {
+        LOG_ERROR(MODULE_DB, "mysql_db_excute failed, ret[%d]", ret);
+        return false;
+    }
+    
+    return true;
+
+}
+bool WorkThread::UpdateUserEmailToDB(const std::string &account, std::string &email)
+{
+    char select_cmd[255] = { 0 };
+    int ret = -1;
+
+    snprintf(select_cmd, sizeof(select_cmd)-1, "UPDATE users_info SET email='%s' WHERE account='%s'",
+             email.c_str(), account.c_str());
+
+    LOG_DEBUG(MODULE_DB, "select_cmd[%s]", select_cmd);
+
+    ret = mysql_db_excute(pdb_con, select_cmd, strlen(select_cmd));
+    if (ret != 0) {
+        LOG_ERROR(MODULE_DB, "mysql_db_excute failed, ret[%d]", ret);
+        return false;
+    }
+    
+    return true;
 }
 
 bool WorkThread::GetHeadImageFromDB(const std::string &account, std::string &data)

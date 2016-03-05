@@ -4,6 +4,7 @@
 #include "debug.h"
 #include <signal.h>
 #include "utils.h"
+#include "md5.h"
 
 //#define LOG_FILE    "/var/log/chessServer.log"
 #define LOG_FILE    "/tmp/chessServer.log"

@@ -7,7 +7,7 @@ CXXFLAGS    += -I$(HOME)/usr/bin/usr/local/include
 CXXFLAGS    += -Werror -g
 SOURCE      :=mainthread.cpp thread.cpp server.cpp usersession.cpp debug.cpp utils.cpp \
 		chessboard.cpp stateauth.cpp statecommon.cpp stategameready.cpp \
-		stategameplay.cpp message.pb.cpp mysqldb.cpp
+		stategameplay.cpp message.pb.cpp mysqldb.cpp md5.cpp
 
 OBJS        :=$(patsubst %.cpp, %.o, $(SOURCE))
 TARGE       :=Server
