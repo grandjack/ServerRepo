@@ -80,7 +80,7 @@ bool GameHall::CreateChessBoard(u_int32 id)
         ret = false;
     } else {
     
-        chessBoard = new ChessBoard(id);
+        chessBoard = new ChessBoard(id, this);
         if (chessBoard != NULL) {
             chessBoardInfo.insert(pair<int, ChessBoard*>(id, chessBoard));
             ret = true;
@@ -94,12 +94,15 @@ bool GameHall::CreateChessBoard(u_int32 id)
     return ret;
 }
 
-
+u_int32 GameHall::GetGameHallID() const
+{
+    return gameHallID;
+}
 
 
 /*Class ChessBoard definitions*/
 
-ChessBoard::ChessBoard(u_int32 id):leftUser(NULL),rightUser(NULL),bottomUser(NULL),chessBoardID(id),currentHall(NULL),
+ChessBoard::ChessBoard(u_int32 id, GameHall *gameHall):leftUser(NULL),rightUser(NULL),bottomUser(NULL),chessBoardID(id),currentHall(gameHall),
                                         currUserNum(0),first_come_user_locate((u_int32)LOCATION_MAX), total_time(0), single_step_time(0)
 {
     pthread_mutex_init(&mutex, NULL);
@@ -342,7 +345,7 @@ bool ChessBoard::MoveChessHandle(const string &msg)
     if (moveChess.ParseFromString(msg)) {
         src_user = GetUserByLocation((Location)moveChess.src_user_locate());
         if (moveChess.is_winner()) {
-            //Winer plus 30 score
+            //Winer plus 10 score
             src_user->IncreaseScore();
             if ((tar_user = GetUserByLocation((Location)moveChess.target_user_locate())) != NULL) {
                 tar_user->ReduceScore();
@@ -462,13 +465,16 @@ bool ChessBoard::GiveUpHandle(const string &msg)
      if (giveup.ParseFromString(msg)) {
         if ((user = GetUserByLocation((Location)giveup.src_user_locate())) != NULL ) {
             //do other job here to notify the sender user what state he will go.
-            user->MessageReply(MSG_HALL_INFO, data);
+
+            if (user->currChessBoard->GameBegine() && (!user->gameOver)) {
+                LOG_DEBUG(MODULE_COMMON, "Game playing state, give up should be punished!");
+                user->ReduceScore(30);
+            }
             
-            user->ReduceScore();
             LeaveOutRoom((Location)giveup.src_user_locate());
             user->SetNextState(new StateGameReady(user));
-            user->stateMachine->WrapHallInfo(this->chessBoardID, data);
-            
+            user->stateMachine->WrapHallInfo(this->currentHall->GetGameHallID(), data);
+            user->MessageReply(MSG_HALL_INFO, data);
         }
 
         for (u_int32 locate = (u_int32)LOCATION_UNKNOWN; locate < (u_int32)LOCATION_MAX; ++locate) {
@@ -506,17 +512,17 @@ bool ChessBoard::UndoHandle(const string &msg, MessageType type)
 u_int32 ChessBoard::GetActiveUsersNum() const
 {
     u_int32 num = 0;
-    if ((leftUser != NULL) && (!leftUser->gameOver))
+    if ((leftUser != NULL) && (leftUser->gameReady) &&(!leftUser->gameOver))
     {
         ++num;
     }
 
-    if ((rightUser != NULL) && (!rightUser->gameOver))
+    if ((rightUser != NULL) && (rightUser->gameReady) && (!rightUser->gameOver))
     {
         ++num;
     }
 
-    if ((bottomUser != NULL) && (!bottomUser->gameOver))
+    if ((bottomUser != NULL) && (bottomUser->gameReady) && (!bottomUser->gameOver))
     {
         ++num;
     }
@@ -629,5 +635,32 @@ void ChessBoard::WrapChessBoardInfo(ChessBoardInfo &chessBoard)
         bottom->set_head_image(user->user_info.head_photo);
     }
 
+}
+
+bool ChessBoard::GameBegine() const
+{
+    bool ret = false;
+    int num = 0;
+    
+    if ((leftUser != NULL) && (leftUser->gameReady))
+    {
+        ++num;
+    }
+
+    if ((rightUser != NULL) && (rightUser->gameReady))
+    {
+        ++num;
+    }
+
+    if ((bottomUser != NULL) && (bottomUser->gameReady))
+    {
+        ++num;
+    }
+
+    if (num == 3) {
+        ret = true;
+    }
+
+    return ret;
 }
 

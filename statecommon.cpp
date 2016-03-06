@@ -154,14 +154,14 @@ bool State::UpdateUserInfos(const string &msg)
         if (info.has_ex_email()) {
             if (info.ex_email().compare(stateMachine->user_info.email)) {
                 stateMachine->user_info.email = info.ex_email();
-                stateMachine->thread->UpdateUserEmailToDB(stateMachine->user_info.account, stateMachine->user_info.password);
+                stateMachine->thread->UpdateUserEmailToDB(stateMachine->user_info.account, stateMachine->user_info.email);
             }
         }
 
         if (info.has_phone()) {
             if (info.phone().compare(stateMachine->user_info.phone)) {
                 stateMachine->user_info.phone = info.phone();
-                stateMachine->thread->UpdateUserPhoneToDB(stateMachine->user_info.account, stateMachine->user_info.password);
+                stateMachine->thread->UpdateUserPhoneToDB(stateMachine->user_info.account, stateMachine->user_info.phone);
             }
         }
 

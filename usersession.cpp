@@ -5,7 +5,7 @@
 #include "thread.h"
 #include "chessboard.h"
 
-UserSession::UserSession():clifd(0),thread(NULL),locate(LOCATION_UNKNOWN),score(0),
+UserSession::UserSession():clifd(0),thread(NULL),locate(LOCATION_UNKNOWN),
     currChessBoard(NULL),stateMachine(NULL),nextState(NULL),gameReady(false),gameOver(false)
 {
     tv.tv_sec = 60;//every 10 seconds trigger the timer
@@ -73,16 +73,14 @@ void UserSession::DestructResource()
 
 }
 
-void UserSession::IncreaseScore()
+void UserSession::IncreaseScore(u_int32 score)
 {
-    this->score += 30;
-    user_info.score = this->score;
+    user_info.score += score;
     thread->UpdateUserScoreToDB(this->user_info.account, this->user_info.score);
 }
-void UserSession::ReduceScore()
+void UserSession::ReduceScore(u_int32 score)
 {
-    this->score -= 30;
-    user_info.score = this->score;
+    user_info.score -= score;
     thread->UpdateUserScoreToDB(this->user_info.account, this->user_info.score);
 }
 

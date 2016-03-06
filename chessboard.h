@@ -29,6 +29,8 @@ public:
 
     u_int32 GetCurrentPeopleNum() const;
 
+    u_int32 GetGameHallID() const;
+
 private:
     bool CreateChessBoard(u_int32 id);
 
@@ -43,7 +45,7 @@ private:
 class ChessBoard
 {
 public:
-    ChessBoard(u_int32 id);
+    ChessBoard(u_int32 id, GameHall *gameHall=NULL);
     ~ChessBoard();
 
     UserSession *GetUserByLocation(const Location &locate);
@@ -63,6 +65,7 @@ public:
     u_int32 GetActiveUsersNum() const;
     u_int32 GetChessBoardID() const;
     void WrapChessBoardInfo(ChessBoardInfo &chessBoard);
+    bool GameBegine() const;
 
 private:
     UserSession *leftUser;

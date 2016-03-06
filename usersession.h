@@ -52,8 +52,8 @@ public:
     void MessageReply(const u_int32 msg_type, const string &msg);
     void DestructResource();
     
-    void IncreaseScore();
-    void ReduceScore();
+    void IncreaseScore(u_int32 score=10);
+    void ReduceScore(u_int32 score=10);
 
 public:
     int clifd;
@@ -63,7 +63,6 @@ public:
     WorkThread *thread;
 
     Location locate;
-    u_int32 score;
     ChessBoard *currChessBoard;
 
     State *stateMachine;

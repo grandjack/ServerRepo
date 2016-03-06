@@ -370,7 +370,6 @@ void WorkThread::OnRead(int iCliFd, short iEvent, void *arg)
     if (pBuf != NULL) {
         delete []pBuf;
         pBuf = NULL;
-        LOG_DEBUG(MODULE_COMMON, "Freed the dynamic buffer successfully!");
     }
 
     pThread->MessageHandle(iCliFd, msg_type, data);
