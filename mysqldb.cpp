@@ -192,3 +192,66 @@ int creat_users_info_table(MYSQL *mysql) {
 	return 0;
 }
 
+int creat_ad_pictures_table(MYSQL *mysql) {
+	char sql[1024] = { 0 };
+	snprintf(sql, sizeof(sql)-1, "CREATE TABLE if NOT exists ad_pictures (\
+		id int NOT NULL,\
+		existed tinyint(1) NOT NULL,\
+		image_name varchar(100),\
+		image_type varchar(50),\
+		image_hashcode varchar(33),\
+		image_size int,\
+		link_url varchar(125),\
+		locate_path varchar(125),\
+		PRIMARY KEY (id)\
+		)ENGINE=InnoDB;");
+
+
+	if(mysql_query(mysql, sql)) {
+        LOG_ERROR(MODULE_DB,"create table ad_pictures failed[%s].", mysql_error(mysql));
+		return -1;
+    }
+
+	return 0;
+}
+
+int mysql_db_query_ad_info(MYSQL *connection, const char * sql, AdPicturesInfo &ad_info) {
+	MYSQL_ROW row;
+	MYSQL_RES *result = NULL;
+	int ret = 0;
+	
+    if(mysql_query(connection, sql)) {
+        LOG_ERROR(MODULE_DB,"mysql_query error[%s]", mysql_error(connection));
+		return -1;
+    } else {
+        result = mysql_use_result(connection);
+		if (result == NULL) {
+			LOG_INFO(MODULE_DB, "mysql_use_result false[%s].", sql);
+			return -1;
+		}
+		unsigned int num_fileds = mysql_num_fields(result);
+  
+		int n = 0;
+		while((row = mysql_fetch_row(result))) {
+			unsigned int j;
+			   
+			for(j=0; j < num_fileds; ++j) {
+				LOG_DEBUG(MODULE_DB, "%s", row[j]);
+			}
+            ad_info.image_id = atoi(row[0]);
+            ad_info.existed = atoi(row[1])? true : false;
+            ad_info.image_name = row[2] ? row[2] : "";
+            ad_info.image_type = row[3] ? row[3] : "";
+            ad_info.image_hashcode = row[4] ? row[4] : "";
+            ad_info.image_size = row[5] ? atoi(row[5]) : 0;
+            ad_info.link_url = row[6] ? row[6] : "";
+            ad_info.locate_path = row[7] ? row[7] : "";
+			n++; 
+		} 
+		ret = n;
+		mysql_free_result(result);
+    }  
+	
+    return ret;
+}
+

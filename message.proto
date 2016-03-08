@@ -174,3 +174,23 @@ message UpdateUserInfo
     optional string phone = 5;
     optional bytes head_image = 6;
 }
+
+// Advertisement  create it as a sql table
+message AdPictureItem
+{
+    required uint32 image_type = 1;//jpeg,png.gif .etc.
+    required string image_name = 2;
+    required bool   existed = 3;
+    optional string image_hashcode = 4;
+    optional string url = 5;
+    optional uint32 image_size = 6;
+    required uint32 image_id = 7;//identify specific image
+    optional bool last_one = 8;// if true, should go to next state
+}
+
+message AdPictureReply
+{
+    required bool   synced = 1;//whether client should sync the image content.
+    optional bytes  content = 2;
+    optional bool   ended = 3;
+}

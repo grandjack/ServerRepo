@@ -95,6 +95,8 @@ public:
     bool UpdateUserPhoneToDB(const std::string &account, std::string &phoneNo);
 
     bool UpdateUserEmailToDB(const std::string &account, std::string &email);
+
+    bool GetAdPicturesInfoFromDB(const u_int32 id, AdPicturesInfo &ad_info);
     
 private:
     struct event_base *base;    /* libevent handle this thread uses */

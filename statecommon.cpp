@@ -8,6 +8,7 @@
 #include "mainthread.h"
 #include "chessboard.h"
 #include "md5.h"
+#include <stdio.h>
 
 State::State(StateMachine *machine):stateMachine(machine){}
 State::~State(){}
@@ -184,5 +185,106 @@ bool State::UpdateUserInfos(const string &msg)
     }
 
     return true;
+}
+
+
+StateAdPictureDownload::StateAdPictureDownload(StateMachine *machine):State(machine)
+{
+    type = STATE_DOWN_AD;
+}
+
+StateAdPictureDownload::~StateAdPictureDownload(){}
+
+bool StateAdPictureDownload::MsgHandle(const u_int32 msg_type, const string &msg)
+{
+    bool ret = false;
+
+    /*handling for auth message*/
+    switch(msg_type)
+    {
+        case MSG_AD_IMAGE_INFO:
+            ret = AdPictureItemHandle(msg);
+            break;
+        
+        case MSG_ECHO:
+            ret = EchoMsgHandle(msg);
+            break;
+
+        default:
+            break;
+    }
+
+    return ret;
+}
+
+bool StateAdPictureDownload::AdPictureItemHandle(const string &msg)
+{
+    bool ret = true;
+    AdPictureItem item;
+    AdPicturesInfo info;
+    AdPictureReply reply;
+    string data;
+
+    if (item.ParseFromString(msg)) {
+        if (item.has_last_one()) {
+            if (item.last_one()) {
+                stateMachine->SetNextState(new StateGameReady(stateMachine));
+            }
+        }
+
+        if(stateMachine->thread->GetAdPicturesInfoFromDB(item.image_id(), info)) {
+            if (info.existed) {
+                if (item.has_image_hashcode()) {
+                    if (info.image_hashcode.compare(item.image_hashcode())) {//not equal
+                        //download the image
+                        DownloadImage(info.locate_path);
+                    } else {
+                        //ignore
+                        reply.set_synced(false);
+                        reply.set_ended(true);
+                        reply.SerializeToString(&data);
+                        stateMachine->MessageReply(MSG_AD_IMAGE_CONTENT, data);
+                    }
+                } else {
+                    //download the image
+                    DownloadImage(info.locate_path);
+                }
+            } else {
+                reply.set_synced(false);
+                reply.set_ended(true);
+                reply.SerializeToString(&data);
+                stateMachine->MessageReply(MSG_AD_IMAGE_CONTENT, data);
+            }
+        }
+    }
+
+    return ret;
+}
+
+void StateAdPictureDownload::DownloadImage(const string &file_path)
+{
+    FILE *fptr = NULL;
+    AdPictureReply reply;
+    string data;
+    char buf[1024] = { 0 };
+    size_t rdSize = 0;
+
+    fptr = fopen(file_path.c_str(), "r");
+    if (fptr != NULL) {
+        while((rdSize = fread(buf, sizeof(buf), 1, fptr)) > 0) {
+            const string sub_data(buf, rdSize);
+            reply.set_synced(true);
+            reply.set_content(sub_data);
+            reply.SerializeToString(&data);
+            stateMachine->MessageReply(MSG_AD_IMAGE_CONTENT, data);
+        }
+
+        reply.set_synced(false);
+        reply.set_ended(true);
+        reply.SerializeToString(&data);
+        stateMachine->MessageReply(MSG_AD_IMAGE_CONTENT, data);
+
+        fclose(fptr);
+    }
 }
 

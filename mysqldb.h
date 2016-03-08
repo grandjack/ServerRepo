@@ -21,4 +21,8 @@ int creat_users_info_table(MYSQL *mysql);
 
 int mysql_get_binary_data(MYSQL *mysql, const char * query_string, int len, string &data);
 
+int creat_ad_pictures_table(MYSQL *mysql);
+
+int mysql_db_query_ad_info(MYSQL *connection, const char * sql, AdPicturesInfo &ad_info);
+
 #endif /*__MYSQL_DB_HEAD__*/

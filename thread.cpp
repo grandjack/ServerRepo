@@ -148,6 +148,8 @@ bool WorkThread::IniSQLConnection()
 
     creat_users_info_table(pdb_con);
 
+    creat_ad_pictures_table(pdb_con);
+
     return true;
 }
 
@@ -299,7 +301,7 @@ void WorkThread::OnWrite(int iCliFd, const u_int32 msg_type, const string &data,
     }
 
     if (pBuf != NULL) {
-        delete pBuf;
+        delete []pBuf;
         pBuf = NULL;
     }
 }
@@ -317,8 +319,7 @@ void WorkThread::OnRead(int iCliFd, short iEvent, void *arg)
     bool gotHead = false;
     u_int32 msg_type = 0;
 
-    while(recvLen < totalSize)
-    {
+    while(recvLen < totalSize) {
         iLen = recv(iCliFd, &buf[recvLen], leftLen, 0);
         if (iLen > 0) {
             recvLen += iLen;
@@ -649,6 +650,24 @@ bool WorkThread::GetHeadImageFromDB(const std::string &account, std::string &dat
     LOG_DEBUG(MODULE_DB, "select_cmd[%s]", select_cmd);
 
     ret = mysql_get_binary_data(pdb_con, select_cmd, strlen(select_cmd), data);
+    if (ret != 0) {
+        LOG_ERROR(MODULE_DB, "mysql_get_binary_data failed, ret[%d]", ret);
+        return false;
+    }
+    
+    return true;
+}
+
+bool WorkThread::GetAdPicturesInfoFromDB(const u_int32 id, AdPicturesInfo &ad_info)
+{
+    char select_cmd[255] = { 0 };
+    int ret = -1;
+
+    snprintf(select_cmd, sizeof(select_cmd)-1, "SELECT * FROM ad_pictures WHERE id=%d", id);
+
+    LOG_DEBUG(MODULE_DB, "select_cmd[%s]", select_cmd);
+
+    ret = mysql_db_query_ad_info(pdb_con, select_cmd, ad_info);
     if (ret != 0) {
         LOG_ERROR(MODULE_DB, "mysql_get_binary_data failed, ret[%d]", ret);
         return false;

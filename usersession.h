@@ -41,6 +41,18 @@ struct UsersInfo
     string phone;
 };
 
+struct AdPicturesInfo
+{
+    u_int32 image_id;
+    bool  existed;
+    string image_hashcode;
+    string image_name;
+    string image_type;
+    string link_url;
+    string locate_path;
+    u_int32 image_size;    
+};
+
 class UserSession
 {
 public:

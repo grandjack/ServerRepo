@@ -20,6 +20,7 @@ typedef UserSession StateMachine;
 typedef enum
 {
     STATE_AUTH = 0,
+    STATE_DOWN_AD,
     STATE_GAME_READY,
     STATE_GAME_PLAY,
     STATE_INVALID
@@ -57,6 +58,8 @@ typedef enum
     MSG_GAME_STATUS,
     MSG_FIND_PASSWORD,
     MSG_UPDATE_USER_INFO,
+    MSG_AD_IMAGE_INFO,
+    MSG_AD_IMAGE_CONTENT,
     MSG_TYPE_MAX
 }MessageType;
 
@@ -117,5 +120,17 @@ public:
 
 };
 
+class StateAdPictureDownload : public State
+{
+public:
+    StateAdPictureDownload(StateMachine *machine);
+    ~StateAdPictureDownload();
+    
+    bool MsgHandle(const u_int32 msg_type, const string &msg);
+    bool AdPictureItemHandle(const string &msg);
+
+private:
+    void DownloadImage(const string &file_path);
+};
 #endif /*__STATE_MACHINE_HEAD__*/
 

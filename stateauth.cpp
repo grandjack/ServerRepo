@@ -26,7 +26,7 @@ bool StateAuth::MsgHandle(const u_int32 msg_type, const string &msg)
             ret = HandleLogin(msg);
             /*if compare the user account and password successfully,then go to next state*/
             if (ret == true) {
-                stateMachine->SetNextState(new StateGameReady(stateMachine));
+                stateMachine->SetNextState(new StateAdPictureDownload(stateMachine));
             }
             break;
         
