@@ -283,9 +283,11 @@ void WorkThread::OnWrite(int iCliFd, const u_int32 msg_type, const string &data,
     memcpy(buf + DATA_HEAD_LENGTH/2 , &msg_type, DATA_HEAD_LENGTH/2);
     memcpy(buf + DATA_HEAD_LENGTH, data.c_str(), data.size());
 
+    LOG_DEBUG(MODULE_COMMON, "Send totalSize[%u] msg_type %u", totalSize, msg_type);
+
     while(sendLen < totalSize)
     {
-        iLen = send(iCliFd, &buf[sendLen], totalSize, 0);
+        iLen = send(iCliFd, &buf[sendLen], totalSize-sendLen, 0);
         if (iLen <= 0) {
             if ((errno == EAGAIN) || (errno == EINTR) || (errno == EWOULDBLOCK)) {
                 LOG_INFO(MODULE_COMMON, "errno EINTR, will continue");
@@ -314,7 +316,7 @@ void WorkThread::OnRead(int iCliFd, short iEvent, void *arg)
     u_int8 *buf = &buffer[0];
     u_int8 *pBuf = NULL;
     u_int32 recvLen = 0;
-    u_int32 leftLen = MAX_DATA_LENGTH;
+    u_int32 leftLen = DATA_HEAD_LENGTH;
     u_int32 totalSize = leftLen;
     bool gotHead = false;
     u_int32 msg_type = 0;
@@ -329,7 +331,7 @@ void WorkThread::OnRead(int iCliFd, short iEvent, void *arg)
                     totalSize = *((u_int32 *)(buf));
                     msg_type = *(((u_int32 *)(buf))+1);
                     
-                    LOG_DEBUG(MODULE_COMMON, "message total size : %u msg_type %u", totalSize, msg_type);
+                    LOG_DEBUG(MODULE_COMMON, "Got message total size : %u msg_type %u", totalSize, msg_type);
                     if ( msg_type > MSG_TYPE_MAX || totalSize > 500*MAX_DATA_LENGTH) {
                         LOG_ERROR(MODULE_COMMON, "Received invalid message, ignore it!");
                         return;
@@ -350,7 +352,7 @@ void WorkThread::OnRead(int iCliFd, short iEvent, void *arg)
                 }
             }
 
-            LOG_DEBUG(MODULE_COMMON, "Current recv Len %u", recvLen);
+            LOG_DEBUG(MODULE_COMMON, "Current recv Len %u", iLen);
             
             leftLen = totalSize - recvLen;
             

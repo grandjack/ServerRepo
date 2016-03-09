@@ -120,7 +120,7 @@ const string GetImageMd5HashCode(const string &path)
     fptr = fopen(path.c_str(), "r");
     if (fptr != NULL) {
         MD5 *md5hash = new MD5();
-        while((rdSize = fread(buf, sizeof(buf), 1, fptr)) > 0) {
+        while((rdSize = fread(buf, 1, sizeof(buf), fptr)) > 0) {
             md5hash->update(buf, rdSize);            
         }
         md5hash->finalize();

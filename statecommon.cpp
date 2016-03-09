@@ -273,7 +273,7 @@ void StateAdPictureDownload::DownloadImage(const string &file_path)
 
     fptr = fopen(file_path.c_str(), "r");
     if (fptr != NULL) {
-        while((rdSize = fread(buf, sizeof(buf), 1, fptr)) > 0) {
+        while((rdSize = fread(buf, 1, sizeof(buf), fptr)) > 0) {
             const string sub_data(buf, rdSize);
             reply.set_synced(true);
             reply.set_content(sub_data);
