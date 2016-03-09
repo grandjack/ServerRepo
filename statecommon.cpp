@@ -202,7 +202,7 @@ bool StateAdPictureDownload::MsgHandle(const u_int32 msg_type, const string &msg
     /*handling for auth message*/
     switch(msg_type)
     {
-        case MSG_AD_IMAGE_INFO:
+        case MSG_AD_IMAGE_REQ:
             ret = AdPictureItemHandle(msg);
             break;
         
@@ -220,9 +220,10 @@ bool StateAdPictureDownload::MsgHandle(const u_int32 msg_type, const string &msg
 bool StateAdPictureDownload::AdPictureItemHandle(const string &msg)
 {
     bool ret = true;
-    AdPictureItem item;
+    //AdPictureItemReply item;
     AdPicturesInfo info;
-    AdPictureReply reply;
+    AdPictureContentReply reply;
+    AdPictureReq item;
     string data;
 
     if (item.ParseFromString(msg)) {
@@ -232,7 +233,10 @@ bool StateAdPictureDownload::AdPictureItemHandle(const string &msg)
             }
         }
 
-        if(stateMachine->thread->GetAdPicturesInfoFromDB(item.image_id(), info)) {
+        stateMachine->thread->GetAdPicturesInfoFromDB(item.image_id(), info);
+        DownloadImageInfo(info);
+
+        {
             if (info.existed) {
                 if (item.has_image_hashcode()) {
                     if (info.image_hashcode.compare(item.image_hashcode())) {//not equal
@@ -241,7 +245,6 @@ bool StateAdPictureDownload::AdPictureItemHandle(const string &msg)
                     } else {
                         //ignore
                         reply.set_synced(false);
-                        reply.set_ended(true);
                         reply.SerializeToString(&data);
                         stateMachine->MessageReply(MSG_AD_IMAGE_CONTENT, data);
                     }
@@ -251,7 +254,6 @@ bool StateAdPictureDownload::AdPictureItemHandle(const string &msg)
                 }
             } else {
                 reply.set_synced(false);
-                reply.set_ended(true);
                 reply.SerializeToString(&data);
                 stateMachine->MessageReply(MSG_AD_IMAGE_CONTENT, data);
             }
@@ -264,7 +266,7 @@ bool StateAdPictureDownload::AdPictureItemHandle(const string &msg)
 void StateAdPictureDownload::DownloadImage(const string &file_path)
 {
     FILE *fptr = NULL;
-    AdPictureReply reply;
+    AdPictureContentReply reply;
     string data;
     char buf[1024] = { 0 };
     size_t rdSize = 0;
@@ -286,5 +288,26 @@ void StateAdPictureDownload::DownloadImage(const string &file_path)
 
         fclose(fptr);
     }
+}
+
+void StateAdPictureDownload::DownloadImageInfo(const AdPicturesInfo &ad_info)
+{
+    AdPictureItemReply reply;
+    string data;
+
+    reply.set_image_id(ad_info.image_id);
+    reply.set_existed(ad_info.existed);
+    
+    if (ad_info.existed) {
+        reply.set_image_type(ad_info.image_type);
+        reply.set_image_name(ad_info.image_name);
+        reply.set_image_hashcode(ad_info.image_hashcode);
+        reply.set_url(ad_info.link_url);
+        reply.set_image_size(ad_info.image_size);
+    }
+    
+    reply.SerializeToString(&data);
+    stateMachine->MessageReply(MSG_AD_IMAGE_INFO, data);
+
 }
 

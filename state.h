@@ -59,6 +59,7 @@ typedef enum
     MSG_FIND_PASSWORD,
     MSG_UPDATE_USER_INFO,
     MSG_AD_IMAGE_INFO,
+    MSG_AD_IMAGE_REQ,
     MSG_AD_IMAGE_CONTENT,
     MSG_TYPE_MAX
 }MessageType;
@@ -120,6 +121,7 @@ public:
 
 };
 
+struct AdPicturesInfo;
 class StateAdPictureDownload : public State
 {
 public:
@@ -131,6 +133,7 @@ public:
 
 private:
     void DownloadImage(const string &file_path);
+    void DownloadImageInfo(const AdPicturesInfo &ad_info);
 };
 #endif /*__STATE_MACHINE_HEAD__*/
 

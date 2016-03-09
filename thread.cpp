@@ -668,8 +668,9 @@ bool WorkThread::GetAdPicturesInfoFromDB(const u_int32 id, AdPicturesInfo &ad_in
     LOG_DEBUG(MODULE_DB, "select_cmd[%s]", select_cmd);
 
     ret = mysql_db_query_ad_info(pdb_con, select_cmd, ad_info);
-    if (ret != 0) {
-        LOG_ERROR(MODULE_DB, "mysql_get_binary_data failed, ret[%d]", ret);
+    if (ret <= 0) {
+        ad_info.existed = false;
+        LOG_ERROR(MODULE_DB, "mysql_db_query_ad_info failed, ret[%d]", ret);
         return false;
     }
     

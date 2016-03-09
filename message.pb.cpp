@@ -89,12 +89,15 @@ const ::google::protobuf::internal::GeneratedMessageReflection*
 const ::google::protobuf::Descriptor* UpdateUserInfo_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   UpdateUserInfo_reflection_ = NULL;
-const ::google::protobuf::Descriptor* AdPictureItem_descriptor_ = NULL;
+const ::google::protobuf::Descriptor* AdPictureItemReply_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
-  AdPictureItem_reflection_ = NULL;
-const ::google::protobuf::Descriptor* AdPictureReply_descriptor_ = NULL;
+  AdPictureItemReply_reflection_ = NULL;
+const ::google::protobuf::Descriptor* AdPictureReq_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
-  AdPictureReply_reflection_ = NULL;
+  AdPictureReq_reflection_ = NULL;
+const ::google::protobuf::Descriptor* AdPictureContentReply_descriptor_ = NULL;
+const ::google::protobuf::internal::GeneratedMessageReflection*
+  AdPictureContentReply_reflection_ = NULL;
 
 }  // namespace
 
@@ -529,45 +532,62 @@ void protobuf_AssignDesc_message_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(UpdateUserInfo));
-  AdPictureItem_descriptor_ = file->message_type(24);
-  static const int AdPictureItem_offsets_[8] = {
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AdPictureItem, image_type_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AdPictureItem, image_name_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AdPictureItem, existed_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AdPictureItem, image_hashcode_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AdPictureItem, url_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AdPictureItem, image_size_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AdPictureItem, image_id_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AdPictureItem, last_one_),
+  AdPictureItemReply_descriptor_ = file->message_type(24);
+  static const int AdPictureItemReply_offsets_[7] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AdPictureItemReply, image_id_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AdPictureItemReply, existed_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AdPictureItemReply, image_type_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AdPictureItemReply, image_name_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AdPictureItemReply, image_hashcode_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AdPictureItemReply, url_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AdPictureItemReply, image_size_),
   };
-  AdPictureItem_reflection_ =
+  AdPictureItemReply_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
-      AdPictureItem_descriptor_,
-      AdPictureItem::default_instance_,
-      AdPictureItem_offsets_,
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AdPictureItem, _has_bits_[0]),
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AdPictureItem, _unknown_fields_),
+      AdPictureItemReply_descriptor_,
+      AdPictureItemReply::default_instance_,
+      AdPictureItemReply_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AdPictureItemReply, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AdPictureItemReply, _unknown_fields_),
       -1,
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
-      sizeof(AdPictureItem));
-  AdPictureReply_descriptor_ = file->message_type(25);
-  static const int AdPictureReply_offsets_[3] = {
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AdPictureReply, synced_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AdPictureReply, content_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AdPictureReply, ended_),
+      sizeof(AdPictureItemReply));
+  AdPictureReq_descriptor_ = file->message_type(25);
+  static const int AdPictureReq_offsets_[4] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AdPictureReq, image_id_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AdPictureReq, image_hashcode_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AdPictureReq, url_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AdPictureReq, last_one_),
   };
-  AdPictureReply_reflection_ =
+  AdPictureReq_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
-      AdPictureReply_descriptor_,
-      AdPictureReply::default_instance_,
-      AdPictureReply_offsets_,
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AdPictureReply, _has_bits_[0]),
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AdPictureReply, _unknown_fields_),
+      AdPictureReq_descriptor_,
+      AdPictureReq::default_instance_,
+      AdPictureReq_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AdPictureReq, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AdPictureReq, _unknown_fields_),
       -1,
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
-      sizeof(AdPictureReply));
+      sizeof(AdPictureReq));
+  AdPictureContentReply_descriptor_ = file->message_type(26);
+  static const int AdPictureContentReply_offsets_[3] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AdPictureContentReply, synced_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AdPictureContentReply, content_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AdPictureContentReply, ended_),
+  };
+  AdPictureContentReply_reflection_ =
+    new ::google::protobuf::internal::GeneratedMessageReflection(
+      AdPictureContentReply_descriptor_,
+      AdPictureContentReply::default_instance_,
+      AdPictureContentReply_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AdPictureContentReply, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AdPictureContentReply, _unknown_fields_),
+      -1,
+      ::google::protobuf::DescriptorPool::generated_pool(),
+      ::google::protobuf::MessageFactory::generated_factory(),
+      sizeof(AdPictureContentReply));
 }
 
 namespace {
@@ -629,9 +649,11 @@ void protobuf_RegisterTypes(const ::std::string&) {
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     UpdateUserInfo_descriptor_, &UpdateUserInfo::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
-    AdPictureItem_descriptor_, &AdPictureItem::default_instance());
+    AdPictureItemReply_descriptor_, &AdPictureItemReply::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
-    AdPictureReply_descriptor_, &AdPictureReply::default_instance());
+    AdPictureReq_descriptor_, &AdPictureReq::default_instance());
+  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
+    AdPictureContentReply_descriptor_, &AdPictureContentReply::default_instance());
 }
 
 }  // namespace
@@ -685,10 +707,12 @@ void protobuf_ShutdownFile_message_2eproto() {
   delete FindPassword_reflection_;
   delete UpdateUserInfo::default_instance_;
   delete UpdateUserInfo_reflection_;
-  delete AdPictureItem::default_instance_;
-  delete AdPictureItem_reflection_;
-  delete AdPictureReply::default_instance_;
-  delete AdPictureReply_reflection_;
+  delete AdPictureItemReply::default_instance_;
+  delete AdPictureItemReply_reflection_;
+  delete AdPictureReq::default_instance_;
+  delete AdPictureReq_reflection_;
+  delete AdPictureContentReply::default_instance_;
+  delete AdPictureContentReply_reflection_;
 }
 
 void protobuf_AddDesc_message_2eproto() {
@@ -758,13 +782,15 @@ void protobuf_AddDesc_message_2eproto() {
     "sword\022\r\n\005email\030\001 \002(\t\022\013\n\003opt\030\002 \001(\t\"{\n\016Upd"
     "ateUserInfo\022\021\n\tuser_name\030\001 \002(\t\022\017\n\007accoun"
     "t\030\002 \002(\t\022\020\n\010password\030\003 \002(\t\022\020\n\010ex_email\030\004 "
-    "\001(\t\022\r\n\005phone\030\005 \001(\t\022\022\n\nhead_image\030\006 \001(\014\"\245"
-    "\001\n\rAdPictureItem\022\022\n\nimage_type\030\001 \002(\r\022\022\n\n"
-    "image_name\030\002 \002(\t\022\017\n\007existed\030\003 \002(\010\022\026\n\016ima"
-    "ge_hashcode\030\004 \001(\t\022\013\n\003url\030\005 \001(\t\022\022\n\nimage_"
-    "size\030\006 \001(\r\022\020\n\010image_id\030\007 \002(\r\022\020\n\010last_one"
-    "\030\010 \001(\010\"@\n\016AdPictureReply\022\016\n\006synced\030\001 \002(\010"
-    "\022\017\n\007content\030\002 \001(\014\022\r\n\005ended\030\003 \001(\010", 2672);
+    "\001(\t\022\r\n\005phone\030\005 \001(\t\022\022\n\nhead_image\030\006 \001(\014\"\230"
+    "\001\n\022AdPictureItemReply\022\020\n\010image_id\030\001 \002(\r\022"
+    "\017\n\007existed\030\002 \002(\010\022\022\n\nimage_type\030\003 \001(\t\022\022\n\n"
+    "image_name\030\004 \001(\t\022\026\n\016image_hashcode\030\005 \001(\t"
+    "\022\013\n\003url\030\006 \001(\t\022\022\n\nimage_size\030\007 \001(\r\"W\n\014AdP"
+    "ictureReq\022\020\n\010image_id\030\001 \002(\r\022\026\n\016image_has"
+    "hcode\030\002 \001(\t\022\013\n\003url\030\003 \001(\t\022\020\n\010last_one\030\004 \001"
+    "(\010\"G\n\025AdPictureContentReply\022\016\n\006synced\030\001 "
+    "\002(\010\022\017\n\007content\030\002 \001(\014\022\r\n\005ended\030\003 \001(\010", 2755);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "message.proto", &protobuf_RegisterTypes);
   Echo::default_instance_ = new Echo();
@@ -791,8 +817,9 @@ void protobuf_AddDesc_message_2eproto() {
   GameStatusReply::default_instance_ = new GameStatusReply();
   FindPassword::default_instance_ = new FindPassword();
   UpdateUserInfo::default_instance_ = new UpdateUserInfo();
-  AdPictureItem::default_instance_ = new AdPictureItem();
-  AdPictureReply::default_instance_ = new AdPictureReply();
+  AdPictureItemReply::default_instance_ = new AdPictureItemReply();
+  AdPictureReq::default_instance_ = new AdPictureReq();
+  AdPictureContentReply::default_instance_ = new AdPictureContentReply();
   Echo::default_instance_->InitAsDefaultInstance();
   LogOnorOut::default_instance_->InitAsDefaultInstance();
   ReplyStatus::default_instance_->InitAsDefaultInstance();
@@ -817,8 +844,9 @@ void protobuf_AddDesc_message_2eproto() {
   GameStatusReply::default_instance_->InitAsDefaultInstance();
   FindPassword::default_instance_->InitAsDefaultInstance();
   UpdateUserInfo::default_instance_->InitAsDefaultInstance();
-  AdPictureItem::default_instance_->InitAsDefaultInstance();
-  AdPictureReply::default_instance_->InitAsDefaultInstance();
+  AdPictureItemReply::default_instance_->InitAsDefaultInstance();
+  AdPictureReq::default_instance_->InitAsDefaultInstance();
+  AdPictureContentReply::default_instance_->InitAsDefaultInstance();
   ::google::protobuf::internal::OnShutdown(&protobuf_ShutdownFile_message_2eproto);
 }
 
@@ -8889,48 +8917,49 @@ void UpdateUserInfo::Swap(UpdateUserInfo* other) {
 // ===================================================================
 
 #ifndef _MSC_VER
-const int AdPictureItem::kImageTypeFieldNumber;
-const int AdPictureItem::kImageNameFieldNumber;
-const int AdPictureItem::kExistedFieldNumber;
-const int AdPictureItem::kImageHashcodeFieldNumber;
-const int AdPictureItem::kUrlFieldNumber;
-const int AdPictureItem::kImageSizeFieldNumber;
-const int AdPictureItem::kImageIdFieldNumber;
-const int AdPictureItem::kLastOneFieldNumber;
+const int AdPictureItemReply::kImageIdFieldNumber;
+const int AdPictureItemReply::kExistedFieldNumber;
+const int AdPictureItemReply::kImageTypeFieldNumber;
+const int AdPictureItemReply::kImageNameFieldNumber;
+const int AdPictureItemReply::kImageHashcodeFieldNumber;
+const int AdPictureItemReply::kUrlFieldNumber;
+const int AdPictureItemReply::kImageSizeFieldNumber;
 #endif  // !_MSC_VER
 
-AdPictureItem::AdPictureItem()
+AdPictureItemReply::AdPictureItemReply()
   : ::google::protobuf::Message() {
   SharedCtor();
 }
 
-void AdPictureItem::InitAsDefaultInstance() {
+void AdPictureItemReply::InitAsDefaultInstance() {
 }
 
-AdPictureItem::AdPictureItem(const AdPictureItem& from)
+AdPictureItemReply::AdPictureItemReply(const AdPictureItemReply& from)
   : ::google::protobuf::Message() {
   SharedCtor();
   MergeFrom(from);
 }
 
-void AdPictureItem::SharedCtor() {
+void AdPictureItemReply::SharedCtor() {
   _cached_size_ = 0;
-  image_type_ = 0u;
-  image_name_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+  image_id_ = 0u;
   existed_ = false;
+  image_type_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+  image_name_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
   image_hashcode_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
   url_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
   image_size_ = 0u;
-  image_id_ = 0u;
-  last_one_ = false;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
-AdPictureItem::~AdPictureItem() {
+AdPictureItemReply::~AdPictureItemReply() {
   SharedDtor();
 }
 
-void AdPictureItem::SharedDtor() {
+void AdPictureItemReply::SharedDtor() {
+  if (image_type_ != &::google::protobuf::internal::kEmptyString) {
+    delete image_type_;
+  }
   if (image_name_ != &::google::protobuf::internal::kEmptyString) {
     delete image_name_;
   }
@@ -8944,35 +8973,40 @@ void AdPictureItem::SharedDtor() {
   }
 }
 
-void AdPictureItem::SetCachedSize(int size) const {
+void AdPictureItemReply::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
 }
-const ::google::protobuf::Descriptor* AdPictureItem::descriptor() {
+const ::google::protobuf::Descriptor* AdPictureItemReply::descriptor() {
   protobuf_AssignDescriptorsOnce();
-  return AdPictureItem_descriptor_;
+  return AdPictureItemReply_descriptor_;
 }
 
-const AdPictureItem& AdPictureItem::default_instance() {
+const AdPictureItemReply& AdPictureItemReply::default_instance() {
   if (default_instance_ == NULL) protobuf_AddDesc_message_2eproto();  return *default_instance_;
 }
 
-AdPictureItem* AdPictureItem::default_instance_ = NULL;
+AdPictureItemReply* AdPictureItemReply::default_instance_ = NULL;
 
-AdPictureItem* AdPictureItem::New() const {
-  return new AdPictureItem;
+AdPictureItemReply* AdPictureItemReply::New() const {
+  return new AdPictureItemReply;
 }
 
-void AdPictureItem::Clear() {
+void AdPictureItemReply::Clear() {
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    image_type_ = 0u;
+    image_id_ = 0u;
+    existed_ = false;
+    if (has_image_type()) {
+      if (image_type_ != &::google::protobuf::internal::kEmptyString) {
+        image_type_->clear();
+      }
+    }
     if (has_image_name()) {
       if (image_name_ != &::google::protobuf::internal::kEmptyString) {
         image_name_->clear();
       }
     }
-    existed_ = false;
     if (has_image_hashcode()) {
       if (image_hashcode_ != &::google::protobuf::internal::kEmptyString) {
         image_hashcode_->clear();
@@ -8984,36 +9018,67 @@ void AdPictureItem::Clear() {
       }
     }
     image_size_ = 0u;
-    image_id_ = 0u;
-    last_one_ = false;
   }
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
   mutable_unknown_fields()->Clear();
 }
 
-bool AdPictureItem::MergePartialFromCodedStream(
+bool AdPictureItemReply::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!(EXPRESSION)) return false
   ::google::protobuf::uint32 tag;
   while ((tag = input->ReadTag()) != 0) {
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // required uint32 image_type = 1;
+      // required uint32 image_id = 1;
       case 1: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
-                 input, &image_type_)));
-          set_has_image_type();
+                 input, &image_id_)));
+          set_has_image_id();
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(18)) goto parse_image_name;
+        if (input->ExpectTag(16)) goto parse_existed;
         break;
       }
       
-      // required string image_name = 2;
+      // required bool existed = 2;
       case 2: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
+         parse_existed:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &existed_)));
+          set_has_existed();
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(26)) goto parse_image_type;
+        break;
+      }
+      
+      // optional string image_type = 3;
+      case 3: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
+         parse_image_type:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_image_type()));
+          ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+            this->image_type().data(), this->image_type().length(),
+            ::google::protobuf::internal::WireFormat::PARSE);
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(34)) goto parse_image_name;
+        break;
+      }
+      
+      // optional string image_name = 4;
+      case 4: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
          parse_image_name:
@@ -9025,28 +9090,12 @@ bool AdPictureItem::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(24)) goto parse_existed;
+        if (input->ExpectTag(42)) goto parse_image_hashcode;
         break;
       }
       
-      // required bool existed = 3;
-      case 3: {
-        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
-            ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
-         parse_existed:
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
-                 input, &existed_)));
-          set_has_existed();
-        } else {
-          goto handle_uninterpreted;
-        }
-        if (input->ExpectTag(34)) goto parse_image_hashcode;
-        break;
-      }
-      
-      // optional string image_hashcode = 4;
-      case 4: {
+      // optional string image_hashcode = 5;
+      case 5: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
          parse_image_hashcode:
@@ -9058,12 +9107,12 @@ bool AdPictureItem::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(42)) goto parse_url;
+        if (input->ExpectTag(50)) goto parse_url;
         break;
       }
       
-      // optional string url = 5;
-      case 5: {
+      // optional string url = 6;
+      case 6: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
          parse_url:
@@ -9075,12 +9124,12 @@ bool AdPictureItem::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(48)) goto parse_image_size;
+        if (input->ExpectTag(56)) goto parse_image_size;
         break;
       }
       
-      // optional uint32 image_size = 6;
-      case 6: {
+      // optional uint32 image_size = 7;
+      case 7: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
          parse_image_size:
@@ -9091,15 +9140,390 @@ bool AdPictureItem::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(56)) goto parse_image_id;
+        if (input->ExpectAtEnd()) return true;
         break;
       }
       
-      // required uint32 image_id = 7;
-      case 7: {
+      default: {
+      handle_uninterpreted:
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          return true;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+  return true;
+#undef DO_
+}
+
+void AdPictureItemReply::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // required uint32 image_id = 1;
+  if (has_image_id()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->image_id(), output);
+  }
+  
+  // required bool existed = 2;
+  if (has_existed()) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(2, this->existed(), output);
+  }
+  
+  // optional string image_type = 3;
+  if (has_image_type()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->image_type().data(), this->image_type().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    ::google::protobuf::internal::WireFormatLite::WriteString(
+      3, this->image_type(), output);
+  }
+  
+  // optional string image_name = 4;
+  if (has_image_name()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->image_name().data(), this->image_name().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    ::google::protobuf::internal::WireFormatLite::WriteString(
+      4, this->image_name(), output);
+  }
+  
+  // optional string image_hashcode = 5;
+  if (has_image_hashcode()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->image_hashcode().data(), this->image_hashcode().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    ::google::protobuf::internal::WireFormatLite::WriteString(
+      5, this->image_hashcode(), output);
+  }
+  
+  // optional string url = 6;
+  if (has_url()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->url().data(), this->url().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    ::google::protobuf::internal::WireFormatLite::WriteString(
+      6, this->url(), output);
+  }
+  
+  // optional uint32 image_size = 7;
+  if (has_image_size()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(7, this->image_size(), output);
+  }
+  
+  if (!unknown_fields().empty()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        unknown_fields(), output);
+  }
+}
+
+::google::protobuf::uint8* AdPictureItemReply::SerializeWithCachedSizesToArray(
+    ::google::protobuf::uint8* target) const {
+  // required uint32 image_id = 1;
+  if (has_image_id()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(1, this->image_id(), target);
+  }
+  
+  // required bool existed = 2;
+  if (has_existed()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(2, this->existed(), target);
+  }
+  
+  // optional string image_type = 3;
+  if (has_image_type()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->image_type().data(), this->image_type().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+        3, this->image_type(), target);
+  }
+  
+  // optional string image_name = 4;
+  if (has_image_name()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->image_name().data(), this->image_name().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+        4, this->image_name(), target);
+  }
+  
+  // optional string image_hashcode = 5;
+  if (has_image_hashcode()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->image_hashcode().data(), this->image_hashcode().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+        5, this->image_hashcode(), target);
+  }
+  
+  // optional string url = 6;
+  if (has_url()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->url().data(), this->url().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+        6, this->url(), target);
+  }
+  
+  // optional uint32 image_size = 7;
+  if (has_image_size()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(7, this->image_size(), target);
+  }
+  
+  if (!unknown_fields().empty()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        unknown_fields(), target);
+  }
+  return target;
+}
+
+int AdPictureItemReply::ByteSize() const {
+  int total_size = 0;
+  
+  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    // required uint32 image_id = 1;
+    if (has_image_id()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
+          this->image_id());
+    }
+    
+    // required bool existed = 2;
+    if (has_existed()) {
+      total_size += 1 + 1;
+    }
+    
+    // optional string image_type = 3;
+    if (has_image_type()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::StringSize(
+          this->image_type());
+    }
+    
+    // optional string image_name = 4;
+    if (has_image_name()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::StringSize(
+          this->image_name());
+    }
+    
+    // optional string image_hashcode = 5;
+    if (has_image_hashcode()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::StringSize(
+          this->image_hashcode());
+    }
+    
+    // optional string url = 6;
+    if (has_url()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::StringSize(
+          this->url());
+    }
+    
+    // optional uint32 image_size = 7;
+    if (has_image_size()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
+          this->image_size());
+    }
+    
+  }
+  if (!unknown_fields().empty()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        unknown_fields());
+  }
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = total_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void AdPictureItemReply::MergeFrom(const ::google::protobuf::Message& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  const AdPictureItemReply* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const AdPictureItemReply*>(
+      &from);
+  if (source == NULL) {
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+    MergeFrom(*source);
+  }
+}
+
+void AdPictureItemReply::MergeFrom(const AdPictureItemReply& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    if (from.has_image_id()) {
+      set_image_id(from.image_id());
+    }
+    if (from.has_existed()) {
+      set_existed(from.existed());
+    }
+    if (from.has_image_type()) {
+      set_image_type(from.image_type());
+    }
+    if (from.has_image_name()) {
+      set_image_name(from.image_name());
+    }
+    if (from.has_image_hashcode()) {
+      set_image_hashcode(from.image_hashcode());
+    }
+    if (from.has_url()) {
+      set_url(from.url());
+    }
+    if (from.has_image_size()) {
+      set_image_size(from.image_size());
+    }
+  }
+  mutable_unknown_fields()->MergeFrom(from.unknown_fields());
+}
+
+void AdPictureItemReply::CopyFrom(const ::google::protobuf::Message& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void AdPictureItemReply::CopyFrom(const AdPictureItemReply& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool AdPictureItemReply::IsInitialized() const {
+  if ((_has_bits_[0] & 0x00000003) != 0x00000003) return false;
+  
+  return true;
+}
+
+void AdPictureItemReply::Swap(AdPictureItemReply* other) {
+  if (other != this) {
+    std::swap(image_id_, other->image_id_);
+    std::swap(existed_, other->existed_);
+    std::swap(image_type_, other->image_type_);
+    std::swap(image_name_, other->image_name_);
+    std::swap(image_hashcode_, other->image_hashcode_);
+    std::swap(url_, other->url_);
+    std::swap(image_size_, other->image_size_);
+    std::swap(_has_bits_[0], other->_has_bits_[0]);
+    _unknown_fields_.Swap(&other->_unknown_fields_);
+    std::swap(_cached_size_, other->_cached_size_);
+  }
+}
+
+::google::protobuf::Metadata AdPictureItemReply::GetMetadata() const {
+  protobuf_AssignDescriptorsOnce();
+  ::google::protobuf::Metadata metadata;
+  metadata.descriptor = AdPictureItemReply_descriptor_;
+  metadata.reflection = AdPictureItemReply_reflection_;
+  return metadata;
+}
+
+
+// ===================================================================
+
+#ifndef _MSC_VER
+const int AdPictureReq::kImageIdFieldNumber;
+const int AdPictureReq::kImageHashcodeFieldNumber;
+const int AdPictureReq::kUrlFieldNumber;
+const int AdPictureReq::kLastOneFieldNumber;
+#endif  // !_MSC_VER
+
+AdPictureReq::AdPictureReq()
+  : ::google::protobuf::Message() {
+  SharedCtor();
+}
+
+void AdPictureReq::InitAsDefaultInstance() {
+}
+
+AdPictureReq::AdPictureReq(const AdPictureReq& from)
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  MergeFrom(from);
+}
+
+void AdPictureReq::SharedCtor() {
+  _cached_size_ = 0;
+  image_id_ = 0u;
+  image_hashcode_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+  url_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+  last_one_ = false;
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+}
+
+AdPictureReq::~AdPictureReq() {
+  SharedDtor();
+}
+
+void AdPictureReq::SharedDtor() {
+  if (image_hashcode_ != &::google::protobuf::internal::kEmptyString) {
+    delete image_hashcode_;
+  }
+  if (url_ != &::google::protobuf::internal::kEmptyString) {
+    delete url_;
+  }
+  if (this != default_instance_) {
+  }
+}
+
+void AdPictureReq::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* AdPictureReq::descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return AdPictureReq_descriptor_;
+}
+
+const AdPictureReq& AdPictureReq::default_instance() {
+  if (default_instance_ == NULL) protobuf_AddDesc_message_2eproto();  return *default_instance_;
+}
+
+AdPictureReq* AdPictureReq::default_instance_ = NULL;
+
+AdPictureReq* AdPictureReq::New() const {
+  return new AdPictureReq;
+}
+
+void AdPictureReq::Clear() {
+  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    image_id_ = 0u;
+    if (has_image_hashcode()) {
+      if (image_hashcode_ != &::google::protobuf::internal::kEmptyString) {
+        image_hashcode_->clear();
+      }
+    }
+    if (has_url()) {
+      if (url_ != &::google::protobuf::internal::kEmptyString) {
+        url_->clear();
+      }
+    }
+    last_one_ = false;
+  }
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+  mutable_unknown_fields()->Clear();
+}
+
+bool AdPictureReq::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!(EXPRESSION)) return false
+  ::google::protobuf::uint32 tag;
+  while ((tag = input->ReadTag()) != 0) {
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // required uint32 image_id = 1;
+      case 1: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
-         parse_image_id:
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
                  input, &image_id_)));
@@ -9107,12 +9531,46 @@ bool AdPictureItem::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(64)) goto parse_last_one;
+        if (input->ExpectTag(18)) goto parse_image_hashcode;
         break;
       }
       
-      // optional bool last_one = 8;
-      case 8: {
+      // optional string image_hashcode = 2;
+      case 2: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
+         parse_image_hashcode:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_image_hashcode()));
+          ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+            this->image_hashcode().data(), this->image_hashcode().length(),
+            ::google::protobuf::internal::WireFormat::PARSE);
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(26)) goto parse_url;
+        break;
+      }
+      
+      // optional string url = 3;
+      case 3: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
+         parse_url:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_url()));
+          ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+            this->url().data(), this->url().length(),
+            ::google::protobuf::internal::WireFormat::PARSE);
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(32)) goto parse_last_one;
+        break;
+      }
+      
+      // optional bool last_one = 4;
+      case 4: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
          parse_last_one:
@@ -9143,58 +9601,34 @@ bool AdPictureItem::MergePartialFromCodedStream(
 #undef DO_
 }
 
-void AdPictureItem::SerializeWithCachedSizes(
+void AdPictureReq::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // required uint32 image_type = 1;
-  if (has_image_type()) {
-    ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->image_type(), output);
+  // required uint32 image_id = 1;
+  if (has_image_id()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->image_id(), output);
   }
   
-  // required string image_name = 2;
-  if (has_image_name()) {
-    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
-      this->image_name().data(), this->image_name().length(),
-      ::google::protobuf::internal::WireFormat::SERIALIZE);
-    ::google::protobuf::internal::WireFormatLite::WriteString(
-      2, this->image_name(), output);
-  }
-  
-  // required bool existed = 3;
-  if (has_existed()) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(3, this->existed(), output);
-  }
-  
-  // optional string image_hashcode = 4;
+  // optional string image_hashcode = 2;
   if (has_image_hashcode()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8String(
       this->image_hashcode().data(), this->image_hashcode().length(),
       ::google::protobuf::internal::WireFormat::SERIALIZE);
     ::google::protobuf::internal::WireFormatLite::WriteString(
-      4, this->image_hashcode(), output);
+      2, this->image_hashcode(), output);
   }
   
-  // optional string url = 5;
+  // optional string url = 3;
   if (has_url()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8String(
       this->url().data(), this->url().length(),
       ::google::protobuf::internal::WireFormat::SERIALIZE);
     ::google::protobuf::internal::WireFormatLite::WriteString(
-      5, this->url(), output);
+      3, this->url(), output);
   }
   
-  // optional uint32 image_size = 6;
-  if (has_image_size()) {
-    ::google::protobuf::internal::WireFormatLite::WriteUInt32(6, this->image_size(), output);
-  }
-  
-  // required uint32 image_id = 7;
-  if (has_image_id()) {
-    ::google::protobuf::internal::WireFormatLite::WriteUInt32(7, this->image_id(), output);
-  }
-  
-  // optional bool last_one = 8;
+  // optional bool last_one = 4;
   if (has_last_one()) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(8, this->last_one(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteBool(4, this->last_one(), output);
   }
   
   if (!unknown_fields().empty()) {
@@ -9203,61 +9637,36 @@ void AdPictureItem::SerializeWithCachedSizes(
   }
 }
 
-::google::protobuf::uint8* AdPictureItem::SerializeWithCachedSizesToArray(
+::google::protobuf::uint8* AdPictureReq::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
-  // required uint32 image_type = 1;
-  if (has_image_type()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(1, this->image_type(), target);
+  // required uint32 image_id = 1;
+  if (has_image_id()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(1, this->image_id(), target);
   }
   
-  // required string image_name = 2;
-  if (has_image_name()) {
-    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
-      this->image_name().data(), this->image_name().length(),
-      ::google::protobuf::internal::WireFormat::SERIALIZE);
-    target =
-      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
-        2, this->image_name(), target);
-  }
-  
-  // required bool existed = 3;
-  if (has_existed()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(3, this->existed(), target);
-  }
-  
-  // optional string image_hashcode = 4;
+  // optional string image_hashcode = 2;
   if (has_image_hashcode()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8String(
       this->image_hashcode().data(), this->image_hashcode().length(),
       ::google::protobuf::internal::WireFormat::SERIALIZE);
     target =
       ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
-        4, this->image_hashcode(), target);
+        2, this->image_hashcode(), target);
   }
   
-  // optional string url = 5;
+  // optional string url = 3;
   if (has_url()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8String(
       this->url().data(), this->url().length(),
       ::google::protobuf::internal::WireFormat::SERIALIZE);
     target =
       ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
-        5, this->url(), target);
+        3, this->url(), target);
   }
   
-  // optional uint32 image_size = 6;
-  if (has_image_size()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(6, this->image_size(), target);
-  }
-  
-  // required uint32 image_id = 7;
-  if (has_image_id()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(7, this->image_id(), target);
-  }
-  
-  // optional bool last_one = 8;
+  // optional bool last_one = 4;
   if (has_last_one()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(8, this->last_one(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(4, this->last_one(), target);
   }
   
   if (!unknown_fields().empty()) {
@@ -9267,58 +9676,32 @@ void AdPictureItem::SerializeWithCachedSizes(
   return target;
 }
 
-int AdPictureItem::ByteSize() const {
+int AdPictureReq::ByteSize() const {
   int total_size = 0;
   
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    // required uint32 image_type = 1;
-    if (has_image_type()) {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::UInt32Size(
-          this->image_type());
-    }
-    
-    // required string image_name = 2;
-    if (has_image_name()) {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::StringSize(
-          this->image_name());
-    }
-    
-    // required bool existed = 3;
-    if (has_existed()) {
-      total_size += 1 + 1;
-    }
-    
-    // optional string image_hashcode = 4;
-    if (has_image_hashcode()) {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::StringSize(
-          this->image_hashcode());
-    }
-    
-    // optional string url = 5;
-    if (has_url()) {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::StringSize(
-          this->url());
-    }
-    
-    // optional uint32 image_size = 6;
-    if (has_image_size()) {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::UInt32Size(
-          this->image_size());
-    }
-    
-    // required uint32 image_id = 7;
+    // required uint32 image_id = 1;
     if (has_image_id()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::UInt32Size(
           this->image_id());
     }
     
-    // optional bool last_one = 8;
+    // optional string image_hashcode = 2;
+    if (has_image_hashcode()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::StringSize(
+          this->image_hashcode());
+    }
+    
+    // optional string url = 3;
+    if (has_url()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::StringSize(
+          this->url());
+    }
+    
+    // optional bool last_one = 4;
     if (has_last_one()) {
       total_size += 1 + 1;
     }
@@ -9335,10 +9718,10 @@ int AdPictureItem::ByteSize() const {
   return total_size;
 }
 
-void AdPictureItem::MergeFrom(const ::google::protobuf::Message& from) {
+void AdPictureReq::MergeFrom(const ::google::protobuf::Message& from) {
   GOOGLE_CHECK_NE(&from, this);
-  const AdPictureItem* source =
-    ::google::protobuf::internal::dynamic_cast_if_available<const AdPictureItem*>(
+  const AdPictureReq* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const AdPictureReq*>(
       &from);
   if (source == NULL) {
     ::google::protobuf::internal::ReflectionOps::Merge(from, this);
@@ -9347,29 +9730,17 @@ void AdPictureItem::MergeFrom(const ::google::protobuf::Message& from) {
   }
 }
 
-void AdPictureItem::MergeFrom(const AdPictureItem& from) {
+void AdPictureReq::MergeFrom(const AdPictureReq& from) {
   GOOGLE_CHECK_NE(&from, this);
   if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    if (from.has_image_type()) {
-      set_image_type(from.image_type());
-    }
-    if (from.has_image_name()) {
-      set_image_name(from.image_name());
-    }
-    if (from.has_existed()) {
-      set_existed(from.existed());
+    if (from.has_image_id()) {
+      set_image_id(from.image_id());
     }
     if (from.has_image_hashcode()) {
       set_image_hashcode(from.image_hashcode());
     }
     if (from.has_url()) {
       set_url(from.url());
-    }
-    if (from.has_image_size()) {
-      set_image_size(from.image_size());
-    }
-    if (from.has_image_id()) {
-      set_image_id(from.image_id());
     }
     if (from.has_last_one()) {
       set_last_one(from.last_one());
@@ -9378,33 +9749,29 @@ void AdPictureItem::MergeFrom(const AdPictureItem& from) {
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
 
-void AdPictureItem::CopyFrom(const ::google::protobuf::Message& from) {
+void AdPictureReq::CopyFrom(const ::google::protobuf::Message& from) {
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-void AdPictureItem::CopyFrom(const AdPictureItem& from) {
+void AdPictureReq::CopyFrom(const AdPictureReq& from) {
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool AdPictureItem::IsInitialized() const {
-  if ((_has_bits_[0] & 0x00000047) != 0x00000047) return false;
+bool AdPictureReq::IsInitialized() const {
+  if ((_has_bits_[0] & 0x00000001) != 0x00000001) return false;
   
   return true;
 }
 
-void AdPictureItem::Swap(AdPictureItem* other) {
+void AdPictureReq::Swap(AdPictureReq* other) {
   if (other != this) {
-    std::swap(image_type_, other->image_type_);
-    std::swap(image_name_, other->image_name_);
-    std::swap(existed_, other->existed_);
+    std::swap(image_id_, other->image_id_);
     std::swap(image_hashcode_, other->image_hashcode_);
     std::swap(url_, other->url_);
-    std::swap(image_size_, other->image_size_);
-    std::swap(image_id_, other->image_id_);
     std::swap(last_one_, other->last_one_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
@@ -9412,11 +9779,11 @@ void AdPictureItem::Swap(AdPictureItem* other) {
   }
 }
 
-::google::protobuf::Metadata AdPictureItem::GetMetadata() const {
+::google::protobuf::Metadata AdPictureReq::GetMetadata() const {
   protobuf_AssignDescriptorsOnce();
   ::google::protobuf::Metadata metadata;
-  metadata.descriptor = AdPictureItem_descriptor_;
-  metadata.reflection = AdPictureItem_reflection_;
+  metadata.descriptor = AdPictureReq_descriptor_;
+  metadata.reflection = AdPictureReq_reflection_;
   return metadata;
 }
 
@@ -9424,26 +9791,26 @@ void AdPictureItem::Swap(AdPictureItem* other) {
 // ===================================================================
 
 #ifndef _MSC_VER
-const int AdPictureReply::kSyncedFieldNumber;
-const int AdPictureReply::kContentFieldNumber;
-const int AdPictureReply::kEndedFieldNumber;
+const int AdPictureContentReply::kSyncedFieldNumber;
+const int AdPictureContentReply::kContentFieldNumber;
+const int AdPictureContentReply::kEndedFieldNumber;
 #endif  // !_MSC_VER
 
-AdPictureReply::AdPictureReply()
+AdPictureContentReply::AdPictureContentReply()
   : ::google::protobuf::Message() {
   SharedCtor();
 }
 
-void AdPictureReply::InitAsDefaultInstance() {
+void AdPictureContentReply::InitAsDefaultInstance() {
 }
 
-AdPictureReply::AdPictureReply(const AdPictureReply& from)
+AdPictureContentReply::AdPictureContentReply(const AdPictureContentReply& from)
   : ::google::protobuf::Message() {
   SharedCtor();
   MergeFrom(from);
 }
 
-void AdPictureReply::SharedCtor() {
+void AdPictureContentReply::SharedCtor() {
   _cached_size_ = 0;
   synced_ = false;
   content_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
@@ -9451,11 +9818,11 @@ void AdPictureReply::SharedCtor() {
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
-AdPictureReply::~AdPictureReply() {
+AdPictureContentReply::~AdPictureContentReply() {
   SharedDtor();
 }
 
-void AdPictureReply::SharedDtor() {
+void AdPictureContentReply::SharedDtor() {
   if (content_ != &::google::protobuf::internal::kEmptyString) {
     delete content_;
   }
@@ -9463,27 +9830,27 @@ void AdPictureReply::SharedDtor() {
   }
 }
 
-void AdPictureReply::SetCachedSize(int size) const {
+void AdPictureContentReply::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
 }
-const ::google::protobuf::Descriptor* AdPictureReply::descriptor() {
+const ::google::protobuf::Descriptor* AdPictureContentReply::descriptor() {
   protobuf_AssignDescriptorsOnce();
-  return AdPictureReply_descriptor_;
+  return AdPictureContentReply_descriptor_;
 }
 
-const AdPictureReply& AdPictureReply::default_instance() {
+const AdPictureContentReply& AdPictureContentReply::default_instance() {
   if (default_instance_ == NULL) protobuf_AddDesc_message_2eproto();  return *default_instance_;
 }
 
-AdPictureReply* AdPictureReply::default_instance_ = NULL;
+AdPictureContentReply* AdPictureContentReply::default_instance_ = NULL;
 
-AdPictureReply* AdPictureReply::New() const {
-  return new AdPictureReply;
+AdPictureContentReply* AdPictureContentReply::New() const {
+  return new AdPictureContentReply;
 }
 
-void AdPictureReply::Clear() {
+void AdPictureContentReply::Clear() {
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
     synced_ = false;
     if (has_content()) {
@@ -9497,7 +9864,7 @@ void AdPictureReply::Clear() {
   mutable_unknown_fields()->Clear();
 }
 
-bool AdPictureReply::MergePartialFromCodedStream(
+bool AdPictureContentReply::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!(EXPRESSION)) return false
   ::google::protobuf::uint32 tag;
@@ -9564,7 +9931,7 @@ bool AdPictureReply::MergePartialFromCodedStream(
 #undef DO_
 }
 
-void AdPictureReply::SerializeWithCachedSizes(
+void AdPictureContentReply::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // required bool synced = 1;
   if (has_synced()) {
@@ -9588,7 +9955,7 @@ void AdPictureReply::SerializeWithCachedSizes(
   }
 }
 
-::google::protobuf::uint8* AdPictureReply::SerializeWithCachedSizesToArray(
+::google::protobuf::uint8* AdPictureContentReply::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
   // required bool synced = 1;
   if (has_synced()) {
@@ -9614,7 +9981,7 @@ void AdPictureReply::SerializeWithCachedSizes(
   return target;
 }
 
-int AdPictureReply::ByteSize() const {
+int AdPictureContentReply::ByteSize() const {
   int total_size = 0;
   
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
@@ -9647,10 +10014,10 @@ int AdPictureReply::ByteSize() const {
   return total_size;
 }
 
-void AdPictureReply::MergeFrom(const ::google::protobuf::Message& from) {
+void AdPictureContentReply::MergeFrom(const ::google::protobuf::Message& from) {
   GOOGLE_CHECK_NE(&from, this);
-  const AdPictureReply* source =
-    ::google::protobuf::internal::dynamic_cast_if_available<const AdPictureReply*>(
+  const AdPictureContentReply* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const AdPictureContentReply*>(
       &from);
   if (source == NULL) {
     ::google::protobuf::internal::ReflectionOps::Merge(from, this);
@@ -9659,7 +10026,7 @@ void AdPictureReply::MergeFrom(const ::google::protobuf::Message& from) {
   }
 }
 
-void AdPictureReply::MergeFrom(const AdPictureReply& from) {
+void AdPictureContentReply::MergeFrom(const AdPictureContentReply& from) {
   GOOGLE_CHECK_NE(&from, this);
   if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
     if (from.has_synced()) {
@@ -9675,25 +10042,25 @@ void AdPictureReply::MergeFrom(const AdPictureReply& from) {
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
 
-void AdPictureReply::CopyFrom(const ::google::protobuf::Message& from) {
+void AdPictureContentReply::CopyFrom(const ::google::protobuf::Message& from) {
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-void AdPictureReply::CopyFrom(const AdPictureReply& from) {
+void AdPictureContentReply::CopyFrom(const AdPictureContentReply& from) {
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool AdPictureReply::IsInitialized() const {
+bool AdPictureContentReply::IsInitialized() const {
   if ((_has_bits_[0] & 0x00000001) != 0x00000001) return false;
   
   return true;
 }
 
-void AdPictureReply::Swap(AdPictureReply* other) {
+void AdPictureContentReply::Swap(AdPictureContentReply* other) {
   if (other != this) {
     std::swap(synced_, other->synced_);
     std::swap(content_, other->content_);
@@ -9704,11 +10071,11 @@ void AdPictureReply::Swap(AdPictureReply* other) {
   }
 }
 
-::google::protobuf::Metadata AdPictureReply::GetMetadata() const {
+::google::protobuf::Metadata AdPictureContentReply::GetMetadata() const {
   protobuf_AssignDescriptorsOnce();
   ::google::protobuf::Metadata metadata;
-  metadata.descriptor = AdPictureReply_descriptor_;
-  metadata.reflection = AdPictureReply_reflection_;
+  metadata.descriptor = AdPictureContentReply_descriptor_;
+  metadata.reflection = AdPictureContentReply_reflection_;
   return metadata;
 }
 

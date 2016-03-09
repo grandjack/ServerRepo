@@ -12,6 +12,7 @@ SOURCE      :=mainthread.cpp thread.cpp server.cpp usersession.cpp debug.cpp uti
 OBJS        :=$(patsubst %.cpp, %.o, $(SOURCE))
 TARGE       :=Server
 TARGE_CLI   :=Client
+TARGE_AD    :=AdInit
 
 all : $(TARGE)
 
@@ -28,9 +29,15 @@ $(TARGE_CLI) :$(CLIENT_SRC)
 	@echo "Generating Client..."
 	@g++ -Wall $(CXXFLAGS) $(LIB) -o $@ $(CLIENT_SRC)
 
-.PHONY:clean install prepare client
+.PHONY:clean install prepare client ad
 
 client:$(TARGE_CLI)
+
+ad : $(TARGE_AD)
+TARGE_AD_SRC := md5.cpp adinit.cpp debug.cpp utils.cpp mysqldb.cpp
+$(TARGE_AD) : $(TARGE_AD_SRC)
+	@echo "Generating AdInit..."
+	@g++ -Wall $(CXXFLAGS) $(LIB) -o $@ $(TARGE_AD_SRC)
 
 install:
 	cp $(TARGE) /usr/bin/$(TARGE)
@@ -43,4 +50,6 @@ clean:
 	@rm -rf $(OBJS)
 	@rm -rf $(TARGE)
 	@rm -rf $(TARGE_CLI)
+	@rm -rf $(TARGE_AD)
 	@rm -rf *.d
+	@rm -rf *.o

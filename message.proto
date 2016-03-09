@@ -176,19 +176,25 @@ message UpdateUserInfo
 }
 
 // Advertisement  create it as a sql table
-message AdPictureItem
+message AdPictureItemReply
 {
-    required uint32 image_type = 1;//jpeg,png.gif .etc.
-    required string image_name = 2;
-    required bool   existed = 3;
-    optional string image_hashcode = 4;
-    optional string url = 5;
-    optional uint32 image_size = 6;
-    required uint32 image_id = 7;//identify specific image
-    optional bool last_one = 8;// if true, should go to next state
+    required uint32 image_id = 1;//identify specific image    
+    required bool   existed = 2;
+    optional string image_type = 3;//jpeg,png.gif .etc.
+    optional string image_name = 4;
+    optional string image_hashcode = 5;
+    optional string url = 6;
+    optional uint32 image_size = 7;
 }
 
-message AdPictureReply
+message AdPictureReq
+{
+    required uint32 image_id = 1;//identify specific image    
+    optional string image_hashcode = 2;
+    optional string url = 3;
+    optional bool last_one = 4;// if true, should go to next state
+}
+message AdPictureContentReply
 {
     required bool   synced = 1;//whether client should sync the image content.
     optional bytes  content = 2;

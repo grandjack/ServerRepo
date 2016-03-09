@@ -56,8 +56,9 @@ class GameReadyReq;
 class GameStatusReply;
 class FindPassword;
 class UpdateUserInfo;
-class AdPictureItem;
-class AdPictureReply;
+class AdPictureItemReply;
+class AdPictureReq;
+class AdPictureContentReply;
 
 // ===================================================================
 
@@ -2793,14 +2794,14 @@ class UpdateUserInfo : public ::google::protobuf::Message {
 };
 // -------------------------------------------------------------------
 
-class AdPictureItem : public ::google::protobuf::Message {
+class AdPictureItemReply : public ::google::protobuf::Message {
  public:
-  AdPictureItem();
-  virtual ~AdPictureItem();
+  AdPictureItemReply();
+  virtual ~AdPictureItemReply();
   
-  AdPictureItem(const AdPictureItem& from);
+  AdPictureItemReply(const AdPictureItemReply& from);
   
-  inline AdPictureItem& operator=(const AdPictureItem& from) {
+  inline AdPictureItemReply& operator=(const AdPictureItemReply& from) {
     CopyFrom(from);
     return *this;
   }
@@ -2814,17 +2815,17 @@ class AdPictureItem : public ::google::protobuf::Message {
   }
   
   static const ::google::protobuf::Descriptor* descriptor();
-  static const AdPictureItem& default_instance();
+  static const AdPictureItemReply& default_instance();
   
-  void Swap(AdPictureItem* other);
+  void Swap(AdPictureItemReply* other);
   
   // implements Message ----------------------------------------------
   
-  AdPictureItem* New() const;
+  AdPictureItemReply* New() const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
-  void CopyFrom(const AdPictureItem& from);
-  void MergeFrom(const AdPictureItem& from);
+  void CopyFrom(const AdPictureItemReply& from);
+  void MergeFrom(const AdPictureItemReply& from);
   void Clear();
   bool IsInitialized() const;
   
@@ -2847,17 +2848,35 @@ class AdPictureItem : public ::google::protobuf::Message {
   
   // accessors -------------------------------------------------------
   
-  // required uint32 image_type = 1;
+  // required uint32 image_id = 1;
+  inline bool has_image_id() const;
+  inline void clear_image_id();
+  static const int kImageIdFieldNumber = 1;
+  inline ::google::protobuf::uint32 image_id() const;
+  inline void set_image_id(::google::protobuf::uint32 value);
+  
+  // required bool existed = 2;
+  inline bool has_existed() const;
+  inline void clear_existed();
+  static const int kExistedFieldNumber = 2;
+  inline bool existed() const;
+  inline void set_existed(bool value);
+  
+  // optional string image_type = 3;
   inline bool has_image_type() const;
   inline void clear_image_type();
-  static const int kImageTypeFieldNumber = 1;
-  inline ::google::protobuf::uint32 image_type() const;
-  inline void set_image_type(::google::protobuf::uint32 value);
+  static const int kImageTypeFieldNumber = 3;
+  inline const ::std::string& image_type() const;
+  inline void set_image_type(const ::std::string& value);
+  inline void set_image_type(const char* value);
+  inline void set_image_type(const char* value, size_t size);
+  inline ::std::string* mutable_image_type();
+  inline ::std::string* release_image_type();
   
-  // required string image_name = 2;
+  // optional string image_name = 4;
   inline bool has_image_name() const;
   inline void clear_image_name();
-  static const int kImageNameFieldNumber = 2;
+  static const int kImageNameFieldNumber = 4;
   inline const ::std::string& image_name() const;
   inline void set_image_name(const ::std::string& value);
   inline void set_image_name(const char* value);
@@ -2865,17 +2884,10 @@ class AdPictureItem : public ::google::protobuf::Message {
   inline ::std::string* mutable_image_name();
   inline ::std::string* release_image_name();
   
-  // required bool existed = 3;
-  inline bool has_existed() const;
-  inline void clear_existed();
-  static const int kExistedFieldNumber = 3;
-  inline bool existed() const;
-  inline void set_existed(bool value);
-  
-  // optional string image_hashcode = 4;
+  // optional string image_hashcode = 5;
   inline bool has_image_hashcode() const;
   inline void clear_image_hashcode();
-  static const int kImageHashcodeFieldNumber = 4;
+  static const int kImageHashcodeFieldNumber = 5;
   inline const ::std::string& image_hashcode() const;
   inline void set_image_hashcode(const ::std::string& value);
   inline void set_image_hashcode(const char* value);
@@ -2883,10 +2895,10 @@ class AdPictureItem : public ::google::protobuf::Message {
   inline ::std::string* mutable_image_hashcode();
   inline ::std::string* release_image_hashcode();
   
-  // optional string url = 5;
+  // optional string url = 6;
   inline bool has_url() const;
   inline void clear_url();
-  static const int kUrlFieldNumber = 5;
+  static const int kUrlFieldNumber = 6;
   inline const ::std::string& url() const;
   inline void set_url(const ::std::string& value);
   inline void set_url(const char* value);
@@ -2894,77 +2906,60 @@ class AdPictureItem : public ::google::protobuf::Message {
   inline ::std::string* mutable_url();
   inline ::std::string* release_url();
   
-  // optional uint32 image_size = 6;
+  // optional uint32 image_size = 7;
   inline bool has_image_size() const;
   inline void clear_image_size();
-  static const int kImageSizeFieldNumber = 6;
+  static const int kImageSizeFieldNumber = 7;
   inline ::google::protobuf::uint32 image_size() const;
   inline void set_image_size(::google::protobuf::uint32 value);
   
-  // required uint32 image_id = 7;
-  inline bool has_image_id() const;
-  inline void clear_image_id();
-  static const int kImageIdFieldNumber = 7;
-  inline ::google::protobuf::uint32 image_id() const;
-  inline void set_image_id(::google::protobuf::uint32 value);
-  
-  // optional bool last_one = 8;
-  inline bool has_last_one() const;
-  inline void clear_last_one();
-  static const int kLastOneFieldNumber = 8;
-  inline bool last_one() const;
-  inline void set_last_one(bool value);
-  
-  // @@protoc_insertion_point(class_scope:MessageStruct.AdPictureItem)
+  // @@protoc_insertion_point(class_scope:MessageStruct.AdPictureItemReply)
  private:
+  inline void set_has_image_id();
+  inline void clear_has_image_id();
+  inline void set_has_existed();
+  inline void clear_has_existed();
   inline void set_has_image_type();
   inline void clear_has_image_type();
   inline void set_has_image_name();
   inline void clear_has_image_name();
-  inline void set_has_existed();
-  inline void clear_has_existed();
   inline void set_has_image_hashcode();
   inline void clear_has_image_hashcode();
   inline void set_has_url();
   inline void clear_has_url();
   inline void set_has_image_size();
   inline void clear_has_image_size();
-  inline void set_has_image_id();
-  inline void clear_has_image_id();
-  inline void set_has_last_one();
-  inline void clear_has_last_one();
   
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
   
+  ::google::protobuf::uint32 image_id_;
+  bool existed_;
+  ::std::string* image_type_;
   ::std::string* image_name_;
   ::std::string* image_hashcode_;
-  ::google::protobuf::uint32 image_type_;
-  bool existed_;
-  bool last_one_;
   ::std::string* url_;
   ::google::protobuf::uint32 image_size_;
-  ::google::protobuf::uint32 image_id_;
   
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(8 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(7 + 31) / 32];
   
   friend void  protobuf_AddDesc_message_2eproto();
   friend void protobuf_AssignDesc_message_2eproto();
   friend void protobuf_ShutdownFile_message_2eproto();
   
   void InitAsDefaultInstance();
-  static AdPictureItem* default_instance_;
+  static AdPictureItemReply* default_instance_;
 };
 // -------------------------------------------------------------------
 
-class AdPictureReply : public ::google::protobuf::Message {
+class AdPictureReq : public ::google::protobuf::Message {
  public:
-  AdPictureReply();
-  virtual ~AdPictureReply();
+  AdPictureReq();
+  virtual ~AdPictureReq();
   
-  AdPictureReply(const AdPictureReply& from);
+  AdPictureReq(const AdPictureReq& from);
   
-  inline AdPictureReply& operator=(const AdPictureReply& from) {
+  inline AdPictureReq& operator=(const AdPictureReq& from) {
     CopyFrom(from);
     return *this;
   }
@@ -2978,17 +2973,137 @@ class AdPictureReply : public ::google::protobuf::Message {
   }
   
   static const ::google::protobuf::Descriptor* descriptor();
-  static const AdPictureReply& default_instance();
+  static const AdPictureReq& default_instance();
   
-  void Swap(AdPictureReply* other);
+  void Swap(AdPictureReq* other);
   
   // implements Message ----------------------------------------------
   
-  AdPictureReply* New() const;
+  AdPictureReq* New() const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
-  void CopyFrom(const AdPictureReply& from);
-  void MergeFrom(const AdPictureReply& from);
+  void CopyFrom(const AdPictureReq& from);
+  void MergeFrom(const AdPictureReq& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // required uint32 image_id = 1;
+  inline bool has_image_id() const;
+  inline void clear_image_id();
+  static const int kImageIdFieldNumber = 1;
+  inline ::google::protobuf::uint32 image_id() const;
+  inline void set_image_id(::google::protobuf::uint32 value);
+  
+  // optional string image_hashcode = 2;
+  inline bool has_image_hashcode() const;
+  inline void clear_image_hashcode();
+  static const int kImageHashcodeFieldNumber = 2;
+  inline const ::std::string& image_hashcode() const;
+  inline void set_image_hashcode(const ::std::string& value);
+  inline void set_image_hashcode(const char* value);
+  inline void set_image_hashcode(const char* value, size_t size);
+  inline ::std::string* mutable_image_hashcode();
+  inline ::std::string* release_image_hashcode();
+  
+  // optional string url = 3;
+  inline bool has_url() const;
+  inline void clear_url();
+  static const int kUrlFieldNumber = 3;
+  inline const ::std::string& url() const;
+  inline void set_url(const ::std::string& value);
+  inline void set_url(const char* value);
+  inline void set_url(const char* value, size_t size);
+  inline ::std::string* mutable_url();
+  inline ::std::string* release_url();
+  
+  // optional bool last_one = 4;
+  inline bool has_last_one() const;
+  inline void clear_last_one();
+  static const int kLastOneFieldNumber = 4;
+  inline bool last_one() const;
+  inline void set_last_one(bool value);
+  
+  // @@protoc_insertion_point(class_scope:MessageStruct.AdPictureReq)
+ private:
+  inline void set_has_image_id();
+  inline void clear_has_image_id();
+  inline void set_has_image_hashcode();
+  inline void clear_has_image_hashcode();
+  inline void set_has_url();
+  inline void clear_has_url();
+  inline void set_has_last_one();
+  inline void clear_has_last_one();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::std::string* image_hashcode_;
+  ::google::protobuf::uint32 image_id_;
+  bool last_one_;
+  ::std::string* url_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(4 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_message_2eproto();
+  friend void protobuf_AssignDesc_message_2eproto();
+  friend void protobuf_ShutdownFile_message_2eproto();
+  
+  void InitAsDefaultInstance();
+  static AdPictureReq* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class AdPictureContentReply : public ::google::protobuf::Message {
+ public:
+  AdPictureContentReply();
+  virtual ~AdPictureContentReply();
+  
+  AdPictureContentReply(const AdPictureContentReply& from);
+  
+  inline AdPictureContentReply& operator=(const AdPictureContentReply& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const AdPictureContentReply& default_instance();
+  
+  void Swap(AdPictureContentReply* other);
+  
+  // implements Message ----------------------------------------------
+  
+  AdPictureContentReply* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const AdPictureContentReply& from);
+  void MergeFrom(const AdPictureContentReply& from);
   void Clear();
   bool IsInitialized() const;
   
@@ -3036,7 +3151,7 @@ class AdPictureReply : public ::google::protobuf::Message {
   inline bool ended() const;
   inline void set_ended(bool value);
   
-  // @@protoc_insertion_point(class_scope:MessageStruct.AdPictureReply)
+  // @@protoc_insertion_point(class_scope:MessageStruct.AdPictureContentReply)
  private:
   inline void set_has_synced();
   inline void clear_has_synced();
@@ -3059,7 +3174,7 @@ class AdPictureReply : public ::google::protobuf::Message {
   friend void protobuf_ShutdownFile_message_2eproto();
   
   void InitAsDefaultInstance();
-  static AdPictureReply* default_instance_;
+  static AdPictureContentReply* default_instance_;
 };
 // ===================================================================
 
@@ -6154,78 +6269,158 @@ inline ::std::string* UpdateUserInfo::release_head_image() {
 
 // -------------------------------------------------------------------
 
-// AdPictureItem
+// AdPictureItemReply
 
-// required uint32 image_type = 1;
-inline bool AdPictureItem::has_image_type() const {
+// required uint32 image_id = 1;
+inline bool AdPictureItemReply::has_image_id() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline void AdPictureItem::set_has_image_type() {
+inline void AdPictureItemReply::set_has_image_id() {
   _has_bits_[0] |= 0x00000001u;
 }
-inline void AdPictureItem::clear_has_image_type() {
+inline void AdPictureItemReply::clear_has_image_id() {
   _has_bits_[0] &= ~0x00000001u;
 }
-inline void AdPictureItem::clear_image_type() {
-  image_type_ = 0u;
-  clear_has_image_type();
+inline void AdPictureItemReply::clear_image_id() {
+  image_id_ = 0u;
+  clear_has_image_id();
 }
-inline ::google::protobuf::uint32 AdPictureItem::image_type() const {
-  return image_type_;
+inline ::google::protobuf::uint32 AdPictureItemReply::image_id() const {
+  return image_id_;
 }
-inline void AdPictureItem::set_image_type(::google::protobuf::uint32 value) {
-  set_has_image_type();
-  image_type_ = value;
+inline void AdPictureItemReply::set_image_id(::google::protobuf::uint32 value) {
+  set_has_image_id();
+  image_id_ = value;
 }
 
-// required string image_name = 2;
-inline bool AdPictureItem::has_image_name() const {
+// required bool existed = 2;
+inline bool AdPictureItemReply::has_existed() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
-inline void AdPictureItem::set_has_image_name() {
+inline void AdPictureItemReply::set_has_existed() {
   _has_bits_[0] |= 0x00000002u;
 }
-inline void AdPictureItem::clear_has_image_name() {
+inline void AdPictureItemReply::clear_has_existed() {
   _has_bits_[0] &= ~0x00000002u;
 }
-inline void AdPictureItem::clear_image_name() {
+inline void AdPictureItemReply::clear_existed() {
+  existed_ = false;
+  clear_has_existed();
+}
+inline bool AdPictureItemReply::existed() const {
+  return existed_;
+}
+inline void AdPictureItemReply::set_existed(bool value) {
+  set_has_existed();
+  existed_ = value;
+}
+
+// optional string image_type = 3;
+inline bool AdPictureItemReply::has_image_type() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void AdPictureItemReply::set_has_image_type() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void AdPictureItemReply::clear_has_image_type() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void AdPictureItemReply::clear_image_type() {
+  if (image_type_ != &::google::protobuf::internal::kEmptyString) {
+    image_type_->clear();
+  }
+  clear_has_image_type();
+}
+inline const ::std::string& AdPictureItemReply::image_type() const {
+  return *image_type_;
+}
+inline void AdPictureItemReply::set_image_type(const ::std::string& value) {
+  set_has_image_type();
+  if (image_type_ == &::google::protobuf::internal::kEmptyString) {
+    image_type_ = new ::std::string;
+  }
+  image_type_->assign(value);
+}
+inline void AdPictureItemReply::set_image_type(const char* value) {
+  set_has_image_type();
+  if (image_type_ == &::google::protobuf::internal::kEmptyString) {
+    image_type_ = new ::std::string;
+  }
+  image_type_->assign(value);
+}
+inline void AdPictureItemReply::set_image_type(const char* value, size_t size) {
+  set_has_image_type();
+  if (image_type_ == &::google::protobuf::internal::kEmptyString) {
+    image_type_ = new ::std::string;
+  }
+  image_type_->assign(reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* AdPictureItemReply::mutable_image_type() {
+  set_has_image_type();
+  if (image_type_ == &::google::protobuf::internal::kEmptyString) {
+    image_type_ = new ::std::string;
+  }
+  return image_type_;
+}
+inline ::std::string* AdPictureItemReply::release_image_type() {
+  clear_has_image_type();
+  if (image_type_ == &::google::protobuf::internal::kEmptyString) {
+    return NULL;
+  } else {
+    ::std::string* temp = image_type_;
+    image_type_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    return temp;
+  }
+}
+
+// optional string image_name = 4;
+inline bool AdPictureItemReply::has_image_name() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
+}
+inline void AdPictureItemReply::set_has_image_name() {
+  _has_bits_[0] |= 0x00000008u;
+}
+inline void AdPictureItemReply::clear_has_image_name() {
+  _has_bits_[0] &= ~0x00000008u;
+}
+inline void AdPictureItemReply::clear_image_name() {
   if (image_name_ != &::google::protobuf::internal::kEmptyString) {
     image_name_->clear();
   }
   clear_has_image_name();
 }
-inline const ::std::string& AdPictureItem::image_name() const {
+inline const ::std::string& AdPictureItemReply::image_name() const {
   return *image_name_;
 }
-inline void AdPictureItem::set_image_name(const ::std::string& value) {
+inline void AdPictureItemReply::set_image_name(const ::std::string& value) {
   set_has_image_name();
   if (image_name_ == &::google::protobuf::internal::kEmptyString) {
     image_name_ = new ::std::string;
   }
   image_name_->assign(value);
 }
-inline void AdPictureItem::set_image_name(const char* value) {
+inline void AdPictureItemReply::set_image_name(const char* value) {
   set_has_image_name();
   if (image_name_ == &::google::protobuf::internal::kEmptyString) {
     image_name_ = new ::std::string;
   }
   image_name_->assign(value);
 }
-inline void AdPictureItem::set_image_name(const char* value, size_t size) {
+inline void AdPictureItemReply::set_image_name(const char* value, size_t size) {
   set_has_image_name();
   if (image_name_ == &::google::protobuf::internal::kEmptyString) {
     image_name_ = new ::std::string;
   }
   image_name_->assign(reinterpret_cast<const char*>(value), size);
 }
-inline ::std::string* AdPictureItem::mutable_image_name() {
+inline ::std::string* AdPictureItemReply::mutable_image_name() {
   set_has_image_name();
   if (image_name_ == &::google::protobuf::internal::kEmptyString) {
     image_name_ = new ::std::string;
   }
   return image_name_;
 }
-inline ::std::string* AdPictureItem::release_image_name() {
+inline ::std::string* AdPictureItemReply::release_image_name() {
   clear_has_image_name();
   if (image_name_ == &::google::protobuf::internal::kEmptyString) {
     return NULL;
@@ -6236,76 +6431,54 @@ inline ::std::string* AdPictureItem::release_image_name() {
   }
 }
 
-// required bool existed = 3;
-inline bool AdPictureItem::has_existed() const {
-  return (_has_bits_[0] & 0x00000004u) != 0;
+// optional string image_hashcode = 5;
+inline bool AdPictureItemReply::has_image_hashcode() const {
+  return (_has_bits_[0] & 0x00000010u) != 0;
 }
-inline void AdPictureItem::set_has_existed() {
-  _has_bits_[0] |= 0x00000004u;
+inline void AdPictureItemReply::set_has_image_hashcode() {
+  _has_bits_[0] |= 0x00000010u;
 }
-inline void AdPictureItem::clear_has_existed() {
-  _has_bits_[0] &= ~0x00000004u;
+inline void AdPictureItemReply::clear_has_image_hashcode() {
+  _has_bits_[0] &= ~0x00000010u;
 }
-inline void AdPictureItem::clear_existed() {
-  existed_ = false;
-  clear_has_existed();
-}
-inline bool AdPictureItem::existed() const {
-  return existed_;
-}
-inline void AdPictureItem::set_existed(bool value) {
-  set_has_existed();
-  existed_ = value;
-}
-
-// optional string image_hashcode = 4;
-inline bool AdPictureItem::has_image_hashcode() const {
-  return (_has_bits_[0] & 0x00000008u) != 0;
-}
-inline void AdPictureItem::set_has_image_hashcode() {
-  _has_bits_[0] |= 0x00000008u;
-}
-inline void AdPictureItem::clear_has_image_hashcode() {
-  _has_bits_[0] &= ~0x00000008u;
-}
-inline void AdPictureItem::clear_image_hashcode() {
+inline void AdPictureItemReply::clear_image_hashcode() {
   if (image_hashcode_ != &::google::protobuf::internal::kEmptyString) {
     image_hashcode_->clear();
   }
   clear_has_image_hashcode();
 }
-inline const ::std::string& AdPictureItem::image_hashcode() const {
+inline const ::std::string& AdPictureItemReply::image_hashcode() const {
   return *image_hashcode_;
 }
-inline void AdPictureItem::set_image_hashcode(const ::std::string& value) {
+inline void AdPictureItemReply::set_image_hashcode(const ::std::string& value) {
   set_has_image_hashcode();
   if (image_hashcode_ == &::google::protobuf::internal::kEmptyString) {
     image_hashcode_ = new ::std::string;
   }
   image_hashcode_->assign(value);
 }
-inline void AdPictureItem::set_image_hashcode(const char* value) {
+inline void AdPictureItemReply::set_image_hashcode(const char* value) {
   set_has_image_hashcode();
   if (image_hashcode_ == &::google::protobuf::internal::kEmptyString) {
     image_hashcode_ = new ::std::string;
   }
   image_hashcode_->assign(value);
 }
-inline void AdPictureItem::set_image_hashcode(const char* value, size_t size) {
+inline void AdPictureItemReply::set_image_hashcode(const char* value, size_t size) {
   set_has_image_hashcode();
   if (image_hashcode_ == &::google::protobuf::internal::kEmptyString) {
     image_hashcode_ = new ::std::string;
   }
   image_hashcode_->assign(reinterpret_cast<const char*>(value), size);
 }
-inline ::std::string* AdPictureItem::mutable_image_hashcode() {
+inline ::std::string* AdPictureItemReply::mutable_image_hashcode() {
   set_has_image_hashcode();
   if (image_hashcode_ == &::google::protobuf::internal::kEmptyString) {
     image_hashcode_ = new ::std::string;
   }
   return image_hashcode_;
 }
-inline ::std::string* AdPictureItem::release_image_hashcode() {
+inline ::std::string* AdPictureItemReply::release_image_hashcode() {
   clear_has_image_hashcode();
   if (image_hashcode_ == &::google::protobuf::internal::kEmptyString) {
     return NULL;
@@ -6316,54 +6489,54 @@ inline ::std::string* AdPictureItem::release_image_hashcode() {
   }
 }
 
-// optional string url = 5;
-inline bool AdPictureItem::has_url() const {
-  return (_has_bits_[0] & 0x00000010u) != 0;
+// optional string url = 6;
+inline bool AdPictureItemReply::has_url() const {
+  return (_has_bits_[0] & 0x00000020u) != 0;
 }
-inline void AdPictureItem::set_has_url() {
-  _has_bits_[0] |= 0x00000010u;
+inline void AdPictureItemReply::set_has_url() {
+  _has_bits_[0] |= 0x00000020u;
 }
-inline void AdPictureItem::clear_has_url() {
-  _has_bits_[0] &= ~0x00000010u;
+inline void AdPictureItemReply::clear_has_url() {
+  _has_bits_[0] &= ~0x00000020u;
 }
-inline void AdPictureItem::clear_url() {
+inline void AdPictureItemReply::clear_url() {
   if (url_ != &::google::protobuf::internal::kEmptyString) {
     url_->clear();
   }
   clear_has_url();
 }
-inline const ::std::string& AdPictureItem::url() const {
+inline const ::std::string& AdPictureItemReply::url() const {
   return *url_;
 }
-inline void AdPictureItem::set_url(const ::std::string& value) {
+inline void AdPictureItemReply::set_url(const ::std::string& value) {
   set_has_url();
   if (url_ == &::google::protobuf::internal::kEmptyString) {
     url_ = new ::std::string;
   }
   url_->assign(value);
 }
-inline void AdPictureItem::set_url(const char* value) {
+inline void AdPictureItemReply::set_url(const char* value) {
   set_has_url();
   if (url_ == &::google::protobuf::internal::kEmptyString) {
     url_ = new ::std::string;
   }
   url_->assign(value);
 }
-inline void AdPictureItem::set_url(const char* value, size_t size) {
+inline void AdPictureItemReply::set_url(const char* value, size_t size) {
   set_has_url();
   if (url_ == &::google::protobuf::internal::kEmptyString) {
     url_ = new ::std::string;
   }
   url_->assign(reinterpret_cast<const char*>(value), size);
 }
-inline ::std::string* AdPictureItem::mutable_url() {
+inline ::std::string* AdPictureItemReply::mutable_url() {
   set_has_url();
   if (url_ == &::google::protobuf::internal::kEmptyString) {
     url_ = new ::std::string;
   }
   return url_;
 }
-inline ::std::string* AdPictureItem::release_url() {
+inline ::std::string* AdPictureItemReply::release_url() {
   clear_has_url();
   if (url_ == &::google::protobuf::internal::kEmptyString) {
     return NULL;
@@ -6374,146 +6547,266 @@ inline ::std::string* AdPictureItem::release_url() {
   }
 }
 
-// optional uint32 image_size = 6;
-inline bool AdPictureItem::has_image_size() const {
-  return (_has_bits_[0] & 0x00000020u) != 0;
+// optional uint32 image_size = 7;
+inline bool AdPictureItemReply::has_image_size() const {
+  return (_has_bits_[0] & 0x00000040u) != 0;
 }
-inline void AdPictureItem::set_has_image_size() {
-  _has_bits_[0] |= 0x00000020u;
+inline void AdPictureItemReply::set_has_image_size() {
+  _has_bits_[0] |= 0x00000040u;
 }
-inline void AdPictureItem::clear_has_image_size() {
-  _has_bits_[0] &= ~0x00000020u;
+inline void AdPictureItemReply::clear_has_image_size() {
+  _has_bits_[0] &= ~0x00000040u;
 }
-inline void AdPictureItem::clear_image_size() {
+inline void AdPictureItemReply::clear_image_size() {
   image_size_ = 0u;
   clear_has_image_size();
 }
-inline ::google::protobuf::uint32 AdPictureItem::image_size() const {
+inline ::google::protobuf::uint32 AdPictureItemReply::image_size() const {
   return image_size_;
 }
-inline void AdPictureItem::set_image_size(::google::protobuf::uint32 value) {
+inline void AdPictureItemReply::set_image_size(::google::protobuf::uint32 value) {
   set_has_image_size();
   image_size_ = value;
 }
 
-// required uint32 image_id = 7;
-inline bool AdPictureItem::has_image_id() const {
-  return (_has_bits_[0] & 0x00000040u) != 0;
+// -------------------------------------------------------------------
+
+// AdPictureReq
+
+// required uint32 image_id = 1;
+inline bool AdPictureReq::has_image_id() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline void AdPictureItem::set_has_image_id() {
-  _has_bits_[0] |= 0x00000040u;
+inline void AdPictureReq::set_has_image_id() {
+  _has_bits_[0] |= 0x00000001u;
 }
-inline void AdPictureItem::clear_has_image_id() {
-  _has_bits_[0] &= ~0x00000040u;
+inline void AdPictureReq::clear_has_image_id() {
+  _has_bits_[0] &= ~0x00000001u;
 }
-inline void AdPictureItem::clear_image_id() {
+inline void AdPictureReq::clear_image_id() {
   image_id_ = 0u;
   clear_has_image_id();
 }
-inline ::google::protobuf::uint32 AdPictureItem::image_id() const {
+inline ::google::protobuf::uint32 AdPictureReq::image_id() const {
   return image_id_;
 }
-inline void AdPictureItem::set_image_id(::google::protobuf::uint32 value) {
+inline void AdPictureReq::set_image_id(::google::protobuf::uint32 value) {
   set_has_image_id();
   image_id_ = value;
 }
 
-// optional bool last_one = 8;
-inline bool AdPictureItem::has_last_one() const {
-  return (_has_bits_[0] & 0x00000080u) != 0;
+// optional string image_hashcode = 2;
+inline bool AdPictureReq::has_image_hashcode() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
 }
-inline void AdPictureItem::set_has_last_one() {
-  _has_bits_[0] |= 0x00000080u;
+inline void AdPictureReq::set_has_image_hashcode() {
+  _has_bits_[0] |= 0x00000002u;
 }
-inline void AdPictureItem::clear_has_last_one() {
-  _has_bits_[0] &= ~0x00000080u;
+inline void AdPictureReq::clear_has_image_hashcode() {
+  _has_bits_[0] &= ~0x00000002u;
 }
-inline void AdPictureItem::clear_last_one() {
+inline void AdPictureReq::clear_image_hashcode() {
+  if (image_hashcode_ != &::google::protobuf::internal::kEmptyString) {
+    image_hashcode_->clear();
+  }
+  clear_has_image_hashcode();
+}
+inline const ::std::string& AdPictureReq::image_hashcode() const {
+  return *image_hashcode_;
+}
+inline void AdPictureReq::set_image_hashcode(const ::std::string& value) {
+  set_has_image_hashcode();
+  if (image_hashcode_ == &::google::protobuf::internal::kEmptyString) {
+    image_hashcode_ = new ::std::string;
+  }
+  image_hashcode_->assign(value);
+}
+inline void AdPictureReq::set_image_hashcode(const char* value) {
+  set_has_image_hashcode();
+  if (image_hashcode_ == &::google::protobuf::internal::kEmptyString) {
+    image_hashcode_ = new ::std::string;
+  }
+  image_hashcode_->assign(value);
+}
+inline void AdPictureReq::set_image_hashcode(const char* value, size_t size) {
+  set_has_image_hashcode();
+  if (image_hashcode_ == &::google::protobuf::internal::kEmptyString) {
+    image_hashcode_ = new ::std::string;
+  }
+  image_hashcode_->assign(reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* AdPictureReq::mutable_image_hashcode() {
+  set_has_image_hashcode();
+  if (image_hashcode_ == &::google::protobuf::internal::kEmptyString) {
+    image_hashcode_ = new ::std::string;
+  }
+  return image_hashcode_;
+}
+inline ::std::string* AdPictureReq::release_image_hashcode() {
+  clear_has_image_hashcode();
+  if (image_hashcode_ == &::google::protobuf::internal::kEmptyString) {
+    return NULL;
+  } else {
+    ::std::string* temp = image_hashcode_;
+    image_hashcode_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    return temp;
+  }
+}
+
+// optional string url = 3;
+inline bool AdPictureReq::has_url() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void AdPictureReq::set_has_url() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void AdPictureReq::clear_has_url() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void AdPictureReq::clear_url() {
+  if (url_ != &::google::protobuf::internal::kEmptyString) {
+    url_->clear();
+  }
+  clear_has_url();
+}
+inline const ::std::string& AdPictureReq::url() const {
+  return *url_;
+}
+inline void AdPictureReq::set_url(const ::std::string& value) {
+  set_has_url();
+  if (url_ == &::google::protobuf::internal::kEmptyString) {
+    url_ = new ::std::string;
+  }
+  url_->assign(value);
+}
+inline void AdPictureReq::set_url(const char* value) {
+  set_has_url();
+  if (url_ == &::google::protobuf::internal::kEmptyString) {
+    url_ = new ::std::string;
+  }
+  url_->assign(value);
+}
+inline void AdPictureReq::set_url(const char* value, size_t size) {
+  set_has_url();
+  if (url_ == &::google::protobuf::internal::kEmptyString) {
+    url_ = new ::std::string;
+  }
+  url_->assign(reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* AdPictureReq::mutable_url() {
+  set_has_url();
+  if (url_ == &::google::protobuf::internal::kEmptyString) {
+    url_ = new ::std::string;
+  }
+  return url_;
+}
+inline ::std::string* AdPictureReq::release_url() {
+  clear_has_url();
+  if (url_ == &::google::protobuf::internal::kEmptyString) {
+    return NULL;
+  } else {
+    ::std::string* temp = url_;
+    url_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    return temp;
+  }
+}
+
+// optional bool last_one = 4;
+inline bool AdPictureReq::has_last_one() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
+}
+inline void AdPictureReq::set_has_last_one() {
+  _has_bits_[0] |= 0x00000008u;
+}
+inline void AdPictureReq::clear_has_last_one() {
+  _has_bits_[0] &= ~0x00000008u;
+}
+inline void AdPictureReq::clear_last_one() {
   last_one_ = false;
   clear_has_last_one();
 }
-inline bool AdPictureItem::last_one() const {
+inline bool AdPictureReq::last_one() const {
   return last_one_;
 }
-inline void AdPictureItem::set_last_one(bool value) {
+inline void AdPictureReq::set_last_one(bool value) {
   set_has_last_one();
   last_one_ = value;
 }
 
 // -------------------------------------------------------------------
 
-// AdPictureReply
+// AdPictureContentReply
 
 // required bool synced = 1;
-inline bool AdPictureReply::has_synced() const {
+inline bool AdPictureContentReply::has_synced() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline void AdPictureReply::set_has_synced() {
+inline void AdPictureContentReply::set_has_synced() {
   _has_bits_[0] |= 0x00000001u;
 }
-inline void AdPictureReply::clear_has_synced() {
+inline void AdPictureContentReply::clear_has_synced() {
   _has_bits_[0] &= ~0x00000001u;
 }
-inline void AdPictureReply::clear_synced() {
+inline void AdPictureContentReply::clear_synced() {
   synced_ = false;
   clear_has_synced();
 }
-inline bool AdPictureReply::synced() const {
+inline bool AdPictureContentReply::synced() const {
   return synced_;
 }
-inline void AdPictureReply::set_synced(bool value) {
+inline void AdPictureContentReply::set_synced(bool value) {
   set_has_synced();
   synced_ = value;
 }
 
 // optional bytes content = 2;
-inline bool AdPictureReply::has_content() const {
+inline bool AdPictureContentReply::has_content() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
-inline void AdPictureReply::set_has_content() {
+inline void AdPictureContentReply::set_has_content() {
   _has_bits_[0] |= 0x00000002u;
 }
-inline void AdPictureReply::clear_has_content() {
+inline void AdPictureContentReply::clear_has_content() {
   _has_bits_[0] &= ~0x00000002u;
 }
-inline void AdPictureReply::clear_content() {
+inline void AdPictureContentReply::clear_content() {
   if (content_ != &::google::protobuf::internal::kEmptyString) {
     content_->clear();
   }
   clear_has_content();
 }
-inline const ::std::string& AdPictureReply::content() const {
+inline const ::std::string& AdPictureContentReply::content() const {
   return *content_;
 }
-inline void AdPictureReply::set_content(const ::std::string& value) {
+inline void AdPictureContentReply::set_content(const ::std::string& value) {
   set_has_content();
   if (content_ == &::google::protobuf::internal::kEmptyString) {
     content_ = new ::std::string;
   }
   content_->assign(value);
 }
-inline void AdPictureReply::set_content(const char* value) {
+inline void AdPictureContentReply::set_content(const char* value) {
   set_has_content();
   if (content_ == &::google::protobuf::internal::kEmptyString) {
     content_ = new ::std::string;
   }
   content_->assign(value);
 }
-inline void AdPictureReply::set_content(const void* value, size_t size) {
+inline void AdPictureContentReply::set_content(const void* value, size_t size) {
   set_has_content();
   if (content_ == &::google::protobuf::internal::kEmptyString) {
     content_ = new ::std::string;
   }
   content_->assign(reinterpret_cast<const char*>(value), size);
 }
-inline ::std::string* AdPictureReply::mutable_content() {
+inline ::std::string* AdPictureContentReply::mutable_content() {
   set_has_content();
   if (content_ == &::google::protobuf::internal::kEmptyString) {
     content_ = new ::std::string;
   }
   return content_;
 }
-inline ::std::string* AdPictureReply::release_content() {
+inline ::std::string* AdPictureContentReply::release_content() {
   clear_has_content();
   if (content_ == &::google::protobuf::internal::kEmptyString) {
     return NULL;
@@ -6525,23 +6818,23 @@ inline ::std::string* AdPictureReply::release_content() {
 }
 
 // optional bool ended = 3;
-inline bool AdPictureReply::has_ended() const {
+inline bool AdPictureContentReply::has_ended() const {
   return (_has_bits_[0] & 0x00000004u) != 0;
 }
-inline void AdPictureReply::set_has_ended() {
+inline void AdPictureContentReply::set_has_ended() {
   _has_bits_[0] |= 0x00000004u;
 }
-inline void AdPictureReply::clear_has_ended() {
+inline void AdPictureContentReply::clear_has_ended() {
   _has_bits_[0] &= ~0x00000004u;
 }
-inline void AdPictureReply::clear_ended() {
+inline void AdPictureContentReply::clear_ended() {
   ended_ = false;
   clear_has_ended();
 }
-inline bool AdPictureReply::ended() const {
+inline bool AdPictureContentReply::ended() const {
   return ended_;
 }
-inline void AdPictureReply::set_ended(bool value) {
+inline void AdPictureContentReply::set_ended(bool value) {
   set_has_ended();
   ended_ = value;
 }
