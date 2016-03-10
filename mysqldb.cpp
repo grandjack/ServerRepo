@@ -41,7 +41,6 @@ int mysql_db_query(MYSQL *connection, const char * sql, UsersInfo &user_info) {
 	MYSQL_ROW row;
 	MYSQL_RES *result = NULL;
 	int ret = 0;
-    int n = 0;
 	
     if(mysql_query(connection, sql)) {
         LOG_ERROR(MODULE_DB,"mysql_query error[%s]", mysql_error(connection));
@@ -54,7 +53,7 @@ int mysql_db_query(MYSQL *connection, const char * sql, UsersInfo &user_info) {
 		}
 		unsigned int num_fileds = mysql_num_fields(result);
   
-		
+		int n = 0;
 		while((row = mysql_fetch_row(result))) {
 			unsigned int j;
 			   

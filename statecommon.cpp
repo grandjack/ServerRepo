@@ -234,28 +234,47 @@ bool StateAdPictureDownload::AdPictureItemHandle(const string &msg)
         }
 
         stateMachine->thread->GetAdPicturesInfoFromDB(item.image_id(), info);
-        DownloadImageInfo(info);
-
+        
+        //if (item.has_image_hashcode()) 
         {
             if (info.existed) {
                 if (item.has_image_hashcode()) {
                     if (info.image_hashcode.compare(item.image_hashcode())) {//not equal
                         //download the image
                         DownloadImage(info.locate_path);
+                        if ((item.has_last_one()) && (item.last_one())) {
+                            reply.set_synced(false);
+                            reply.set_ended(true);
+                            reply.SerializeToString(&data);
+                            stateMachine->MessageReply(MSG_AD_IMAGE_CONTENT, data);
+                        }
                     } else {
                         //ignore
+                        DownloadImageInfo(info);
+                        if ((item.has_last_one()) && (item.last_one())) {
+                            reply.set_synced(false);
+                            reply.set_ended(true);
+                            reply.SerializeToString(&data);
+                            stateMachine->MessageReply(MSG_AD_IMAGE_CONTENT, data);
+                        }
+                    }
+                } else {
+                    //download the image info
+                    DownloadImageInfo(info);
+                    if ((item.has_last_one()) && (item.last_one())) {
                         reply.set_synced(false);
+                        reply.set_ended(true);
                         reply.SerializeToString(&data);
                         stateMachine->MessageReply(MSG_AD_IMAGE_CONTENT, data);
                     }
-                } else {
-                    //download the image
-                    DownloadImage(info.locate_path);
                 }
             } else {
-                reply.set_synced(false);
-                reply.SerializeToString(&data);
-                stateMachine->MessageReply(MSG_AD_IMAGE_CONTENT, data);
+                if ((item.has_last_one()) && (item.last_one())) {
+                    reply.set_synced(false);
+                    reply.set_ended(true);
+                    reply.SerializeToString(&data);
+                    stateMachine->MessageReply(MSG_AD_IMAGE_CONTENT, data);
+                }
             }
         }
     }
@@ -280,11 +299,6 @@ void StateAdPictureDownload::DownloadImage(const string &file_path)
             reply.SerializeToString(&data);
             stateMachine->MessageReply(MSG_AD_IMAGE_CONTENT, data);
         }
-
-        reply.set_synced(false);
-        reply.set_ended(true);
-        reply.SerializeToString(&data);
-        stateMachine->MessageReply(MSG_AD_IMAGE_CONTENT, data);
 
         fclose(fptr);
     }
