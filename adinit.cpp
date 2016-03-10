@@ -138,7 +138,7 @@ const string GetImageLinkUrl(const string &path)
 {
     FILE *fptr = NULL;
     char buf[1024] = { 0 };
-    string url;
+    string url = "";
     
     fptr = fopen(path.c_str(), "r");
     if (fptr != NULL) {
@@ -176,7 +176,7 @@ bool IniSQLConnection()
 void UpdateImageInfoToDB(const AdPicturesInfo &ad_info)
 {
     int ret = 0;
-    char sql_cmd[255] = {0};
+    char sql_cmd[1024] = {0};
 
     snprintf(sql_cmd, sizeof(sql_cmd)-1, "INSERT INTO ad_pictures (id,existed,image_name,image_type,image_hashcode,image_size,link_url,locate_path) \
 VALUES (%d,%d,'%s','%s','%s',%d,'%s','%s')",\

@@ -227,12 +227,8 @@ bool StateAdPictureDownload::AdPictureItemHandle(const string &msg)
     string data;
 
     if (item.ParseFromString(msg)) {
-        if (item.has_last_one()) {
-            if (item.last_one()) {
-                stateMachine->SetNextState(new StateGameReady(stateMachine));
-            }
-        }
-
+        
+        info.image_id = item.image_id();
         stateMachine->thread->GetAdPicturesInfoFromDB(item.image_id(), info);
         
         //if (item.has_image_hashcode()) 
@@ -269,12 +265,20 @@ bool StateAdPictureDownload::AdPictureItemHandle(const string &msg)
                     }
                 }
             } else {
+                //download the image info
+                DownloadImageInfo(info);
                 if ((item.has_last_one()) && (item.last_one())) {
                     reply.set_synced(false);
                     reply.set_ended(true);
                     reply.SerializeToString(&data);
                     stateMachine->MessageReply(MSG_AD_IMAGE_CONTENT, data);
                 }
+            }
+        }
+
+        if (item.has_last_one()) {
+            if (item.last_one()) {
+                stateMachine->SetNextState(new StateGameReady(stateMachine));
             }
         }
     }
@@ -299,6 +303,11 @@ void StateAdPictureDownload::DownloadImage(const string &file_path)
             reply.SerializeToString(&data);
             stateMachine->MessageReply(MSG_AD_IMAGE_CONTENT, data);
         }
+
+        reply.set_synced(true);
+        reply.set_ended(true);
+        reply.SerializeToString(&data);
+        stateMachine->MessageReply(MSG_AD_IMAGE_CONTENT, data);
 
         fclose(fptr);
     }
