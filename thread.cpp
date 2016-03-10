@@ -294,9 +294,8 @@ void WorkThread::OnWrite(int iCliFd, const u_int32 msg_type, const string &data,
                 continue;
             } else {
                 LOG_ERROR(MODULE_COMMON, "send() return err: %d,[%s]\n", errno, strerror(errno));
-                //ClosingClientCon(iCliFd);
-                //break;
-                return;
+                ClosingClientCon(iCliFd);
+                break;
             }
         } else {
             sendLen += iLen;
@@ -363,13 +362,8 @@ void WorkThread::OnRead(int iCliFd, short iEvent, void *arg)
                 continue;
             } else {
                 LOG_ERROR(MODULE_COMMON, "recv() return err: %d,[%s]\n", errno, strerror(errno));
-                //pThread->ClosingClientCon(iCliFd);
-                //break;
-                if (pBuf != NULL) {
-                    delete []pBuf;
-                    pBuf = NULL;
-                }
-                return;
+                pThread->ClosingClientCon(iCliFd);
+                break;
             }
         }
     }
