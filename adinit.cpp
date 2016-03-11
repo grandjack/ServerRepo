@@ -85,11 +85,14 @@ int main()
                         ad_info.image_name = entry->d_name;
                         ad_info.locate_path = path;
                         ad_info.image_id = AdImageMap[i].image_id;
-                        ad_info.image_type = "*.png|*.jpeg|*.bmp";
+                        //ad_info.image_type = "*.png|*.jpeg|*.bmp";
                         ad_info.image_size = statbuf.st_size;
                         ad_info.link_url = GetImageLinkUrl(string(AdImageMap[i].locat_path) + "link_url.txt");
                         ad_info.existed = true;
                         ad_info.image_hashcode = GetImageMd5HashCode(path);
+
+                        std::size_t found = ad_info.image_name.find_last_of(".");
+                        ad_info.image_type = "*" + ad_info.image_name.substr(found);
                         
                         LOG_DEBUG(MODULE_COMMON, "Got the hash code[%s]", ad_info.image_hashcode.c_str());
 

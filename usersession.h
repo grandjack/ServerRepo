@@ -61,11 +61,14 @@ public:
 
     void SetNextState(State *state);
     bool MessageHandle(const u_int32 msg_type, const string &msg);
-    void MessageReply(const u_int32 msg_type, const string &msg);
+    bool MessageReply(const u_int32 msg_type, const string &msg);
     void DestructResource();
     
     void IncreaseScore(u_int32 score=10);
     void ReduceScore(u_int32 score=10);
+
+    bool GetHandleResult() const;
+    void SetHandleResult(bool result);
 
 public:
     int clifd;
@@ -83,6 +86,9 @@ public:
     UsersInfo user_info;
     bool gameReady;
     bool gameOver;
+
+private:
+    bool send_status;
     
 };
 

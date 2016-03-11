@@ -242,7 +242,7 @@ bool StateAdPictureDownload::AdPictureItemHandle(const string &msg)
                             reply.set_synced(false);
                             reply.set_ended(true);
                             reply.SerializeToString(&data);
-                            stateMachine->MessageReply(MSG_AD_IMAGE_CONTENT, data);
+                            ret = stateMachine->MessageReply(MSG_AD_IMAGE_CONTENT, data);
                         }
                     } else {
                         //ignore
@@ -251,7 +251,7 @@ bool StateAdPictureDownload::AdPictureItemHandle(const string &msg)
                             reply.set_synced(false);
                             reply.set_ended(true);
                             reply.SerializeToString(&data);
-                            stateMachine->MessageReply(MSG_AD_IMAGE_CONTENT, data);
+                            ret = stateMachine->MessageReply(MSG_AD_IMAGE_CONTENT, data);
                         }
                     }
                 } else {
@@ -261,7 +261,7 @@ bool StateAdPictureDownload::AdPictureItemHandle(const string &msg)
                         reply.set_synced(false);
                         reply.set_ended(true);
                         reply.SerializeToString(&data);
-                        stateMachine->MessageReply(MSG_AD_IMAGE_CONTENT, data);
+                        ret = stateMachine->MessageReply(MSG_AD_IMAGE_CONTENT, data);
                     }
                 }
             } else {
@@ -271,7 +271,7 @@ bool StateAdPictureDownload::AdPictureItemHandle(const string &msg)
                     reply.set_synced(false);
                     reply.set_ended(true);
                     reply.SerializeToString(&data);
-                    stateMachine->MessageReply(MSG_AD_IMAGE_CONTENT, data);
+                    ret = stateMachine->MessageReply(MSG_AD_IMAGE_CONTENT, data);
                 }
             }
         }
@@ -286,13 +286,14 @@ bool StateAdPictureDownload::AdPictureItemHandle(const string &msg)
     return ret;
 }
 
-void StateAdPictureDownload::DownloadImage(const string &file_path)
+bool StateAdPictureDownload::DownloadImage(const string &file_path)
 {
     FILE *fptr = NULL;
     AdPictureContentReply reply;
     string data;
     char buf[1024] = { 0 };
     size_t rdSize = 0;
+    bool ret = true;
 
     fptr = fopen(file_path.c_str(), "r");
     if (fptr != NULL) {
@@ -301,7 +302,11 @@ void StateAdPictureDownload::DownloadImage(const string &file_path)
             reply.set_synced(true);
             reply.set_content(sub_data);
             reply.SerializeToString(&data);
-            stateMachine->MessageReply(MSG_AD_IMAGE_CONTENT, data);
+            ret = stateMachine->MessageReply(MSG_AD_IMAGE_CONTENT, data);
+            if (!ret) {
+                fclose(fptr);
+                return ret;
+            }
         }
 
         reply.set_synced(true);
@@ -311,12 +316,15 @@ void StateAdPictureDownload::DownloadImage(const string &file_path)
 
         fclose(fptr);
     }
+
+    return ret;
 }
 
-void StateAdPictureDownload::DownloadImageInfo(const AdPicturesInfo &ad_info)
+bool StateAdPictureDownload::DownloadImageInfo(const AdPicturesInfo &ad_info)
 {
     AdPictureItemReply reply;
     string data;
+    bool ret = true;
 
     reply.set_image_id(ad_info.image_id);
     reply.set_existed(ad_info.existed);
@@ -330,7 +338,8 @@ void StateAdPictureDownload::DownloadImageInfo(const AdPicturesInfo &ad_info)
     }
     
     reply.SerializeToString(&data);
-    stateMachine->MessageReply(MSG_AD_IMAGE_INFO, data);
+    ret = stateMachine->MessageReply(MSG_AD_IMAGE_INFO, data);
 
+    return ret;
 }
 

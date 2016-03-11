@@ -254,7 +254,7 @@ void WorkThread::DestrotiedSessions()
     fdSessionMap.clear();
 }
 
-void WorkThread::OnWrite(int iCliFd, const u_int32 msg_type, const string &data, void *arg)
+bool WorkThread::OnWrite(int iCliFd, const u_int32 msg_type, const string &data, void *arg)
 {
     UserSession *user = static_cast<UserSession *>(arg);
     u_int8 buffer[MAX_DATA_LENGTH] = { 0 };
@@ -263,18 +263,24 @@ void WorkThread::OnWrite(int iCliFd, const u_int32 msg_type, const string &data,
     u_int32 totalSize = data.size() + DATA_HEAD_LENGTH;
     u_int32 sendLen = 0;
     int iLen = 0;
+    bool ret = true;
+
+    if(!user->GetHandleResult()) {
+        LOG_ERROR(MODULE_NET, "Can NOT send, this session will ouver!");
+        return false;
+    }
 
     if (user == NULL) {
-        LOG_ERROR(MODULE_COMMON, "Got parameter failed.");
-        return;
+        LOG_ERROR(MODULE_NET, "Got parameter failed.");
+        return false;
     }
 
     if (totalSize > MAX_DATA_LENGTH) {
         try {
             pBuf = new u_int8[totalSize];
         } catch (exception &e) {
-            LOG_ERROR(MODULE_COMMON, "New pBuf failed.");
-            return;
+            LOG_ERROR(MODULE_NET, "New pBuf failed.");
+            return false;
         }
         buf = pBuf;
     }
@@ -283,18 +289,20 @@ void WorkThread::OnWrite(int iCliFd, const u_int32 msg_type, const string &data,
     memcpy(buf + DATA_HEAD_LENGTH/2 , &msg_type, DATA_HEAD_LENGTH/2);
     memcpy(buf + DATA_HEAD_LENGTH, data.c_str(), data.size());
 
-    LOG_DEBUG(MODULE_COMMON, "Send totalSize[%u] msg_type %u", totalSize, msg_type);
+    LOG_DEBUG(MODULE_NET, "Send totalSize[%u] msg_type %u", totalSize, msg_type);
 
     while(sendLen < totalSize)
     {
         iLen = send(iCliFd, &buf[sendLen], totalSize-sendLen, 0);
         if (iLen <= 0) {
             if ((errno == EAGAIN) || (errno == EINTR) || (errno == EWOULDBLOCK)) {
-                LOG_INFO(MODULE_COMMON, "errno EINTR, will continue");
+                LOG_INFO(MODULE_NET, "errno EINTR, will continue");
                 continue;
             } else {
-                LOG_ERROR(MODULE_COMMON, "send() return err: %d,[%s]\n", errno, strerror(errno));
-                ClosingClientCon(iCliFd);
+                LOG_ERROR(MODULE_NET, "send() return err: %d,[%s]\n", errno, strerror(errno));
+                //ClosingClientCon(iCliFd);
+                ret = false;
+                user->SetHandleResult(ret);
                 break;
             }
         } else {
@@ -306,6 +314,8 @@ void WorkThread::OnWrite(int iCliFd, const u_int32 msg_type, const string &data,
         delete []pBuf;
         pBuf = NULL;
     }
+
+    return ret;
 }
 
 void WorkThread::OnRead(int iCliFd, short iEvent, void *arg)
@@ -333,7 +343,7 @@ void WorkThread::OnRead(int iCliFd, short iEvent, void *arg)
                     
                     LOG_DEBUG(MODULE_COMMON, "Got message total size : %u msg_type %u", totalSize, msg_type);
                     if ( msg_type > MSG_TYPE_MAX || totalSize > 500*MAX_DATA_LENGTH) {
-                        LOG_ERROR(MODULE_COMMON, "Received invalid message, ignore it!");
+                        LOG_ERROR(MODULE_NET, "Received invalid message, ignore it!");
                         return;
                     }
                     
@@ -343,7 +353,7 @@ void WorkThread::OnRead(int iCliFd, short iEvent, void *arg)
                         try {
                             pBuf = new u_int8[totalSize];
                         } catch (exception &e) {
-                            LOG_ERROR(MODULE_COMMON, "New pBuf failed.");
+                            LOG_ERROR(MODULE_NET, "New pBuf failed.");
                             return;
                         }
                         memcpy(pBuf, buf, recvLen);
@@ -352,16 +362,16 @@ void WorkThread::OnRead(int iCliFd, short iEvent, void *arg)
                 }
             }
 
-            LOG_DEBUG(MODULE_COMMON, "Current recv Len %u", iLen);
+            LOG_DEBUG(MODULE_NET, "Current recv Len %u", iLen);
             
             leftLen = totalSize - recvLen;
             
         } else if (iLen <= 0) {
             if ((errno == EAGAIN) || (errno == EINTR) || (errno == EWOULDBLOCK)) {
-                LOG_INFO(MODULE_COMMON, "errno EINTR, will continue");
+                LOG_INFO(MODULE_NET, "errno EINTR, will continue");
                 continue;
             } else {
-                LOG_ERROR(MODULE_COMMON, "recv() return err: %d,[%s]\n", errno, strerror(errno));
+                LOG_ERROR(MODULE_NET, "recv() return err: %d,[%s]\n", errno, strerror(errno));
                 pThread->ClosingClientCon(iCliFd);
                 break;
             }
@@ -398,7 +408,7 @@ void WorkThread::MessageHandle(int fd, const u_int32 msg_type, const string &msg
     if(l_it != fdSessionMap.end()) {
         session = static_cast<UserSession *>(l_it->second);
         if (session != NULL) {
-            if (!session->MessageHandle(msg_type, msg)) {
+            if ((!session->MessageHandle(msg_type, msg)) || (!session->GetHandleResult())) {
                 LOG_ERROR(MODULE_COMMON, "MessageHandle failed,close the connection.");
                 ClosingClientCon(fd);
             } else {

@@ -56,7 +56,7 @@ public:
 
     void ResetTimer(UserSession *session);
     
-    void OnWrite(int iCliFd, const u_int32 msg_type, const std::string &data, void *arg);
+    bool OnWrite(int iCliFd, const u_int32 msg_type, const std::string &data, void *arg);
     
     bool SetupThread();
 

@@ -6,7 +6,7 @@
 #include "chessboard.h"
 
 UserSession::UserSession():clifd(0),thread(NULL),locate(LOCATION_UNKNOWN),
-    currChessBoard(NULL),stateMachine(NULL),nextState(NULL),gameReady(false),gameOver(false)
+    currChessBoard(NULL),stateMachine(NULL),nextState(NULL),gameReady(false),gameOver(false),send_status(true)
 {
     tv.tv_sec = 60;//every 10 seconds trigger the timer
     tv.tv_usec = 0;
@@ -16,7 +16,6 @@ UserSession::UserSession():clifd(0),thread(NULL),locate(LOCATION_UNKNOWN),
 
 UserSession::~UserSession()
 {
-
 }
 
 void UserSession::SetNextState(State * state)
@@ -40,9 +39,9 @@ bool UserSession::MessageHandle(const u_int32 msg_type, const string &msg)
     return true;
 }
 
-void UserSession::MessageReply(const u_int32 msg_type, const string &msg)
+bool UserSession::MessageReply(const u_int32 msg_type, const string &msg)
 {
-     thread->OnWrite(clifd, msg_type, msg, this);
+     return thread->OnWrite(clifd, msg_type, msg, this);
 }
 
 void UserSession::DestructResource()
@@ -82,5 +81,15 @@ void UserSession::ReduceScore(u_int32 score)
 {
     user_info.score -= score;
     thread->UpdateUserScoreToDB(this->user_info.account, this->user_info.score);
+}
+
+bool UserSession::GetHandleResult() const
+{
+    return send_status;
+}
+
+void UserSession::SetHandleResult(bool result)
+{
+    send_status = result;
 }
 

@@ -132,8 +132,8 @@ public:
     bool AdPictureItemHandle(const string &msg);
 
 private:
-    void DownloadImage(const string &file_path);
-    void DownloadImageInfo(const AdPicturesInfo &ad_info);
+    bool DownloadImage(const string &file_path);
+    bool DownloadImageInfo(const AdPicturesInfo &ad_info);
 };
 #endif /*__STATE_MACHINE_HEAD__*/
 
