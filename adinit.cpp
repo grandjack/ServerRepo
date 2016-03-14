@@ -158,6 +158,7 @@ const string GetImageLinkUrl(const string &path)
 bool IniSQLConnection()
 {
     int ret = 0;
+    const char *sql = "DROP TABLE ad_pictures";
 
     mysql_db_init(&pdb_con);
     if (pdb_con == NULL) {
@@ -170,6 +171,8 @@ bool IniSQLConnection()
         LOG_ERROR(MODULE_DB, "mysql_db_connect failed.");
         return false;
     }
+
+    mysql_db_excute(pdb_con, sql, strlen(sql));
 
     creat_ad_pictures_table(pdb_con);
 
@@ -186,11 +189,10 @@ VALUES (%d,%d,'%s','%s','%s',%d,'%s','%s')",\
             ad_info.image_id,ad_info.existed? 1 : 0, ad_info.image_name.c_str(), ad_info.image_type.c_str(), ad_info.image_hashcode.c_str(),
             ad_info.image_size, ad_info.link_url.c_str(), ad_info.locate_path.c_str());
             
-    LOG_DEBUG(MODULE_DB, "sql_cmd[%s]", sql_cmd);
     ret = mysql_db_excute(pdb_con, sql_cmd, strlen(sql_cmd));
     if (ret != 0) {
         LOG_INFO(MODULE_DB, "mysql_db_excute failed, ret[%d]", ret);
-
+        /*
         //Should insert it!
         snprintf(sql_cmd, sizeof(sql_cmd)-1, "UPDATE ad_pictures SET existed=%d,image_name='%s',image_type='%s',image_hashcode='%s',image_size=%d,\
 link_url='%s',locate_path='%s' WHERE id=%d", ad_info.existed? 1 : 0, ad_info.image_name.c_str(), ad_info.image_type.c_str(), ad_info.image_hashcode.c_str(),
@@ -201,7 +203,9 @@ link_url='%s',locate_path='%s' WHERE id=%d", ad_info.existed? 1 : 0, ad_info.ima
         ret = mysql_db_excute(pdb_con, sql_cmd, strlen(sql_cmd));
         if (ret != 0) {
             LOG_ERROR(MODULE_DB, "mysql_db_excute failed, ret[%d]", ret);
-        }
+        }*/
+    } else {
+        LOG_DEBUG(MODULE_DB, "Insert successfully!");
     }
 }
 
