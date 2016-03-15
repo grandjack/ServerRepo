@@ -153,9 +153,17 @@ u_int32 ChessBoard::GetUserNum() const
     return currUserNum;
 }
 
-void ChessBoard::BroadCastMsg(const string &str)
+void ChessBoard::BroadCastMsg(const MessageType type, const string &str, Location locate_filter)
 {
+    UserSession *user = NULL;
 
+    for (int locate = (int)LOCATION_UNKNOWN; locate < (int)LOCATION_MAX; ++locate) {
+        if (locate != locate_filter) {
+            if ((user = GetUserByLocation((Location)locate)) != NULL) {
+                user->MessageReply(type, str);
+            }
+        }
+    }
 }
 
 bool ChessBoard::AddUser(UserSession *user)
@@ -477,14 +485,7 @@ bool ChessBoard::GiveUpHandle(const string &msg)
             user->MessageReply(MSG_HALL_INFO, data);
         }
 
-        for (u_int32 locate = (u_int32)LOCATION_UNKNOWN; locate < (u_int32)LOCATION_MAX; ++locate) {
-            if (locate != giveup.src_user_locate()) 
-            {
-                if ((user = GetUserByLocation((Location)locate)) != NULL ) {
-                    user->MessageReply(MSG_GIVE_UP, msg);
-                }
-            }
-        }
+        BroadCastMsg(MSG_GIVE_UP, msg, (Location)giveup.src_user_locate());
      }
 
      return true;
@@ -663,4 +664,3 @@ bool ChessBoard::GameBegine() const
 
     return ret;
 }
-

@@ -92,6 +92,11 @@ bool StateGameReady::GameRequestHandle(const string &msg)
 
             requestReply.SerializeToString(&data);
             stateMachine->MessageReply(MSG_REQUEST_PLAY_REPLY, data);
+
+            //Notify the others that should update user's info
+            requestReply.set_status(2);
+            requestReply.SerializeToString(&data);
+            stateMachine->currChessBoard->BroadCastMsg(MSG_REQUEST_PLAY_REPLY, data, stateMachine->locate);
         }
     }
 

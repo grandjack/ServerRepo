@@ -50,7 +50,7 @@ public:
 
     UserSession *GetUserByLocation(const Location &locate);
     inline bool HasFullUsers();
-    void BroadCastMsg(const string &str);
+    void BroadCastMsg(const MessageType type, const string &str, Location locate_filter);
     bool AddUser(UserSession *user);
     u_int32 GetUserNum() const;
     bool LeaveOutRoom(const UserSession *user);

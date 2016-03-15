@@ -1,3 +1,4 @@
 *.o
 Server
 core.*
+/Images/*
