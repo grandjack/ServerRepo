@@ -498,11 +498,15 @@ bool ChessBoard::UndoHandle(const string &msg, MessageType type)
 
     if (undo.ParseFromString(msg)) {
         //just translate the message
-        user = GetUserByLocation((Location)undo.tar_user_locate());
-        if (user) {
-            user->MessageReply(type, msg);
-        } else {
-            LOG_ERROR(MODULE_COMMON, "Get the user failed, locate[%u]", undo.tar_user_locate());
+        if (undo.rep_or_respon() == 0) {//apply request
+            user = GetUserByLocation((Location)undo.tar_user_locate());
+            if (user) {
+                user->MessageReply(type, msg);
+            } else {
+                LOG_ERROR(MODULE_COMMON, "Get the user failed, locate[%u]", undo.tar_user_locate());
+            }
+        } else if (undo.rep_or_respon() == 1) {
+            BroadCastMsg(type, msg, (Location)undo.tar_user_locate());
         }
     }
 
