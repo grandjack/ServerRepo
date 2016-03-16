@@ -410,38 +410,8 @@ bool ChessBoard::MoveChessHandle(const string &msg)
         //Cautions
         //
         //Notes
-        for (int locate = (int)LOCATION_UNKNOWN; locate < (int)LOCATION_MAX; ++locate) {
-            //if (locate != moveChess.src_user_locate()) 
-            {
-                if ((src_user = GetUserByLocation((Location)locate)) != NULL)
-                {
-                    src_user->MessageReply(MSG_ANNOUNCE_MOVE, data);
-                } else {
-                    LOG_ERROR(MODULE_COMMON, "Got User by location failed.");
-                }
-            }
-        }
+        BroadCastMsg(MSG_ANNOUNCE_MOVE, data, LOCATION_MAX);
     }
-
-    return true;
-}
-
-//Qiu He
-bool ChessBoard::ReconciledHandle(const string &msg, MessageType type)
-{
-     Reconciled peace;
-     UserSession *user = NULL;
-
-    if (peace.ParseFromString(msg)) {
-        //just translate the message
-        user = GetUserByLocation((Location)peace.tar_user_locate());
-        if (user) {
-            user->MessageReply(type, msg);
-        } else {
-            LOG_ERROR(MODULE_COMMON, "Get the user failed, locate[%u]", peace.tar_user_locate());
-        }
-    }
-
 
     return true;
 }
@@ -452,16 +422,31 @@ bool ChessBoard::UserMessageHandle(const string &msg)
     UserSession *user = NULL;
     
      if (userMsg.ParseFromString(msg)) {
-        for (u_int32 locate = (u_int32)LOCATION_UNKNOWN; locate < (u_int32)LOCATION_MAX; ++locate) {
-            if (locate != userMsg.src_user_locate()) {
-                if((user=GetUserByLocation((Location)locate)) != NULL) {
-                    user->MessageReply(MSG_USER_MSG, msg);
-                }
-            }
-        }
+        BroadCastMsg(MSG_USER_MSG, msg, userMsg.src_user_locate());
      }
 
      return true;
+}
+
+
+//Qiu He
+bool ChessBoard::ReconciledHandle(const string &msg, MessageType type)
+{
+     Reconciled peace;
+     UserSession *user = NULL;
+
+    if (peace.ParseFromString(msg)) {
+        if (type == MSG_RECONCILED_REQ || peace.apply_or_reply() == 0) {
+            BroadCastMsg(type, msg, (Location)peace.src_user_locate());
+        } else if (type == MSG_RECONCILED_RESP || peace.apply_or_reply() == 1) {
+            //just reply for the original user
+            if((user=GetUserByLocation((Location)peace.tar_user_locate())) != NULL) {
+                user->MessageReply(type, msg);
+            }
+        }
+    }
+
+    return true;
 }
 
 bool ChessBoard::GiveUpHandle(const string &msg)
@@ -490,7 +475,7 @@ bool ChessBoard::GiveUpHandle(const string &msg)
 
      return true;
 }
-
+//Hui Qi
 bool ChessBoard::UndoHandle(const string &msg, MessageType type)
 {
      Undo undo;
@@ -506,6 +491,7 @@ bool ChessBoard::UndoHandle(const string &msg, MessageType type)
                 LOG_ERROR(MODULE_COMMON, "Get the user failed, locate[%u]", undo.tar_user_locate());
             }
         } else if (undo.rep_or_respon() == 1) {
+            LOG_DEBUG(MODULE_COMMON, "BroadCastMsg Undo response, tar_user_locate=%d", undo.tar_user_locate());
             BroadCastMsg(type, msg, (Location)undo.tar_user_locate());
         }
     }

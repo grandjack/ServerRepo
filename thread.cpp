@@ -409,7 +409,7 @@ void WorkThread::MessageHandle(int fd, const u_int32 msg_type, const string &msg
         session = static_cast<UserSession *>(l_it->second);
         if (session != NULL) {
             if ((!session->MessageHandle(msg_type, msg)) || (!session->GetHandleResult())) {
-                LOG_ERROR(MODULE_COMMON, "MessageHandle failed,close the connection.");
+                LOG_ERROR(MODULE_COMMON, "MessageHandle failed,close the connection for [%s].",session->user_info.account.c_str());
                 ClosingClientCon(fd);
             } else {
                 ResetTimer(session);
