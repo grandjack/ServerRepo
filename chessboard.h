@@ -50,7 +50,7 @@ public:
 
     UserSession *GetUserByLocation(const Location &locate);
     inline bool HasFullUsers();
-    void BroadCastMsg(const MessageType type, const string &str, Location locate_filter);
+    void BroadCastMsg(const MessageType type, const string &str, int locate_filter);
     bool AddUser(UserSession *user);
     u_int32 GetUserNum() const;
     bool LeaveOutRoom(const UserSession *user);
@@ -80,6 +80,8 @@ public:
     u_int32 first_come_user_locate;
     u_int32 total_time;
     u_int32 single_step_time;
+    Location recent_winner_locate;
+    Location recent_loser_locate;
 };
 
 #endif /*__CHESS_BOARD_HEAD__*/

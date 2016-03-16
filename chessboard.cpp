@@ -103,7 +103,8 @@ u_int32 GameHall::GetGameHallID() const
 /*Class ChessBoard definitions*/
 
 ChessBoard::ChessBoard(u_int32 id, GameHall *gameHall):leftUser(NULL),rightUser(NULL),bottomUser(NULL),chessBoardID(id),currentHall(gameHall),
-                                        currUserNum(0),first_come_user_locate((u_int32)LOCATION_MAX), total_time(0), single_step_time(0)
+                                        currUserNum(0),first_come_user_locate((u_int32)LOCATION_MAX), total_time(0), single_step_time(0),
+                                        recent_winner_locate(LOCATION_MAX),recent_loser_locate(LOCATION_MAX)
 {
     pthread_mutex_init(&mutex, NULL);
 }
@@ -153,7 +154,7 @@ u_int32 ChessBoard::GetUserNum() const
     return currUserNum;
 }
 
-void ChessBoard::BroadCastMsg(const MessageType type, const string &str, Location locate_filter)
+void ChessBoard::BroadCastMsg(const MessageType type, const string &str, int locate_filter)
 {
     UserSession *user = NULL;
 
@@ -354,6 +355,9 @@ bool ChessBoard::MoveChessHandle(const string &msg)
         src_user = GetUserByLocation((Location)moveChess.src_user_locate());
         if (moveChess.is_winner()) {
             //Winer plus 10 score
+            recent_winner_locate = (Location)moveChess.src_user_locate();
+            recent_loser_locate = (Location)moveChess.target_user_locate();
+            
             src_user->IncreaseScore();
             if ((tar_user = GetUserByLocation((Location)moveChess.target_user_locate())) != NULL) {
                 tar_user->ReduceScore();
@@ -363,6 +367,9 @@ bool ChessBoard::MoveChessHandle(const string &msg)
             }
             
             LOG_DEBUG(MODULE_COMMON, "User[%s] won user locate[%d]", src_user->user_info.account.c_str(), moveChess.target_user_locate());
+        } else {
+            recent_winner_locate = LOCATION_MAX;
+            recent_loser_locate = LOCATION_MAX;
         }
         LOG_DEBUG(MODULE_COMMON, "src user locate: %d, current user locate: %d", moveChess.src_user_locate(),src_user->locate);
 
@@ -419,7 +426,6 @@ bool ChessBoard::MoveChessHandle(const string &msg)
 bool ChessBoard::UserMessageHandle(const string &msg)
 {
     UserMessage userMsg;
-    UserSession *user = NULL;
     
      if (userMsg.ParseFromString(msg)) {
         BroadCastMsg(MSG_USER_MSG, msg, userMsg.src_user_locate());
@@ -493,6 +499,17 @@ bool ChessBoard::UndoHandle(const string &msg, MessageType type)
         } else if (undo.rep_or_respon() == 1) {
             LOG_DEBUG(MODULE_COMMON, "BroadCastMsg Undo response, tar_user_locate=%d", undo.tar_user_locate());
             BroadCastMsg(type, msg, (Location)undo.tar_user_locate());
+            if ((undo.has_status()) && (undo.status())) {
+                if (recent_winner_locate != LOCATION_MAX) {
+                    try {
+                        GetUserByLocation(recent_winner_locate)->ReduceScore();
+                        GetUserByLocation(recent_loser_locate)->IncreaseScore();
+                        GetUserByLocation(recent_loser_locate)->gameOver = false;
+                    } catch(const exception &e) {
+                        LOG_ERROR(MODULE_COMMON, "Set status failed.");
+                    }
+                }
+            }
         }
     }
 
