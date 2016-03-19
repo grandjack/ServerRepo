@@ -30,6 +30,15 @@ typedef enum
     LOCATION_MAX
 }Location;
 
+typedef enum 
+{
+    STATUS_NOT_START = 0,
+    STATUS_READY,
+    STATUS_PLAYING,
+    STATUS_ENDED,
+    STATUS_EXITED
+}UserGameStatus;
+
 struct UsersInfo
 {
     string account;
@@ -86,6 +95,8 @@ public:
     UsersInfo user_info;
     bool gameReady;
     bool gameOver;
+
+    UserGameStatus status;
 
 private:
     bool send_status;

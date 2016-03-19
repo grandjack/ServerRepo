@@ -468,12 +468,15 @@ bool ChessBoard::GiveUpHandle(const string &msg)
             if (user->currChessBoard->GameBegine() && (!user->gameOver)) {
                 LOG_DEBUG(MODULE_COMMON, "Game playing state, give up should be punished!");
                 user->ReduceScore(30);
+                //user->st
             }
-            
-            LeaveOutRoom((Location)giveup.src_user_locate());
-            user->SetNextState(new StateGameReady(user));
-            user->stateMachine->WrapHallInfo(this->currentHall->GetGameHallID(), data);
-            user->MessageReply(MSG_HALL_INFO, data);
+
+            if ((giveup.has_opt()) && (!giveup.opt().compare("exit"))) {//exit from the game room
+                LeaveOutRoom((Location)giveup.src_user_locate());
+                user->SetNextState(new StateGameReady(user));
+                user->stateMachine->WrapHallInfo(this->currentHall->GetGameHallID(), data);
+                user->MessageReply(MSG_HALL_INFO, data);
+            }
         }
 
         BroadCastMsg(MSG_GIVE_UP, msg, (Location)giveup.src_user_locate());
@@ -588,15 +591,8 @@ bool ChessBoard::GameReadyHandle(const string &msg)
         status.set_token_locate(LOCATION_BOTTOM);
 
         status.SerializeToString(&data);
-        
-        for (int locate = (int)LOCATION_UNKNOWN; locate < (int)LOCATION_MAX; ++locate) {
-            //if (locate != (int)gameReady.src_user_locate()) 
-            {
-                if ((user = GetUserByLocation((Location)locate)) != NULL) {
-                    user->MessageReply(MSG_GAME_STATUS, data);
-                }
-            }
-        }
+
+        BroadCastMsg(MSG_GAME_STATUS, data, LOCATION_MAX);
     }
 
     return true;

@@ -88,6 +88,7 @@ bool StateGameReady::GameRequestHandle(const string &msg)
                 /* handle successfully,then return next state*/
                 State *state = new StateGamePlay(stateMachine);
                 stateMachine->SetNextState(state);
+                stateMachine->status = STATUS_READY;
             }
 
             requestReply.SerializeToString(&data);
