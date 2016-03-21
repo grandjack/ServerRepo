@@ -289,7 +289,7 @@ bool WorkThread::OnWrite(int iCliFd, const u_int32 msg_type, const string &data,
     memcpy(buf + DATA_HEAD_LENGTH/2 , &msg_type, DATA_HEAD_LENGTH/2);
     memcpy(buf + DATA_HEAD_LENGTH, data.c_str(), data.size());
 
-    LOG_DEBUG(MODULE_NET, "Send totalSize[%u] msg_type %u", totalSize, msg_type);
+    LOG_DEBUG(MODULE_NET, "Send totalSize[%u] msg_type %u for user[%s]", totalSize, msg_type, user->user_info.account.c_str());
 
     while(sendLen < totalSize)
     {
@@ -371,7 +371,7 @@ void WorkThread::OnRead(int iCliFd, short iEvent, void *arg)
                 LOG_INFO(MODULE_NET, "errno EINTR, will continue");
                 continue;
             } else {
-                LOG_ERROR(MODULE_NET, "recv() return err: %d,[%s]\n", errno, strerror(errno));
+                LOG_ERROR(MODULE_NET, "recv() return err: %d,[%s]", errno, strerror(errno));
                 pThread->ClosingClientCon(iCliFd);
                 break;
             }
@@ -435,14 +435,15 @@ bool WorkThread::ClosingClientCon(int fd)
 
     if(l_it != fdSessionMap.end()) {
         session = static_cast<UserSession *>(l_it->second);
-        if (session != NULL) {
+        if (session != NULL) {            
+            fdSessionMap.erase(l_it);
+            LOG_INFO(MODULE_COMMON, "Destrory user[%s]...\r\n", session->user_info.account.c_str());
+            session->DestructResource();
             event_del(&session->event);
             event_del(&session->timer_ev);
             close(fd);
-            session->DestructResource();
             delete session;
         }
-        fdSessionMap.erase(l_it);
     }
 
     return true;

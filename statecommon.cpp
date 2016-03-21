@@ -44,14 +44,12 @@ bool State::GameHallSumaryHandle(const string &msg)
     HallInfo *hallInfo = NULL;
     GameHall *gameHall = NULL;
     string data;
-    
-    GameHallSumaryReq sumaryReq;
 
-    if (!sumaryReq.ParseFromString(msg)) {
-        LOG_ERROR(MODULE_COMMON, "ParseFromString failed.");
+    if (stateMachine == NULL) {
         return false;
     }
 
+    try {
     sumary.set_account(stateMachine->user_info.account);
     sumary.set_username(stateMachine->user_info.user_name);
     sumary.set_score(stateMachine->user_info.score);
@@ -76,6 +74,10 @@ bool State::GameHallSumaryHandle(const string &msg)
 
     sumary.SerializeToString(&data);
     stateMachine->MessageReply(MSG_GAME_HALL_SUMARY,data);
+    }
+    catch (const exception &e) {
+        LOG_ERROR(MODULE_COMMON, "Wrap GameHallSumary failed !");
+    }
 
     return true;
 }

@@ -468,7 +468,6 @@ bool ChessBoard::GiveUpHandle(const string &msg)
 {
     GiveUp giveup;
     UserSession *user = NULL;
-    string data;
     
      if (giveup.ParseFromString(msg)) {
         if ((user = GetUserByLocation((Location)giveup.src_user_locate())) != NULL ) {
@@ -478,8 +477,6 @@ bool ChessBoard::GiveUpHandle(const string &msg)
 
             if ((giveup.has_opt()) && (!giveup.opt().compare("exit"))) {//exit from the game room                
                 user->SetNextState(new StateGameReady(user));
-                user->stateMachine->WrapHallInfo(this->currentHall->GetGameHallID(), data);
-                user->MessageReply(MSG_HALL_INFO, data);
             }
         }
 
@@ -682,8 +679,7 @@ void ChessBoard::LeaveRoomHandle(UserSession *user)
         return;
     }
     
-    if ((user->status == STATUS_PLAYING) ||
-        (user->currChessBoard->GameBegine() && (!user->gameOver))) {
+    if (user->currChessBoard->GameBegine() && (!user->gameOver)) {
         user->ReduceScore(30);
 
         give_up.set_src_user_locate((unsigned int)user->locate);
@@ -720,6 +716,7 @@ void ChessBoard::BroadCastHallInfo(UserSession *user)
                 UserSession *tmp_user = iter->second;
                 if (tmp_user != NULL) {
                     tmp_user->MessageReply(MSG_HALL_INFO,data);
+                    tmp_user->stateMachine->GameHallSumaryHandle(data);
                 }
             }
 
@@ -727,3 +724,4 @@ void ChessBoard::BroadCastHallInfo(UserSession *user)
     }
    
 }
+

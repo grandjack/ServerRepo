@@ -47,6 +47,11 @@ bool UserSession::MessageReply(const u_int32 msg_type, const string &msg)
 
 void UserSession::DestructResource()
 {
+    if (currChessBoard != NULL) {
+        currChessBoard->LeaveRoomHandle(this);
+        currChessBoard = NULL;
+    }
+
     if (stateMachine != NULL) {
         if (stateMachine == nextState) {
             delete stateMachine;
@@ -62,11 +67,6 @@ void UserSession::DestructResource()
                 nextState = NULL;
             }
         }
-    }
-
-    if (currChessBoard != NULL) {
-        currChessBoard->LeaveRoomHandle(this);
-        currChessBoard = NULL;
     }
     
     thread = NULL;
