@@ -65,7 +65,7 @@ void UserSession::DestructResource()
     }
 
     if (currChessBoard != NULL) {
-        currChessBoard->LeaveOutRoom(this);
+        currChessBoard->LeaveRoomHandle(this);
         currChessBoard = NULL;
     }
     

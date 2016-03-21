@@ -41,6 +41,8 @@ public:
     UserSession* PopFrontSession();
     const int GetUnhandledSessionsSize();
     GameHall* GetGameHall(const u_int32 id);
+    int GetThreadsNum() const;
+    WorkThread *GetOneThreadByIndex(u_int8 index);
     
 private:
     MainThread();

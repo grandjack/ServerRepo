@@ -98,7 +98,7 @@ public:
 
     bool GetAdPicturesInfoFromDB(const u_int32 id, AdPicturesInfo &ad_info);
     
-private:
+public:
     struct event_base *base;    /* libevent handle this thread uses */
     struct event notify_event;  /* listen event for notify pipe */
     int notify_receive_fd;      /* receiving end of notify pipe */

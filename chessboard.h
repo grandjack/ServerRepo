@@ -67,6 +67,7 @@ public:
     void WrapChessBoardInfo(ChessBoardInfo &chessBoard);
     bool GameBegine() const;
     void LeaveRoomHandle(UserSession *user);
+    void BroadCastHallInfo(UserSession *user);
 
 private:
     UserSession *leftUser;

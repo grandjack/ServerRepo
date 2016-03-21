@@ -7,6 +7,7 @@
 #include "utils.h"
 #include "thread.h"
 #include "chessboard.h"
+#include "mainthread.h"
 
 using namespace MessageStruct;
 
@@ -418,6 +419,14 @@ bool ChessBoard::MoveChessHandle(const string &msg)
         //
         //Notes
         BroadCastMsg(MSG_ANNOUNCE_MOVE, data, LOCATION_MAX);
+
+        //If has ate someone ,need to notify all users & update ststus
+        if (moveChess.is_winner()) {
+            ChessBoardInfo chessBoard;
+            WrapChessBoardInfo(chessBoard);
+            chessBoard.SerializeToString(&data);
+            BroadCastMsg(MSG_CHESS_BOARD, data, LOCATION_MAX);
+        }
     }
 
     return true;
@@ -686,8 +695,35 @@ void ChessBoard::LeaveRoomHandle(UserSession *user)
     
     WrapChessBoardInfo(chessBoardInfo);
     chessBoardInfo.SerializeToString(&data);
+    //notify the others that the user has exit
     BroadCastMsg(MSG_CHESS_BOARD, data, (int)user->locate);
 
     
+    BroadCastHallInfo(user);
+    
 }
 
+//temporary handle & because it may cross many threads !!!!!!!!!!!!!!!!!!!!!!!!!
+void ChessBoard::BroadCastHallInfo(UserSession *user)
+{
+    string data;
+    
+    user->stateMachine->WrapHallInfo(currentHall->GetGameHallID(), data);
+
+    u_int8 thread_num =  MainThread::GetMainThreadObj()->GetThreadsNum();
+    for (u_int8 i = 0; i < thread_num; ++i) {
+        WorkThread *thread = MainThread::GetMainThreadObj()->GetOneThreadByIndex(i);
+        if (thread != NULL) {
+
+            std::map<int,UserSession*>::iterator iter;
+            for ( iter = thread->fdSessionMap.begin(); iter != thread->fdSessionMap.end(); iter++ ) {                
+                UserSession *tmp_user = iter->second;
+                if (tmp_user != NULL) {
+                    tmp_user->MessageReply(MSG_HALL_INFO,data);
+                }
+            }
+
+        }
+    }
+   
+}

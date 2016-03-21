@@ -58,7 +58,7 @@ bool StateGameReady::GameRequestHandle(const string &msg)
     ChessBoardInfo *chessBoardInfo = NULL;
     ChessBoard *chessBoard = NULL;
     RequestPlayReply requestReply;
-    
+    bool added_ok = false;
     
     if (requestPlay.ParseFromString(msg)) {
         gameHall = MainThread::GetMainThreadObj()->GetGameHall(requestPlay.game_hall_id());
@@ -89,15 +89,20 @@ bool StateGameReady::GameRequestHandle(const string &msg)
                 State *state = new StateGamePlay(stateMachine);
                 stateMachine->SetNextState(state);
                 stateMachine->status = STATUS_READY;
+                added_ok = true;
             }
 
             requestReply.SerializeToString(&data);
             stateMachine->MessageReply(MSG_REQUEST_PLAY_REPLY, data);
 
-            //Notify the others that should update user's info
-            requestReply.set_status(2);
-            requestReply.SerializeToString(&data);
-            stateMachine->currChessBoard->BroadCastMsg(MSG_REQUEST_PLAY_REPLY, data, (int)stateMachine->locate);
+            if (added_ok) {
+                //Notify the others that should update user's info
+                requestReply.set_status(2);
+                requestReply.SerializeToString(&data);
+                stateMachine->currChessBoard->BroadCastMsg(MSG_REQUEST_PLAY_REPLY, data, (int)stateMachine->locate);
+                stateMachine->currChessBoard->BroadCastHallInfo(stateMachine);
+            }
+
         }
     }
 

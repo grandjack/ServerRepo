@@ -188,6 +188,22 @@ WorkThread *MainThread::GetOneThread()
     return threadList[index];
 }
 
+int MainThread::GetThreadsNum() const
+{
+    return threadList.size();
+}
+
+WorkThread *MainThread::GetOneThreadByIndex(u_int8 index)
+{
+    WorkThread *thread = NULL;
+    
+    if ((index >= 0) && (index < threadList.size())) {
+        thread = threadList[index];
+    }
+
+    return thread;
+}
+
 void MainThread::PushSessionBack(UserSession *session)
 {
     pthread_mutex_lock(&init_lock);
