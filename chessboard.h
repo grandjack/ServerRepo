@@ -66,6 +66,7 @@ public:
     u_int32 GetChessBoardID() const;
     void WrapChessBoardInfo(ChessBoardInfo &chessBoard);
     bool GameBegine() const;
+    void LeaveRoomHandle(UserSession *user);
 
 private:
     UserSession *leftUser;

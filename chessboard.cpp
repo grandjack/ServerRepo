@@ -362,6 +362,7 @@ bool ChessBoard::MoveChessHandle(const string &msg)
             if ((tar_user = GetUserByLocation((Location)moveChess.target_user_locate())) != NULL) {
                 tar_user->ReduceScore();
                 tar_user->gameOver = true;
+                tar_user->status = STATUS_ENDED;
             } else {
                 LOG_ERROR(MODULE_COMMON,"Get target user failed.");
             }
@@ -375,8 +376,7 @@ bool ChessBoard::MoveChessHandle(const string &msg)
 
 
         announceAction.set_src_user_locate(src_user->locate);
-        if (GetActiveUsersNum() > 1)
-        {
+        if (GetActiveUsersNum() > 1) {
             if (src_user->locate == LOCATION_LEFT) {
                 if (((tar_user = GetUserByLocation(LOCATION_BOTTOM)) != NULL) &&
                     tar_user->gameOver) {
@@ -465,21 +465,15 @@ bool ChessBoard::GiveUpHandle(const string &msg)
         if ((user = GetUserByLocation((Location)giveup.src_user_locate())) != NULL ) {
             //do other job here to notify the sender user what state he will go.
 
-            if (user->currChessBoard->GameBegine() && (!user->gameOver)) {
-                LOG_DEBUG(MODULE_COMMON, "Game playing state, give up should be punished!");
-                user->ReduceScore(30);
-                //user->st
-            }
+            LeaveRoomHandle(user);
 
-            if ((giveup.has_opt()) && (!giveup.opt().compare("exit"))) {//exit from the game room
-                LeaveOutRoom((Location)giveup.src_user_locate());
+            if ((giveup.has_opt()) && (!giveup.opt().compare("exit"))) {//exit from the game room                
                 user->SetNextState(new StateGameReady(user));
                 user->stateMachine->WrapHallInfo(this->currentHall->GetGameHallID(), data);
                 user->MessageReply(MSG_HALL_INFO, data);
             }
         }
 
-        BroadCastMsg(MSG_GIVE_UP, msg, (Location)giveup.src_user_locate());
      }
 
      return true;
@@ -557,6 +551,7 @@ bool ChessBoard::GameReadyHandle(const string &msg)
         user = GetUserByLocation((Location)gameReady.src_user_locate());
         if (user != NULL) {
             user->gameReady = true;
+            user->status = STATUS_PLAYING;
         }
 
         if ((gameReady.src_user_locate() == first_come_user_locate) &&
@@ -615,7 +610,7 @@ void ChessBoard::WrapChessBoardInfo(ChessBoardInfo &chessBoard)
         left->set_account(user->user_info.account);
         left->set_user_name(user->user_info.user_name);
         left->set_score(user->user_info.score);
-        left->set_status(user->stateMachine->GetType());
+        left->set_status(user->status);
         left->set_head_image(user->user_info.head_photo);
     }
         
@@ -625,7 +620,7 @@ void ChessBoard::WrapChessBoardInfo(ChessBoardInfo &chessBoard)
         right->set_account(user->user_info.account);
         right->set_user_name(user->user_info.user_name);
         right->set_score(user->user_info.score);
-        right->set_status(user->stateMachine->GetType());
+        right->set_status(user->status);
         right->set_head_image(user->user_info.head_photo);
     }
         
@@ -635,7 +630,7 @@ void ChessBoard::WrapChessBoardInfo(ChessBoardInfo &chessBoard)
         bottom->set_account(user->user_info.account);
         bottom->set_user_name(user->user_info.user_name);
         bottom->set_score(user->user_info.score);
-        bottom->set_status(user->stateMachine->GetType());
+        bottom->set_status(user->status);
         bottom->set_head_image(user->user_info.head_photo);
     }
 
@@ -667,3 +662,32 @@ bool ChessBoard::GameBegine() const
 
     return ret;
 }
+
+void ChessBoard::LeaveRoomHandle(UserSession *user)
+{
+    ChessBoardInfo chessBoardInfo;
+    string data;
+    GiveUp give_up;
+        
+    if (user == NULL) {
+        return;
+    }
+    
+    if ((user->status == STATUS_PLAYING) ||
+        (user->currChessBoard->GameBegine() && (!user->gameOver))) {
+        user->ReduceScore(30);
+
+        give_up.set_src_user_locate((unsigned int)user->locate);
+        give_up.SerializeToString(&data);
+        BroadCastMsg(MSG_GIVE_UP, data, (int)user->locate);
+    }
+    
+    LeaveOutRoom(user);
+    
+    WrapChessBoardInfo(chessBoardInfo);
+    chessBoardInfo.SerializeToString(&data);
+    BroadCastMsg(MSG_CHESS_BOARD, data, (int)user->locate);
+
+    
+}
+

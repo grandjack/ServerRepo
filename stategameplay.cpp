@@ -41,13 +41,14 @@ bool StateGamePlay::MsgHandle(const u_int32 msg_type, const string &msg)
             break;
             
         case MSG_MOVE_CHESS:
-        case MSG_RECONCILED_REQ:
         case MSG_USER_MSG:
         case MSG_UNDO_REQ:
         case MSG_UNDO_REPS:
         case MSG_GIVE_UP:
         case MSG_GAME_READY_REQ:
         case MSG_SYSTEM_MSG:
+        case MSG_RECONCILED_REQ:
+        case MSG_RECONCILED_RESP:
             ret = stateMachine->currChessBoard->TranslateMsg(msg_type, msg);
             break;
 
