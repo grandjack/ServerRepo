@@ -33,10 +33,10 @@ typedef enum
 typedef enum 
 {
     STATUS_NOT_START = 0,
+    STATUS_EXITED = STATUS_NOT_START,
     STATUS_READY,
     STATUS_PLAYING,
-    STATUS_ENDED,
-    STATUS_EXITED
+    STATUS_ENDED    
 }UserGameStatus;
 
 struct UsersInfo

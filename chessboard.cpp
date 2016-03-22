@@ -681,7 +681,7 @@ void ChessBoard::LeaveRoomHandle(UserSession *user)
     
     if (user->currChessBoard->GameBegine() && (!user->gameOver)) {
         user->ReduceScore(30);
-
+        user->status = STATUS_EXITED;
         give_up.set_src_user_locate((unsigned int)user->locate);
         give_up.SerializeToString(&data);
         BroadCastMsg(MSG_GIVE_UP, data, (int)user->locate);
