@@ -379,24 +379,24 @@ bool ChessBoard::MoveChessHandle(const string &msg)
         announceAction.set_src_user_locate(src_user->locate);
         if (GetActiveUsersNum() > 1) {
             if (src_user->locate == LOCATION_LEFT) {
-                if (((tar_user = GetUserByLocation(LOCATION_BOTTOM)) != NULL) &&
-                    tar_user->gameOver) {
+                if ((((tar_user = GetUserByLocation(LOCATION_BOTTOM)) != NULL) &&
+                    tar_user->gameOver) || (tar_user == NULL)) {
                     announceAction.set_token_locate((u_int32)LOCATION_RIGHT);
                 } else {
                     announceAction.set_token_locate((u_int32)LOCATION_BOTTOM);
                 }
                 
             } else if (src_user->locate == LOCATION_BOTTOM) {
-                if (((tar_user = GetUserByLocation(LOCATION_RIGHT)) != NULL) &&
-                    tar_user->gameOver) {
+                if ((((tar_user = GetUserByLocation(LOCATION_RIGHT)) != NULL) &&
+                    tar_user->gameOver) || (tar_user == NULL)) {
                     announceAction.set_token_locate((u_int32)LOCATION_LEFT);
                 } else {
                     announceAction.set_token_locate((u_int32)LOCATION_RIGHT);
                 }
                 
             } else if (src_user->locate == LOCATION_RIGHT) {
-                if (((tar_user = GetUserByLocation(LOCATION_LEFT)) != NULL) &&
-                    tar_user->gameOver) {
+                if ((((tar_user = GetUserByLocation(LOCATION_LEFT)) != NULL) &&
+                    tar_user->gameOver) || (tar_user == NULL)) {
                     announceAction.set_token_locate((u_int32)LOCATION_BOTTOM);
                 } else {
                     announceAction.set_token_locate((u_int32)LOCATION_LEFT);
@@ -475,8 +475,11 @@ bool ChessBoard::GiveUpHandle(const string &msg)
 
             LeaveRoomHandle(user);
 
-            if ((giveup.has_opt()) && (!giveup.opt().compare("exit"))) {//exit from the game room                
-                user->SetNextState(new StateGameReady(user));
+            if ((giveup.has_opt()) && (0 == giveup.opt().compare("exit"))) {//exit from the game room                
+                user->SetNextState(new StateGameReady(user));                
+                user->status = STATUS_EXITED;
+                user->gameOver = true;
+                LOG_DEBUG(MODULE_COMMON, "%s exit current game room, and will go to Ready State.", user->user_info.account.c_str());
             }
         }
 
@@ -681,11 +684,13 @@ void ChessBoard::LeaveRoomHandle(UserSession *user)
     
     if (user->currChessBoard->GameBegine() && (!user->gameOver)) {
         user->ReduceScore(30);
-        user->status = STATUS_EXITED;
+        user->status = STATUS_ENDED;
         give_up.set_src_user_locate((unsigned int)user->locate);
         give_up.SerializeToString(&data);
         BroadCastMsg(MSG_GIVE_UP, data, (int)user->locate);
     }
+
+    user->gameOver = true;
     
     LeaveOutRoom(user);
     
