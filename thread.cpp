@@ -470,6 +470,7 @@ UserSession* WorkThread::GetUserByClientFD(const int fd)
     return session;
 }
 
+//just find the special user account in One thead is NOT safety
 bool WorkThread::GetIndividualUser(const string &account)
 {
     map<int ,UserSession* >::iterator l_it;

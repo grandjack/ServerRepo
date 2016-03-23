@@ -28,6 +28,7 @@ bool StateAuth::MsgHandle(const u_int32 msg_type, const string &msg)
             if (ret == true) {
                 stateMachine->SetNextState(new StateAdPictureDownload(stateMachine));
             }
+            ret = true;
             break;
         
         case MSG_LOGOUT:
@@ -120,6 +121,7 @@ bool StateAuth::HandleLogin(const string &msg)
             } else {
                 status.set_status(0);
                 LOG_ERROR(MODULE_COMMON, "User Account[%s] login failed for password NOT equal.", user_info->account.c_str());
+                user_info->account = "";
                 ret = false;
             }
         } else {
