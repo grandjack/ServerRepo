@@ -68,6 +68,7 @@ bool StateGameReady::GameRequestHandle(const string &msg)
             if (!chessBoard->AddUser(stateMachine)) {
                 LOG_ERROR(MODULE_COMMON, "Add user failed.");
                 requestReply.set_status(0);
+                requestReply.set_first_come_user_locate(chessBoard->first_come_user_locate);
                 //reply status 0
             } else {
                 //reply chessBoardInfo & set status 1
