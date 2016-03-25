@@ -473,13 +473,14 @@ bool ChessBoard::GiveUpHandle(const string &msg)
         if ((user = GetUserByLocation((Location)giveup.src_user_locate())) != NULL ) {
             //do other job here to notify the sender user what state he will go.
 
-            LeaveRoomHandle(user);
-
-            if ((giveup.has_opt()) && (0 == giveup.opt().compare("exit"))) {//exit from the game room                
+            if ((giveup.has_opt()) && (0 == giveup.opt().compare("exit"))) {//exit from the game room            
+                LeaveRoomHandle(user, true);
                 user->SetNextState(new StateGameReady(user));                
                 user->status = STATUS_EXITED;
                 user->gameOver = true;
                 LOG_DEBUG(MODULE_COMMON, "%s exit current game room, and will go to Ready State.", user->user_info.account.c_str());
+            }else {
+                LeaveRoomHandle(user, false);
             }
         }
 
@@ -672,7 +673,7 @@ bool ChessBoard::GameBegine() const
     return ret;
 }
 
-void ChessBoard::LeaveRoomHandle(UserSession *user)
+void ChessBoard::LeaveRoomHandle(UserSession *user, bool really_leave)
 {
     ChessBoardInfo chessBoardInfo;
     string data;
@@ -686,22 +687,27 @@ void ChessBoard::LeaveRoomHandle(UserSession *user)
         user->ReduceScore(30);
         user->status = STATUS_ENDED;
         give_up.set_src_user_locate((unsigned int)user->locate);
+        if (really_leave) {
+            give_up.set_opt("exit");
+            user->status = STATUS_EXITED;
+        }
         give_up.SerializeToString(&data);
+        //notify the others that the user has exit
         BroadCastMsg(MSG_GIVE_UP, data, (int)user->locate);
     }
 
     user->gameOver = true;
-    
-    LeaveOutRoom(user);
+
+    if (really_leave) {
+
+        LeaveOutRoom(user);
+        BroadCastHallInfo(user);
+    }
     
     WrapChessBoardInfo(chessBoardInfo);
     chessBoardInfo.SerializeToString(&data);
-    //notify the others that the user has exit
-    BroadCastMsg(MSG_CHESS_BOARD, data, (int)user->locate);
-
-    
-    BroadCastHallInfo(user);
-    
+    //Update the User's state
+    BroadCastMsg(MSG_CHESS_BOARD, data, (int)LOCATION_MAX);
 }
 
 //temporary handle & because it may cross many threads !!!!!!!!!!!!!!!!!!!!!!!!!

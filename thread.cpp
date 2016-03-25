@@ -265,13 +265,13 @@ bool WorkThread::OnWrite(int iCliFd, const u_int32 msg_type, const string &data,
     int iLen = 0;
     bool ret = true;
 
-    if(!user->GetHandleResult()) {
-        LOG_ERROR(MODULE_NET, "Can NOT send, this session will ouver!");
+    if (user == NULL || iCliFd < 0) {
+        LOG_ERROR(MODULE_NET, "Got parameter failed.");
         return false;
     }
 
-    if (user == NULL) {
-        LOG_ERROR(MODULE_NET, "Got parameter failed.");
+    if(!user->GetHandleResult()) {
+        LOG_ERROR(MODULE_NET, "Can NOT send, this session[%s] will be over!", user->user_info.account.c_str());
         return false;
     }
 
@@ -344,6 +344,7 @@ void WorkThread::OnRead(int iCliFd, short iEvent, void *arg)
                     LOG_DEBUG(MODULE_COMMON, "Got message total size : %u msg_type %u", totalSize, msg_type);
                     if ( msg_type > MSG_TYPE_MAX || totalSize > 500*MAX_DATA_LENGTH) {
                         LOG_ERROR(MODULE_NET, "Received invalid message, ignore it!");
+                        pThread->ClosingClientCon(iCliFd);
                         return;
                     }
                     

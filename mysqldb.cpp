@@ -22,9 +22,12 @@ int mysql_db_close(MYSQL *connection) {
 
 int mysql_db_connect(MYSQL *connection, const char *host, const char * user, const char * pwd, const char * db_name) {
 
-    my_bool re_connect = true;
+    my_bool re_connect = (my_bool)1;
 
-    mysql_options(connection, MYSQL_OPT_RECONNECT, &re_connect);
+    if (mysql_options(connection, MYSQL_OPT_RECONNECT, &re_connect) != 0) {
+        LOG_ERROR(MODULE_DB,"mysql_options error[%s].", mysql_error(connection));
+        return -1;
+    }
 
     connection = mysql_real_connect(connection, host,  
             user, pwd, db_name, 0, NULL, 0);
