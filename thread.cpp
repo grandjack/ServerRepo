@@ -438,7 +438,7 @@ bool WorkThread::ClosingClientCon(int fd)
         session = static_cast<UserSession *>(l_it->second);
         if (session != NULL) {            
             fdSessionMap.erase(l_it);
-            LOG_INFO(MODULE_COMMON, "Destrory user[%s]...\r\n", session->user_info.account.c_str());
+            LOG_INFO(MODULE_COMMON, "Destrory user[%s]...\r\n", session->user_info.account.empty() ? "Unknown" : session->user_info.account.c_str());
             session->DestructResource();
             event_del(&session->event);
             event_del(&session->timer_ev);
