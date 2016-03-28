@@ -49,6 +49,7 @@ bool StateGamePlay::MsgHandle(const u_int32 msg_type, const string &msg)
         case MSG_SYSTEM_MSG:
         case MSG_RECONCILED_REQ:
         case MSG_RECONCILED_RESP:
+        case MSG_REQUEST_PLAY:
             ret = stateMachine->currChessBoard->TranslateMsg(msg_type, msg);
             break;
 
@@ -60,6 +61,7 @@ bool StateGamePlay::MsgHandle(const u_int32 msg_type, const string &msg)
     /*if handle failed,then  return next state*/
     if (ret == false) {
         stateMachine->SetNextState(new StateGameReady(stateMachine));
+        stateMachine->status = STATUS_NOT_START;
     }
 
     return ret;

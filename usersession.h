@@ -35,8 +35,9 @@ typedef enum
     STATUS_NOT_START = 0,
     STATUS_EXITED = STATUS_NOT_START,
     STATUS_READY,
+    STATUS_BEGAN,
     STATUS_PLAYING,
-    STATUS_ENDED    
+    STATUS_ENDED
 }UserGameStatus;
 
 struct UsersInfo
@@ -93,8 +94,6 @@ public:
     State *nextState;
 
     UsersInfo user_info;
-    bool gameReady;
-    bool gameOver;
 
     UserGameStatus status;
 

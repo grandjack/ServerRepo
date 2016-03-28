@@ -6,8 +6,7 @@
 #include "chessboard.h"
 
 UserSession::UserSession():clifd(0),thread(NULL),locate(LOCATION_UNKNOWN),
-    currChessBoard(NULL),stateMachine(NULL),nextState(NULL),gameReady(false),
-    gameOver(false),status(STATUS_NOT_START),send_status(true)
+    currChessBoard(NULL),stateMachine(NULL),nextState(NULL),status(STATUS_NOT_START),send_status(true)
 {
     tv.tv_sec = 60;//every 10 seconds trigger the timer
     tv.tv_usec = 0;

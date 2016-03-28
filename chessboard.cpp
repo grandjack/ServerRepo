@@ -54,7 +54,7 @@ ChessBoard* GameHall::GetChessBoardByID(u_int32 id)
         LOG_ERROR(MODULE_COMMON, " Invalid Chess Board ID.");
         return NULL;
     }
-    
+
     try {
         chessBoard = static_cast<ChessBoard *>(chessBoardInfo.find(id)->second);
     } catch (const exception &e) {
@@ -184,14 +184,14 @@ bool ChessBoard::AddUser(UserSession *user)
                 }
                 break;
             case LOCATION_RIGHT:
-                if (rightUser== NULL) {
+                if (rightUser == NULL) {
                     rightUser = user;
                     ret = true;
                     ++currUserNum;
                 }
                 break;
             case LOCATION_BOTTOM:
-                if (bottomUser== NULL) {
+                if (bottomUser == NULL) {
                     bottomUser = user;
                     ret = true;
                     ++currUserNum;
@@ -330,6 +330,9 @@ bool ChessBoard::TranslateMsg(const u_int32 msg_type, const string &msg)
         case MSG_GAME_READY_REQ:
             ret = GameReadyHandle(msg);
             break;
+        case MSG_REQUEST_PLAY:
+            ret = GameAgainHandle(msg);
+            break;
             
         default:
             break;
@@ -362,7 +365,6 @@ bool ChessBoard::MoveChessHandle(const string &msg)
             src_user->IncreaseScore();
             if ((tar_user = GetUserByLocation((Location)moveChess.target_user_locate())) != NULL) {
                 tar_user->ReduceScore();
-                tar_user->gameOver = true;
                 tar_user->status = STATUS_ENDED;
             } else {
                 LOG_ERROR(MODULE_COMMON,"Get target user failed.");
@@ -375,12 +377,12 @@ bool ChessBoard::MoveChessHandle(const string &msg)
         }
         LOG_DEBUG(MODULE_COMMON, "src user locate: %d, current user locate: %d", moveChess.src_user_locate(),src_user->locate);
 
-
+        LOG_DEBUG(MODULE_COMMON, "Current chessboard Active user num[%d], total user num[%d]", GetActiveUsersNum(),GetUserNum());
         announceAction.set_src_user_locate(src_user->locate);
         if (GetActiveUsersNum() > 1) {
             if (src_user->locate == LOCATION_LEFT) {
                 if ((((tar_user = GetUserByLocation(LOCATION_BOTTOM)) != NULL) &&
-                    tar_user->gameOver) || (tar_user == NULL)) {
+                    (tar_user->status != STATUS_PLAYING)) || (tar_user == NULL)) {
                     announceAction.set_token_locate((u_int32)LOCATION_RIGHT);
                 } else {
                     announceAction.set_token_locate((u_int32)LOCATION_BOTTOM);
@@ -388,7 +390,7 @@ bool ChessBoard::MoveChessHandle(const string &msg)
                 
             } else if (src_user->locate == LOCATION_BOTTOM) {
                 if ((((tar_user = GetUserByLocation(LOCATION_RIGHT)) != NULL) &&
-                    tar_user->gameOver) || (tar_user == NULL)) {
+                    (tar_user->status != STATUS_PLAYING)) || (tar_user == NULL)) {
                     announceAction.set_token_locate((u_int32)LOCATION_LEFT);
                 } else {
                     announceAction.set_token_locate((u_int32)LOCATION_RIGHT);
@@ -396,7 +398,7 @@ bool ChessBoard::MoveChessHandle(const string &msg)
                 
             } else if (src_user->locate == LOCATION_RIGHT) {
                 if ((((tar_user = GetUserByLocation(LOCATION_LEFT)) != NULL) &&
-                    tar_user->gameOver) || (tar_user == NULL)) {
+                    (tar_user->status != STATUS_PLAYING)) || (tar_user == NULL)) {
                     announceAction.set_token_locate((u_int32)LOCATION_BOTTOM);
                 } else {
                     announceAction.set_token_locate((u_int32)LOCATION_LEFT);
@@ -475,9 +477,7 @@ bool ChessBoard::GiveUpHandle(const string &msg)
 
             if ((giveup.has_opt()) && (0 == giveup.opt().compare("exit"))) {//exit from the game room            
                 LeaveRoomHandle(user, true);
-                user->SetNextState(new StateGameReady(user));                
-                user->status = STATUS_EXITED;
-                user->gameOver = true;
+                user->SetNextState(new StateGameReady(user));
                 LOG_DEBUG(MODULE_COMMON, "%s exit current game room, and will go to Ready State.", user->user_info.account.c_str());
             }else {
                 LeaveRoomHandle(user, false);
@@ -511,7 +511,7 @@ bool ChessBoard::UndoHandle(const string &msg, MessageType type)
                     try {
                         GetUserByLocation(recent_winner_locate)->ReduceScore();
                         GetUserByLocation(recent_loser_locate)->IncreaseScore();
-                        GetUserByLocation(recent_loser_locate)->gameOver = false;
+                        GetUserByLocation(recent_loser_locate)->status = STATUS_PLAYING;
                     } catch(const exception &e) {
                         LOG_ERROR(MODULE_COMMON, "Set status failed.");
                     }
@@ -522,27 +522,6 @@ bool ChessBoard::UndoHandle(const string &msg, MessageType type)
 
 
     return true;
-}
-
-u_int32 ChessBoard::GetActiveUsersNum() const
-{
-    u_int32 num = 0;
-    if ((leftUser != NULL) && (leftUser->gameReady) &&(!leftUser->gameOver))
-    {
-        ++num;
-    }
-
-    if ((rightUser != NULL) && (rightUser->gameReady) && (!rightUser->gameOver))
-    {
-        ++num;
-    }
-
-    if ((bottomUser != NULL) && (bottomUser->gameReady) && (!bottomUser->gameOver))
-    {
-        ++num;
-    }
-
-    return num;
 }
 
 u_int32 ChessBoard::GetChessBoardID() const
@@ -556,12 +535,13 @@ bool ChessBoard::GameReadyHandle(const string &msg)
     GameStatusReply status;
     string data;
     UserSession *user = NULL;
+    int began_num = 0;
+    bool var = false;
     
     if (gameReady.ParseFromString(msg)) {
         user = GetUserByLocation((Location)gameReady.src_user_locate());
         if (user != NULL) {
-            user->gameReady = true;
-            user->status = STATUS_PLAYING;
+            user->status = STATUS_BEGAN;
         }
 
         if ((gameReady.src_user_locate() == first_come_user_locate) &&
@@ -576,19 +556,34 @@ bool ChessBoard::GameReadyHandle(const string &msg)
         LOG_DEBUG(MODULE_COMMON, "total_time [%d]  single_step_time[%d]", total_time,single_step_time);
 
         if ((user = GetUserByLocation(LOCATION_LEFT)) != NULL) {
-            status.set_left_user_status(user->gameReady);
+            if (user->status == STATUS_BEGAN) {
+                var = true;
+                ++began_num;
+            }
+            status.set_left_user_status(var);
+            var = false;
         } else {
             status.set_left_user_status(false);
         }
 
         if ((user = GetUserByLocation(LOCATION_RIGHT)) != NULL) {
-            status.set_right_user_status(user->gameReady);
+            if (user->status == STATUS_BEGAN) {
+                var = true;
+                ++began_num;
+            }
+            status.set_right_user_status(var);
+            var = false;
         } else {
             status.set_right_user_status(false);
         }
 
         if ((user = GetUserByLocation(LOCATION_BOTTOM)) != NULL) {
-            status.set_bottom_user_status(user->gameReady);
+            if (user->status == STATUS_BEGAN) {
+                var = true;
+                ++began_num;
+            }
+            status.set_bottom_user_status(var);
+            var = false;
         } else {
             status.set_bottom_user_status(false);
         }
@@ -598,6 +593,13 @@ bool ChessBoard::GameReadyHandle(const string &msg)
         status.SerializeToString(&data);
 
         BroadCastMsg(MSG_GAME_STATUS, data, LOCATION_MAX);
+
+        if (began_num == 3) {
+            rightUser->status = STATUS_PLAYING;
+            leftUser->status = STATUS_PLAYING;
+            bottomUser->status = STATUS_PLAYING;
+            BroadCastHallInfo(user);
+        }
     }
 
     return true;
@@ -646,27 +648,48 @@ void ChessBoard::WrapChessBoardInfo(ChessBoardInfo &chessBoard)
 
 }
 
-bool ChessBoard::GameBegine() const
+u_int32 ChessBoard::GetActiveUsersNum() const
+{
+    u_int32 num = 0;
+    if ((leftUser != NULL) && (leftUser->status == STATUS_PLAYING))
+    {
+        ++num;
+    }
+
+    if ((rightUser != NULL) && (rightUser->status == STATUS_PLAYING))
+    {
+        ++num;
+    }
+
+    if ((bottomUser != NULL) && (bottomUser->status == STATUS_PLAYING))
+    {
+        ++num;
+    }
+
+    return num;
+}
+
+bool ChessBoard::GameBegan() const
 {
     bool ret = false;
     int num = 0;
     
-    if ((leftUser != NULL) && (leftUser->gameReady))
+    if ((leftUser != NULL) && (leftUser->status > STATUS_BEGAN))
     {
         ++num;
     }
 
-    if ((rightUser != NULL) && (rightUser->gameReady))
+    if ((rightUser != NULL) && (rightUser->status > STATUS_BEGAN))
     {
         ++num;
     }
 
-    if ((bottomUser != NULL) && (bottomUser->gameReady))
+    if ((bottomUser != NULL) && (bottomUser->status > STATUS_BEGAN))
     {
         ++num;
     }
 
-    if (num == 3) {
+    if (num > 0) {
         ret = true;
     }
 
@@ -682,35 +705,42 @@ void ChessBoard::LeaveRoomHandle(UserSession *user, bool really_leave)
     if (user == NULL) {
         return;
     }
-    
-    if (user->currChessBoard->GameBegine() && (!user->gameOver)) {
+
+    if (user->status == STATUS_PLAYING) {
         user->ReduceScore(30);
+    }
+    
+    give_up.set_src_user_locate((unsigned int)user->locate);
+    if (really_leave) {
+        give_up.set_opt("exit");
+        user->status = STATUS_EXITED;
+    }else {            
         user->status = STATUS_ENDED;
-        give_up.set_src_user_locate((unsigned int)user->locate);
-        if (really_leave) {
-            give_up.set_opt("exit");
-            user->status = STATUS_EXITED;
-        }
-        give_up.SerializeToString(&data);
-        //notify the others that the user has exit
-        BroadCastMsg(MSG_GIVE_UP, data, (int)user->locate);
     }
 
-    user->gameOver = true;
+
+    //notify the others that the user has exit
+    give_up.SerializeToString(&data);
+    BroadCastMsg(MSG_GIVE_UP, data, (int)user->locate);
 
     if (really_leave) {
-
         LeaveOutRoom(user);
         BroadCastHallInfo(user);
+        //Update the User's state through BroadCast MSG_CHESS_BOARD
+        WrapChessBoardInfo(chessBoardInfo);
+        chessBoardInfo.SerializeToString(&data);
+        BroadCastMsg(MSG_CHESS_BOARD, data, (int)user->locate);
+    }
+    else {
+        //Update the User's state through BroadCast MSG_CHESS_BOARD
+        WrapChessBoardInfo(chessBoardInfo);
+        chessBoardInfo.SerializeToString(&data);
+        BroadCastMsg(MSG_CHESS_BOARD, data, (int)LOCATION_MAX);
     }
     
-    WrapChessBoardInfo(chessBoardInfo);
-    chessBoardInfo.SerializeToString(&data);
-    //Update the User's state
-    BroadCastMsg(MSG_CHESS_BOARD, data, (int)LOCATION_MAX);
 }
 
-//temporary handle & because it may cross many threads !!!!!!!!!!!!!!!!!!!!!!!!!
+//NOT thread safty & because it may cross many threads !!!!!!!!!!!!!!!!!!!!!!!!!
 void ChessBoard::BroadCastHallInfo(UserSession *user)
 {
     string data;
@@ -734,5 +764,55 @@ void ChessBoard::BroadCastHallInfo(UserSession *user)
         }
     }
    
+}
+
+bool ChessBoard::GameAgainHandle(const string &msg)
+{
+    GameHallSumary sumary;
+    GameHall *gameHall = NULL;
+    string data;
+    
+    RequestPlay requestPlay;
+    ChessBoardInfo *chessBoardInfo = NULL;
+    ChessBoard *chessBoard = NULL;
+    RequestPlayReply requestReply;
+    bool added_ok = false;
+    UserSession *user = NULL;
+    
+    if (requestPlay.ParseFromString(msg)) {
+        gameHall = MainThread::GetMainThreadObj()->GetGameHall(requestPlay.game_hall_id());
+        if (NULL != gameHall) {
+            chessBoard = gameHall->GetChessBoardByID(requestPlay.chess_board_id());
+            user = GetUserByLocation((Location)requestPlay.locate());
+            if (user != NULL) {
+                if ((chessBoard->GameBegan()) && (user->status == STATUS_ENDED)) {
+                    user->status = STATUS_READY;
+                    requestReply.set_status(1);
+                    requestReply.set_first_come_user_locate(chessBoard->first_come_user_locate);                    
+                    chessBoardInfo = requestReply.mutable_chessboard();
+                    chessBoard->WrapChessBoardInfo(*chessBoardInfo);
+                    
+                    added_ok = true;
+                
+                } else {
+                    LOG_ERROR(MODULE_COMMON, "Replay request hand failed.");
+                    requestReply.set_status(0);
+                    requestReply.set_first_come_user_locate(chessBoard->first_come_user_locate);
+                }
+
+                requestReply.SerializeToString(&data);
+                user->MessageReply(MSG_REQUEST_PLAY_REPLY, data);
+
+                if (added_ok) {
+                    //Notify the others that should update user's info
+                    requestReply.set_status(2);
+                    requestReply.SerializeToString(&data);
+                    user->currChessBoard->BroadCastMsg(MSG_REQUEST_PLAY_REPLY, data, (int)user->locate);
+                }
+            }
+        }
+    }
+
+    return true;
 }
 

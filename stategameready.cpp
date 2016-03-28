@@ -65,13 +65,15 @@ bool StateGameReady::GameRequestHandle(const string &msg)
         if (NULL != gameHall) {
             chessBoard = gameHall->GetChessBoardByID(requestPlay.chess_board_id());
             stateMachine->locate = (Location)requestPlay.locate();
-            if (!chessBoard->AddUser(stateMachine)) {
+            if ((chessBoard->GameBegan()) || 
+                (!chessBoard->AddUser(stateMachine))) {
                 LOG_ERROR(MODULE_COMMON, "Add user failed.");
                 requestReply.set_status(0);
                 requestReply.set_first_come_user_locate(chessBoard->first_come_user_locate);
                 //reply status 0
             } else {
                 //reply chessBoardInfo & set status 1
+                LOG_DEBUG(MODULE_COMMON, "Add user OK, the chessboard id[%d]", chessBoard->GetChessBoardID());
                 requestReply.set_status(1);
                 stateMachine->currChessBoard = chessBoard;
 
