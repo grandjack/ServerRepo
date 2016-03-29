@@ -5,6 +5,7 @@
 #include "utils.h"
 #include "debug.h"
 #include "thread.h"
+#include "findpwd.h"
 
 StateAuth::StateAuth(StateMachine *machine):State(machine)
 {
@@ -156,7 +157,8 @@ bool StateAuth::HandleFindPwd(const string &msg)
     FindPassword pwd;
 
     if (pwd.ParseFromString(msg)) {
-        LOG_DEBUG(MODULE_COMMON, "To find the lost password for [%s]!!", pwd.email().c_str());
+        LOG_DEBUG(MODULE_COMMON, "To find the lost password for [%s]!", pwd.email().c_str());
+        FindPwdViaEmail::FindPwdViaAccount(pwd.email());
     }
 
     return true;

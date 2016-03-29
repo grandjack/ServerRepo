@@ -1,0 +1,1 @@
+export LD_LIBRARY_PATH=/users/gbx386/gbx386/myProjects/libevent_test/libtimer:$LD_LIBRARY_PATH

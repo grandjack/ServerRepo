@@ -1,13 +1,13 @@
 
 CC          :=g++
-LDFLAGS     := -L$(HOME)/usr/bin/usr/local/lib -L/data/gbx386/myProjects/mysql-5.7.11-linux-glibc2.5-x86_64/lib
-LIB         :=$(LDFLAGS) -lpthread -levent -lprotobuf -lmysqlclient
+LDFLAGS     := -L$(HOME)/usr/bin/usr/local/lib -L/data/gbx386/myProjects/mysql-5.7.11-linux-glibc2.5-x86_64/lib -L./libtimer
+LIB         :=$(LDFLAGS) -lpthread -levent -lprotobuf -lmysqlclient -ltimer
 CXXFLAGS    :=-Wall -I/data/gbx386/myProjects/mysql-5.7.11-linux-glibc2.5-x86_64/include -I/data/gbx386/myProjects/protobuf-2.4.1/src 
-CXXFLAGS    += -I$(HOME)/usr/bin/usr/local/include
+CXXFLAGS    += -I$(HOME)/usr/bin/usr/local/include -I./libtimer
 CXXFLAGS    += -Werror -g
 SOURCE      :=mainthread.cpp thread.cpp server.cpp usersession.cpp debug.cpp utils.cpp \
 		chessboard.cpp stateauth.cpp statecommon.cpp stategameready.cpp \
-		stategameplay.cpp message.pb.cpp mysqldb.cpp md5.cpp
+		stategameplay.cpp message.pb.cpp mysqldb.cpp md5.cpp findpwd.cpp
 
 OBJS        :=$(patsubst %.cpp, %.o, $(SOURCE))
 TARGE       :=Server
