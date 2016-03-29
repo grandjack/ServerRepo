@@ -114,6 +114,7 @@ bool FindPwdViaEmail::WriteUserTokentoFile(const string &account, const string &
     ret = system(cmd.c_str());
     if (ret != 0) {
         ret_var = false;
+        LOG_ERROR(MODULE_COMMON, "system comand failed [%s]", cmd.c_str());
     }
 
     return ret_var;
