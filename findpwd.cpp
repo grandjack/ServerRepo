@@ -6,7 +6,7 @@
 #include "md5.h"
 #include "debug.h"
 
-#define VERIFY_PATH         "./"
+#define VERIFY_PATH         "/usr/share/web/data/"
 #define SEND_MAIL_CMD       "python ./MailSend.py "
 
 FindPwdViaEmail* FindPwdViaEmail::instance_ = NULL;
@@ -102,7 +102,7 @@ bool FindPwdViaEmail::WriteUserTokentoFile(const string &account, const string &
 
     strncpy(buf, token.c_str(), sizeof(buf) - 1);
     
-    fptr = fopen(path.c_str(), "w");
+    fptr = fopen(path.c_str(), "w+");
     if (fptr != NULL) {
         if (fwrite(buf, 1, token.size(), fptr) < 0 ) {
             LOG_ERROR(MODULE_COMMON, "fwrite token failed for user[%s]", account.c_str());

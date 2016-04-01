@@ -1,3 +1,4 @@
+#!/usr/bin/python
 #coding=utf-8
 import sys
 import smtplib  
@@ -26,16 +27,14 @@ def send_mail(to_list,sub,content):
         return False  
 if __name__ == '__main__':
     if len(sys.argv) != 3:
-        print 'Usage: python input_name output_name'
+        print 'Usage: Account Token'
         exit(1)
     else:
         mailto_list.append(sys.argv[1]);
         token=sys.argv[2]
-        content="<a href='http://123.57.180.67/'>Cick me for updating your password!</a> <p> Current Token:" + token + "</p>"
+        content="<a href='http://123.57.180.67/cgi-bin/check.py?account=" +sys.argv[1]+ "&token="+sys.argv[2]+"'>Cick me for updating your password!</a> <p> Current Token:" + token + "</p>"
         
     if send_mail(mailto_list,"ThreeChess Update Password",content):
-        print "Successfully"
         exit(0)
     else:
-        print "fault"
         exit(1)
