@@ -69,7 +69,7 @@ bool StateAuth::HandleRegister(const string &msg)
         user_info.password = register_info.password();
         user_info.score = 100;
         user_info.email = user_info.account;
-        user_info.user_name = user_info.account;
+        user_info.user_name = "新手";
         
         ReplyStatus status;
         string data;
