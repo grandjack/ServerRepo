@@ -8,6 +8,7 @@
 
 #define VERIFY_PATH         "/usr/share/web/data/"
 #define SEND_MAIL_CMD       "python ./MailSend.py "
+#define OUT_TIME            (5*60)
 
 FindPwdViaEmail* FindPwdViaEmail::instance_ = NULL;
 
@@ -70,10 +71,10 @@ void FindPwdViaEmail::SendMail(void * arg)
         if (user->retry_count <= 5) {
             timer_add(60,0, &FindPwdViaEmail::SendMail, user);
         } else {
-            timer_add(60,0, &FindPwdViaEmail::TimeOutHandle, user);
+            timer_add(0,500, &FindPwdViaEmail::TimeOutHandle, user);
         }
     } else {
-        timer_add(60,0, &FindPwdViaEmail::TimeOutHandle, user);
+        timer_add(OUT_TIME,0, &FindPwdViaEmail::TimeOutHandle, user);
     }
 }
 

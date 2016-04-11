@@ -363,7 +363,7 @@ void WorkThread::OnRead(int iCliFd, short iEvent, void *arg)
                 }
             }
 
-            LOG_DEBUG(MODULE_NET, "Current recv Len %u", iLen);
+            //LOG_DEBUG(MODULE_NET, "Current recv Len %u", iLen);
             
             leftLen = totalSize - recvLen;
             

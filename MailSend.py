@@ -23,7 +23,7 @@ def send_mail(to_list,sub,content):
         s.close()  
         return True  
     except Exception, e:  
-        print str(e)  
+        #print str(e)  
         return False  
 if __name__ == '__main__':
     if len(sys.argv) != 3:
@@ -32,9 +32,9 @@ if __name__ == '__main__':
     else:
         mailto_list.append(sys.argv[1]);
         token=sys.argv[2]
-        content="<a href='http://123.57.180.67/cgi-bin/check.py?account=" +sys.argv[1]+ "&token="+sys.argv[2]+"'>Cick me for updating your password!</a> <p> Current Token:" + token + "</p>"
+        content="<a href='http://123.57.180.67/cgi-bin/check.py?account=" +sys.argv[1]+ "&token="+sys.argv[2]+"'>请在5分钟之内点击修改密码</a> <p> 请记住您的口令为:" + token + "</p>"
         
-    if send_mail(mailto_list,"ThreeChess Update Password",content):
+    if send_mail(mailto_list,"三人中国象",content):
         exit(0)
     else:
         exit(1)

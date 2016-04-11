@@ -25,7 +25,7 @@ bool State::EchoMsgHandle(const string &msg)
 
     if (echo_msg.ParseFromString(msg)) {
         if (echo_msg.has_time_stamp()) {
-            LOG_DEBUG(MODULE_COMMON, "echo[%s]", echo_msg.time_stamp().c_str());
+            LOG_DEBUG(MODULE_COMMON, "echo[%s] from user[%s]", echo_msg.time_stamp().c_str(), stateMachine->user_info.account.c_str());
         }
     }
     

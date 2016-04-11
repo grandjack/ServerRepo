@@ -330,6 +330,7 @@ bool ChessBoard::TranslateMsg(const u_int32 msg_type, const string &msg)
         case MSG_GAME_READY_REQ:
             ret = GameReadyHandle(msg);
             break;
+            
         case MSG_REQUEST_PLAY:
             ret = GameAgainHandle(msg);
             break;
@@ -408,6 +409,7 @@ bool ChessBoard::MoveChessHandle(const string &msg)
             // src_user is the last winner!!
             announceAction.set_token_locate((u_int32)LOCATION_MAX);
             LOG_DEBUG(MODULE_COMMON, "######## The last winner is %s", src_user->user_info.account.c_str());
+            src_user->status = STATUS_ENDED;
         }
         
         pmoveChess = announceAction.mutable_movechess();
@@ -455,6 +457,14 @@ bool ChessBoard::ReconciledHandle(const string &msg, MessageType type)
     if (peace.ParseFromString(msg)) {
         if (type == MSG_RECONCILED_REQ || peace.apply_or_reply() == 0) {
             BroadCastMsg(type, msg, (Location)peace.src_user_locate());
+            if ((peace.has_status()) && (0 == peace.status().compare("All"))) {
+                if (leftUser != NULL)
+                    leftUser->status = STATUS_ENDED;
+                if (rightUser != NULL)
+                    rightUser->status = STATUS_ENDED;
+                if (bottomUser != NULL)
+                    bottomUser->status = STATUS_ENDED;
+            }
         } else if (type == MSG_RECONCILED_RESP || peace.apply_or_reply() == 1) {
             //just reply for the original user
             if((user=GetUserByLocation((Location)peace.tar_user_locate())) != NULL) {
@@ -481,7 +491,7 @@ bool ChessBoard::GiveUpHandle(const string &msg)
                 LOG_DEBUG(MODULE_COMMON, "%s exit current game room, and will go to Ready State.", user->user_info.account.c_str());
             }else {
                 LeaveRoomHandle(user, false);
-            }
+            }            
         }
 
      }
@@ -669,6 +679,38 @@ u_int32 ChessBoard::GetActiveUsersNum() const
     return num;
 }
 
+UserSession *ChessBoard::GetOnlyActiveUser() const
+{
+    u_int32 num = 0;
+    UserSession *user = NULL;
+    
+    if ((leftUser != NULL) && (leftUser->status == STATUS_PLAYING))
+    {
+        ++num;
+        user = leftUser;
+    }
+
+    if ((rightUser != NULL) && (rightUser->status == STATUS_PLAYING))
+    {
+        ++num;
+        user = rightUser;
+    }
+
+    if ((bottomUser != NULL) && (bottomUser->status == STATUS_PLAYING))
+    {
+        ++num;
+        user = bottomUser;
+    }
+
+    if (num == 1) {
+        return user;
+    } else {
+        return NULL;
+    }
+    
+    return NULL;
+}
+
 bool ChessBoard::GameBegan() const
 {
     bool ret = false;
@@ -701,43 +743,66 @@ void ChessBoard::LeaveRoomHandle(UserSession *user, bool really_leave)
     ChessBoardInfo chessBoardInfo;
     string data;
     GiveUp give_up;
+    bool chessboard_end_game = false;
+    int leave_user_locate = (int)user->locate;
         
     if (user == NULL) {
         return;
     }
 
+    //the others will end the game too while the gived up user's state is playing
     if (user->status == STATUS_PLAYING) {
         user->ReduceScore(30);
+        chessboard_end_game = true;
     }
     
-    give_up.set_src_user_locate((unsigned int)user->locate);
+    give_up.set_src_user_locate((unsigned int)leave_user_locate);
     if (really_leave) {
         give_up.set_opt("exit");
         user->status = STATUS_EXITED;
+        LeaveOutRoom(user);
     }else {            
         user->status = STATUS_ENDED;
     }
 
-
     //notify the others that the user has exit
     give_up.SerializeToString(&data);
-    BroadCastMsg(MSG_GIVE_UP, data, (int)user->locate);
+    BroadCastMsg(MSG_GIVE_UP, data, leave_user_locate);
 
-    if (really_leave) {
-        LeaveOutRoom(user);
-        BroadCastHallInfo(user);
-        //Update the User's state through BroadCast MSG_CHESS_BOARD
-        WrapChessBoardInfo(chessBoardInfo);
-        chessBoardInfo.SerializeToString(&data);
-        BroadCastMsg(MSG_CHESS_BOARD, data, (int)user->locate);
+    //if just left only ONE user, then it's the last winner
+    if ((GetActiveUsersNum() == 1) && ((user=GetOnlyActiveUser()) != NULL)) {
+        if (user->status == STATUS_PLAYING) {
+            LOG_DEBUG(MODULE_COMMON, "The last user will win the game!");
+            user->IncreaseScore();
+            user->status = STATUS_ENDED;
+        }
     }
-    else {
-        //Update the User's state through BroadCast MSG_CHESS_BOARD
-        WrapChessBoardInfo(chessBoardInfo);
-        chessBoardInfo.SerializeToString(&data);
+
+    if (chessboard_end_game) {
+        if (leftUser != NULL) {
+            leftUser->status = STATUS_ENDED;
+        }
+        if (rightUser != NULL) {
+            rightUser->status = STATUS_ENDED;
+        }
+        if (bottomUser != NULL) {
+            bottomUser->status = STATUS_ENDED;
+        }
+    }
+
+    //Update the User's state through BroadCast MSG_CHESS_BOARD
+    WrapChessBoardInfo(chessBoardInfo);
+    chessBoardInfo.SerializeToString(&data);
+    if (really_leave) {
+        BroadCastMsg(MSG_CHESS_BOARD, data, leave_user_locate);
+    } else {
         BroadCastMsg(MSG_CHESS_BOARD, data, (int)LOCATION_MAX);
     }
     
+    if (chessboard_end_game || really_leave) {
+        BroadCastHallInfo(user);
+    }
+
 }
 
 //NOT thread safty & because it may cross many threads !!!!!!!!!!!!!!!!!!!!!!!!!
@@ -778,6 +843,7 @@ bool ChessBoard::GameAgainHandle(const string &msg)
     RequestPlayReply requestReply;
     bool added_ok = false;
     UserSession *user = NULL;
+    bool should_update_hall = true;
     
     if (requestPlay.ParseFromString(msg)) {
         gameHall = MainThread::GetMainThreadObj()->GetGameHall(requestPlay.game_hall_id());
@@ -808,6 +874,20 @@ bool ChessBoard::GameAgainHandle(const string &msg)
                     requestReply.set_status(2);
                     requestReply.SerializeToString(&data);
                     user->currChessBoard->BroadCastMsg(MSG_REQUEST_PLAY_REPLY, data, (int)user->locate);
+
+                    if (chessBoard->leftUser != NULL) {
+                        should_update_hall &= (chessBoard->leftUser->status == STATUS_READY) ? true : false;
+                    }
+                    if (chessBoard->rightUser != NULL) {
+                        should_update_hall &= (chessBoard->rightUser->status == STATUS_READY) ? true : false;
+                    }
+                    if (chessBoard->bottomUser != NULL) {
+                        should_update_hall &= (chessBoard->bottomUser->status == STATUS_READY) ? true : false;
+                    }
+
+                    if (should_update_hall) {
+                        chessBoard->BroadCastHallInfo(user);
+                    }
                 }
             }
         }

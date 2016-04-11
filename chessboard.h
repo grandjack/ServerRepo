@@ -69,6 +69,7 @@ public:
     void LeaveRoomHandle(UserSession *user, bool really_leave = true);
     void BroadCastHallInfo(UserSession *user);
     bool GameAgainHandle(const string &msg);
+    UserSession *GetOnlyActiveUser() const;
 
 private:
     UserSession *leftUser;
