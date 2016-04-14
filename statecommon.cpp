@@ -219,6 +219,7 @@ bool StateAdPictureDownload::MsgHandle(const u_int32 msg_type, const string &msg
     return ret;
 }
 
+#if 0
 bool StateAdPictureDownload::AdPictureItemHandle(const string &msg)
 {
     bool ret = true;
@@ -317,11 +318,14 @@ bool StateAdPictureDownload::DownloadImage(const string &file_path)
         stateMachine->MessageReply(MSG_AD_IMAGE_CONTENT, data);
 
         fclose(fptr);
+    }else {
+        LOG_DEBUG(MODULE_COMMON, "Open %s failed !", file_path.c_str());
+        ret = false;
     }
 
     return ret;
 }
-
+#endif
 bool StateAdPictureDownload::DownloadImageInfo(const AdPicturesInfo &ad_info)
 {
     AdPictureItemReply reply;
@@ -341,6 +345,72 @@ bool StateAdPictureDownload::DownloadImageInfo(const AdPicturesInfo &ad_info)
     
     reply.SerializeToString(&data);
     ret = stateMachine->MessageReply(MSG_AD_IMAGE_INFO, data);
+
+    return ret;
+}
+
+bool StateAdPictureDownload::SendImageContent()
+{
+    bool ret = true;
+    size_t rdSize = 0;
+    char buf[1024] = { 0 };
+    AdPictureContentReply reply;
+    string data;
+    
+    if (stateMachine->ad_img_fp != NULL) {
+        if((rdSize = fread(buf, 1, sizeof(buf), stateMachine->ad_img_fp)) > 0) {
+            const string sub_data(buf, rdSize);
+            reply.set_ended(false);
+            reply.set_content(sub_data);
+            reply.SerializeToString(&data);
+            ret = stateMachine->MessageReply(MSG_AD_IMAGE_CONTENT, data);
+            if (!ret) {
+                fclose(stateMachine->ad_img_fp);
+                stateMachine->ad_img_fp = NULL;
+                return ret;
+            }
+        } else {
+            fclose(stateMachine->ad_img_fp);
+            stateMachine->ad_img_fp = NULL;
+            reply.set_ended(true);
+            reply.SerializeToString(&data);
+            stateMachine->MessageReply(MSG_AD_IMAGE_CONTENT, data);
+        }
+    }else {
+        LOG_DEBUG(MODULE_COMMON, "stateMachine->ad_img_fp is NULL !");
+        ret = false;
+    }
+
+    return ret;
+}
+
+bool StateAdPictureDownload::AdPictureItemHandle(const string &msg)
+{
+    bool ret = true;
+    AdPicturesInfo info;
+    AdPictureContentReply reply;
+    AdPictureReq item;
+    string data;
+
+    if (item.ParseFromString(msg)) {
+        
+        info.image_id = item.image_id();
+        stateMachine->thread->GetAdPicturesInfoFromDB(item.image_id(), info);
+
+        if (item.req_type() == 1) {//get image info
+            DownloadImageInfo(info);
+        } else if (item.req_type() == 2) {//get image content
+            if (stateMachine->ad_img_fp == NULL) {                
+                stateMachine->ad_img_fp = fopen(info.locate_path.c_str(), "r");
+            }
+
+            ret = SendImageContent();
+        }
+
+        if (ret && (stateMachine->ad_img_fp == NULL) && item.has_last_one() && item.last_one()) {
+            stateMachine->SetNextState(new StateGameReady(stateMachine));
+        }
+    }
 
     return ret;
 }

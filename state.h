@@ -132,8 +132,9 @@ public:
     bool AdPictureItemHandle(const string &msg);
 
 private:
-    bool DownloadImage(const string &file_path);
+    //bool DownloadImage(const string &file_path);
     bool DownloadImageInfo(const AdPicturesInfo &ad_info);
+    bool SendImageContent();
 };
 #endif /*__STATE_MACHINE_HEAD__*/
 

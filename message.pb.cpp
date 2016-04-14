@@ -554,10 +554,9 @@ void protobuf_AssignDesc_message_2eproto() {
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(AdPictureItemReply));
   AdPictureReq_descriptor_ = file->message_type(25);
-  static const int AdPictureReq_offsets_[4] = {
+  static const int AdPictureReq_offsets_[3] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AdPictureReq, image_id_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AdPictureReq, image_hashcode_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AdPictureReq, url_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AdPictureReq, req_type_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AdPictureReq, last_one_),
   };
   AdPictureReq_reflection_ =
@@ -572,10 +571,9 @@ void protobuf_AssignDesc_message_2eproto() {
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(AdPictureReq));
   AdPictureContentReply_descriptor_ = file->message_type(26);
-  static const int AdPictureContentReply_offsets_[3] = {
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AdPictureContentReply, synced_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AdPictureContentReply, content_),
+  static const int AdPictureContentReply_offsets_[2] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AdPictureContentReply, ended_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AdPictureContentReply, content_),
   };
   AdPictureContentReply_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -786,11 +784,10 @@ void protobuf_AddDesc_message_2eproto() {
     "\001\n\022AdPictureItemReply\022\020\n\010image_id\030\001 \002(\r\022"
     "\017\n\007existed\030\002 \002(\010\022\022\n\nimage_type\030\003 \001(\t\022\022\n\n"
     "image_name\030\004 \001(\t\022\026\n\016image_hashcode\030\005 \001(\t"
-    "\022\013\n\003url\030\006 \001(\t\022\022\n\nimage_size\030\007 \001(\r\"W\n\014AdP"
-    "ictureReq\022\020\n\010image_id\030\001 \002(\r\022\026\n\016image_has"
-    "hcode\030\002 \001(\t\022\013\n\003url\030\003 \001(\t\022\020\n\010last_one\030\004 \001"
-    "(\010\"G\n\025AdPictureContentReply\022\016\n\006synced\030\001 "
-    "\002(\010\022\017\n\007content\030\002 \001(\014\022\r\n\005ended\030\003 \001(\010", 2755);
+    "\022\013\n\003url\030\006 \001(\t\022\022\n\nimage_size\030\007 \001(\r\"D\n\014AdP"
+    "ictureReq\022\020\n\010image_id\030\001 \002(\r\022\020\n\010req_type\030"
+    "\002 \002(\r\022\020\n\010last_one\030\003 \001(\010\"7\n\025AdPictureCont"
+    "entReply\022\r\n\005ended\030\001 \002(\010\022\017\n\007content\030\002 \001(\014", 2720);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "message.proto", &protobuf_RegisterTypes);
   Echo::default_instance_ = new Echo();
@@ -9432,8 +9429,7 @@ void AdPictureItemReply::Swap(AdPictureItemReply* other) {
 
 #ifndef _MSC_VER
 const int AdPictureReq::kImageIdFieldNumber;
-const int AdPictureReq::kImageHashcodeFieldNumber;
-const int AdPictureReq::kUrlFieldNumber;
+const int AdPictureReq::kReqTypeFieldNumber;
 const int AdPictureReq::kLastOneFieldNumber;
 #endif  // !_MSC_VER
 
@@ -9454,8 +9450,7 @@ AdPictureReq::AdPictureReq(const AdPictureReq& from)
 void AdPictureReq::SharedCtor() {
   _cached_size_ = 0;
   image_id_ = 0u;
-  image_hashcode_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
-  url_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+  req_type_ = 0u;
   last_one_ = false;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
@@ -9465,12 +9460,6 @@ AdPictureReq::~AdPictureReq() {
 }
 
 void AdPictureReq::SharedDtor() {
-  if (image_hashcode_ != &::google::protobuf::internal::kEmptyString) {
-    delete image_hashcode_;
-  }
-  if (url_ != &::google::protobuf::internal::kEmptyString) {
-    delete url_;
-  }
   if (this != default_instance_) {
   }
 }
@@ -9498,16 +9487,7 @@ AdPictureReq* AdPictureReq::New() const {
 void AdPictureReq::Clear() {
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
     image_id_ = 0u;
-    if (has_image_hashcode()) {
-      if (image_hashcode_ != &::google::protobuf::internal::kEmptyString) {
-        image_hashcode_->clear();
-      }
-    }
-    if (has_url()) {
-      if (url_ != &::google::protobuf::internal::kEmptyString) {
-        url_->clear();
-      }
-    }
+    req_type_ = 0u;
     last_one_ = false;
   }
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
@@ -9531,46 +9511,28 @@ bool AdPictureReq::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(18)) goto parse_image_hashcode;
+        if (input->ExpectTag(16)) goto parse_req_type;
         break;
       }
       
-      // optional string image_hashcode = 2;
+      // required uint32 req_type = 2;
       case 2: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
-            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
-         parse_image_hashcode:
-          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
-                input, this->mutable_image_hashcode()));
-          ::google::protobuf::internal::WireFormat::VerifyUTF8String(
-            this->image_hashcode().data(), this->image_hashcode().length(),
-            ::google::protobuf::internal::WireFormat::PARSE);
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
+         parse_req_type:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &req_type_)));
+          set_has_req_type();
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(26)) goto parse_url;
+        if (input->ExpectTag(24)) goto parse_last_one;
         break;
       }
       
-      // optional string url = 3;
+      // optional bool last_one = 3;
       case 3: {
-        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
-            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
-         parse_url:
-          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
-                input, this->mutable_url()));
-          ::google::protobuf::internal::WireFormat::VerifyUTF8String(
-            this->url().data(), this->url().length(),
-            ::google::protobuf::internal::WireFormat::PARSE);
-        } else {
-          goto handle_uninterpreted;
-        }
-        if (input->ExpectTag(32)) goto parse_last_one;
-        break;
-      }
-      
-      // optional bool last_one = 4;
-      case 4: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
          parse_last_one:
@@ -9608,27 +9570,14 @@ void AdPictureReq::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->image_id(), output);
   }
   
-  // optional string image_hashcode = 2;
-  if (has_image_hashcode()) {
-    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
-      this->image_hashcode().data(), this->image_hashcode().length(),
-      ::google::protobuf::internal::WireFormat::SERIALIZE);
-    ::google::protobuf::internal::WireFormatLite::WriteString(
-      2, this->image_hashcode(), output);
+  // required uint32 req_type = 2;
+  if (has_req_type()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(2, this->req_type(), output);
   }
   
-  // optional string url = 3;
-  if (has_url()) {
-    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
-      this->url().data(), this->url().length(),
-      ::google::protobuf::internal::WireFormat::SERIALIZE);
-    ::google::protobuf::internal::WireFormatLite::WriteString(
-      3, this->url(), output);
-  }
-  
-  // optional bool last_one = 4;
+  // optional bool last_one = 3;
   if (has_last_one()) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(4, this->last_one(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteBool(3, this->last_one(), output);
   }
   
   if (!unknown_fields().empty()) {
@@ -9644,29 +9593,14 @@ void AdPictureReq::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(1, this->image_id(), target);
   }
   
-  // optional string image_hashcode = 2;
-  if (has_image_hashcode()) {
-    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
-      this->image_hashcode().data(), this->image_hashcode().length(),
-      ::google::protobuf::internal::WireFormat::SERIALIZE);
-    target =
-      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
-        2, this->image_hashcode(), target);
+  // required uint32 req_type = 2;
+  if (has_req_type()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(2, this->req_type(), target);
   }
   
-  // optional string url = 3;
-  if (has_url()) {
-    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
-      this->url().data(), this->url().length(),
-      ::google::protobuf::internal::WireFormat::SERIALIZE);
-    target =
-      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
-        3, this->url(), target);
-  }
-  
-  // optional bool last_one = 4;
+  // optional bool last_one = 3;
   if (has_last_one()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(4, this->last_one(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(3, this->last_one(), target);
   }
   
   if (!unknown_fields().empty()) {
@@ -9687,21 +9621,14 @@ int AdPictureReq::ByteSize() const {
           this->image_id());
     }
     
-    // optional string image_hashcode = 2;
-    if (has_image_hashcode()) {
+    // required uint32 req_type = 2;
+    if (has_req_type()) {
       total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::StringSize(
-          this->image_hashcode());
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
+          this->req_type());
     }
     
-    // optional string url = 3;
-    if (has_url()) {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::StringSize(
-          this->url());
-    }
-    
-    // optional bool last_one = 4;
+    // optional bool last_one = 3;
     if (has_last_one()) {
       total_size += 1 + 1;
     }
@@ -9736,11 +9663,8 @@ void AdPictureReq::MergeFrom(const AdPictureReq& from) {
     if (from.has_image_id()) {
       set_image_id(from.image_id());
     }
-    if (from.has_image_hashcode()) {
-      set_image_hashcode(from.image_hashcode());
-    }
-    if (from.has_url()) {
-      set_url(from.url());
+    if (from.has_req_type()) {
+      set_req_type(from.req_type());
     }
     if (from.has_last_one()) {
       set_last_one(from.last_one());
@@ -9762,7 +9686,7 @@ void AdPictureReq::CopyFrom(const AdPictureReq& from) {
 }
 
 bool AdPictureReq::IsInitialized() const {
-  if ((_has_bits_[0] & 0x00000001) != 0x00000001) return false;
+  if ((_has_bits_[0] & 0x00000003) != 0x00000003) return false;
   
   return true;
 }
@@ -9770,8 +9694,7 @@ bool AdPictureReq::IsInitialized() const {
 void AdPictureReq::Swap(AdPictureReq* other) {
   if (other != this) {
     std::swap(image_id_, other->image_id_);
-    std::swap(image_hashcode_, other->image_hashcode_);
-    std::swap(url_, other->url_);
+    std::swap(req_type_, other->req_type_);
     std::swap(last_one_, other->last_one_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
@@ -9791,9 +9714,8 @@ void AdPictureReq::Swap(AdPictureReq* other) {
 // ===================================================================
 
 #ifndef _MSC_VER
-const int AdPictureContentReply::kSyncedFieldNumber;
-const int AdPictureContentReply::kContentFieldNumber;
 const int AdPictureContentReply::kEndedFieldNumber;
+const int AdPictureContentReply::kContentFieldNumber;
 #endif  // !_MSC_VER
 
 AdPictureContentReply::AdPictureContentReply()
@@ -9812,9 +9734,8 @@ AdPictureContentReply::AdPictureContentReply(const AdPictureContentReply& from)
 
 void AdPictureContentReply::SharedCtor() {
   _cached_size_ = 0;
-  synced_ = false;
-  content_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
   ended_ = false;
+  content_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -9852,13 +9773,12 @@ AdPictureContentReply* AdPictureContentReply::New() const {
 
 void AdPictureContentReply::Clear() {
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    synced_ = false;
+    ended_ = false;
     if (has_content()) {
       if (content_ != &::google::protobuf::internal::kEmptyString) {
         content_->clear();
       }
     }
-    ended_ = false;
   }
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
   mutable_unknown_fields()->Clear();
@@ -9870,14 +9790,14 @@ bool AdPictureContentReply::MergePartialFromCodedStream(
   ::google::protobuf::uint32 tag;
   while ((tag = input->ReadTag()) != 0) {
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // required bool synced = 1;
+      // required bool ended = 1;
       case 1: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
-                 input, &synced_)));
-          set_has_synced();
+                 input, &ended_)));
+          set_has_ended();
         } else {
           goto handle_uninterpreted;
         }
@@ -9892,22 +9812,6 @@ bool AdPictureContentReply::MergePartialFromCodedStream(
          parse_content:
           DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
                 input, this->mutable_content()));
-        } else {
-          goto handle_uninterpreted;
-        }
-        if (input->ExpectTag(24)) goto parse_ended;
-        break;
-      }
-      
-      // optional bool ended = 3;
-      case 3: {
-        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
-            ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
-         parse_ended:
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
-                 input, &ended_)));
-          set_has_ended();
         } else {
           goto handle_uninterpreted;
         }
@@ -9933,20 +9837,15 @@ bool AdPictureContentReply::MergePartialFromCodedStream(
 
 void AdPictureContentReply::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // required bool synced = 1;
-  if (has_synced()) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(1, this->synced(), output);
+  // required bool ended = 1;
+  if (has_ended()) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(1, this->ended(), output);
   }
   
   // optional bytes content = 2;
   if (has_content()) {
     ::google::protobuf::internal::WireFormatLite::WriteBytes(
       2, this->content(), output);
-  }
-  
-  // optional bool ended = 3;
-  if (has_ended()) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(3, this->ended(), output);
   }
   
   if (!unknown_fields().empty()) {
@@ -9957,9 +9856,9 @@ void AdPictureContentReply::SerializeWithCachedSizes(
 
 ::google::protobuf::uint8* AdPictureContentReply::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
-  // required bool synced = 1;
-  if (has_synced()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(1, this->synced(), target);
+  // required bool ended = 1;
+  if (has_ended()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(1, this->ended(), target);
   }
   
   // optional bytes content = 2;
@@ -9967,11 +9866,6 @@ void AdPictureContentReply::SerializeWithCachedSizes(
     target =
       ::google::protobuf::internal::WireFormatLite::WriteBytesToArray(
         2, this->content(), target);
-  }
-  
-  // optional bool ended = 3;
-  if (has_ended()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(3, this->ended(), target);
   }
   
   if (!unknown_fields().empty()) {
@@ -9985,8 +9879,8 @@ int AdPictureContentReply::ByteSize() const {
   int total_size = 0;
   
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    // required bool synced = 1;
-    if (has_synced()) {
+    // required bool ended = 1;
+    if (has_ended()) {
       total_size += 1 + 1;
     }
     
@@ -9995,11 +9889,6 @@ int AdPictureContentReply::ByteSize() const {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::BytesSize(
           this->content());
-    }
-    
-    // optional bool ended = 3;
-    if (has_ended()) {
-      total_size += 1 + 1;
     }
     
   }
@@ -10029,14 +9918,11 @@ void AdPictureContentReply::MergeFrom(const ::google::protobuf::Message& from) {
 void AdPictureContentReply::MergeFrom(const AdPictureContentReply& from) {
   GOOGLE_CHECK_NE(&from, this);
   if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    if (from.has_synced()) {
-      set_synced(from.synced());
+    if (from.has_ended()) {
+      set_ended(from.ended());
     }
     if (from.has_content()) {
       set_content(from.content());
-    }
-    if (from.has_ended()) {
-      set_ended(from.ended());
     }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
@@ -10062,9 +9948,8 @@ bool AdPictureContentReply::IsInitialized() const {
 
 void AdPictureContentReply::Swap(AdPictureContentReply* other) {
   if (other != this) {
-    std::swap(synced_, other->synced_);
-    std::swap(content_, other->content_);
     std::swap(ended_, other->ended_);
+    std::swap(content_, other->content_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);

@@ -5,6 +5,7 @@
 #include <string>
 #include <time.h>
 #include "utils.h"
+#include <stdio.h>
 
 using namespace std;
 
@@ -96,6 +97,8 @@ public:
     UsersInfo user_info;
 
     UserGameStatus status;
+
+    FILE *ad_img_fp;
 
 private:
     bool send_status;

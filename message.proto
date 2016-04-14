@@ -189,14 +189,12 @@ message AdPictureItemReply
 
 message AdPictureReq
 {
-    required uint32 image_id = 1;//identify specific image    
-    optional string image_hashcode = 2;
-    optional string url = 3;
-    optional bool last_one = 4;// if true, should go to next state
+    required uint32 image_id = 1;//identify specific image
+    required uint32 req_type = 2;//type=1:image info type=2:image content;
+    optional bool last_one = 3; // if true, indicate that server should go to next state
 }
 message AdPictureContentReply
 {
-    required bool   synced = 1;//whether client should sync the image content.
+    required bool   ended = 1;//whether content transmit is ended.
     optional bytes  content = 2;
-    optional bool   ended = 3;
 }

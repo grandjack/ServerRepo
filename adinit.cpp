@@ -12,7 +12,7 @@
 using namespace std;
 
 #define LOG_FILE        "/tmp/chessAdinit.log"
-#define IMAGE_PREFIX    "./Images/"
+#define IMAGE_PREFIX    "/home/gbx386/libevent_test/Images/"
 
 typedef enum {
     IMAGE_ID_AD_HALL_TOP_LEFT = 0,
@@ -56,7 +56,7 @@ static const string GetImageLinkUrl(const string &path);
 
 int main() 
 {    
-    log_init(LOG_FILE, 102400, DEBUG);
+    log_init(LOG_FILE, 102400, ERROR);
     IniSQLConnection();
     
     LOG_DEBUG(MODULE_COMMON, "Begain execute...");
