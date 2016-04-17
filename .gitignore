@@ -2,3 +2,5 @@
 Server
 core.*
 /Images/*
+/message.pb.cpp
+/message.pb.h

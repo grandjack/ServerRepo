@@ -34,6 +34,7 @@ void protobuf_ShutdownFile_message_2eproto();
 
 class Echo;
 class LogOnorOut;
+class ImageVersion;
 class ReplyStatus;
 class Register;
 class ChessBoardUser;
@@ -248,6 +249,102 @@ class LogOnorOut : public ::google::protobuf::Message {
 };
 // -------------------------------------------------------------------
 
+class ImageVersion : public ::google::protobuf::Message {
+ public:
+  ImageVersion();
+  virtual ~ImageVersion();
+  
+  ImageVersion(const ImageVersion& from);
+  
+  inline ImageVersion& operator=(const ImageVersion& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const ImageVersion& default_instance();
+  
+  void Swap(ImageVersion* other);
+  
+  // implements Message ----------------------------------------------
+  
+  ImageVersion* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const ImageVersion& from);
+  void MergeFrom(const ImageVersion& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // required string server_version = 1;
+  inline bool has_server_version() const;
+  inline void clear_server_version();
+  static const int kServerVersionFieldNumber = 1;
+  inline const ::std::string& server_version() const;
+  inline void set_server_version(const ::std::string& value);
+  inline void set_server_version(const char* value);
+  inline void set_server_version(const char* value, size_t size);
+  inline ::std::string* mutable_server_version();
+  inline ::std::string* release_server_version();
+  
+  // required bool mandatory_update = 2;
+  inline bool has_mandatory_update() const;
+  inline void clear_mandatory_update();
+  static const int kMandatoryUpdateFieldNumber = 2;
+  inline bool mandatory_update() const;
+  inline void set_mandatory_update(bool value);
+  
+  // @@protoc_insertion_point(class_scope:MessageStruct.ImageVersion)
+ private:
+  inline void set_has_server_version();
+  inline void clear_has_server_version();
+  inline void set_has_mandatory_update();
+  inline void clear_has_mandatory_update();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::std::string* server_version_;
+  bool mandatory_update_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(2 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_message_2eproto();
+  friend void protobuf_AssignDesc_message_2eproto();
+  friend void protobuf_ShutdownFile_message_2eproto();
+  
+  void InitAsDefaultInstance();
+  static ImageVersion* default_instance_;
+};
+// -------------------------------------------------------------------
+
 class ReplyStatus : public ::google::protobuf::Message {
  public:
   ReplyStatus();
@@ -317,20 +414,31 @@ class ReplyStatus : public ::google::protobuf::Message {
   inline ::MessageStruct::ChessBoardUser* mutable_user();
   inline ::MessageStruct::ChessBoardUser* release_user();
   
+  // optional .MessageStruct.ImageVersion version_info = 3;
+  inline bool has_version_info() const;
+  inline void clear_version_info();
+  static const int kVersionInfoFieldNumber = 3;
+  inline const ::MessageStruct::ImageVersion& version_info() const;
+  inline ::MessageStruct::ImageVersion* mutable_version_info();
+  inline ::MessageStruct::ImageVersion* release_version_info();
+  
   // @@protoc_insertion_point(class_scope:MessageStruct.ReplyStatus)
  private:
   inline void set_has_status();
   inline void clear_has_status();
   inline void set_has_user();
   inline void clear_has_user();
+  inline void set_has_version_info();
+  inline void clear_has_version_info();
   
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
   
   ::MessageStruct::ChessBoardUser* user_;
+  ::MessageStruct::ImageVersion* version_info_;
   ::google::protobuf::uint32 status_;
   
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(2 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(3 + 31) / 32];
   
   friend void  protobuf_AddDesc_message_2eproto();
   friend void protobuf_AssignDesc_message_2eproto();
@@ -3335,6 +3443,90 @@ inline ::std::string* LogOnorOut::release_password() {
 
 // -------------------------------------------------------------------
 
+// ImageVersion
+
+// required string server_version = 1;
+inline bool ImageVersion::has_server_version() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void ImageVersion::set_has_server_version() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void ImageVersion::clear_has_server_version() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void ImageVersion::clear_server_version() {
+  if (server_version_ != &::google::protobuf::internal::kEmptyString) {
+    server_version_->clear();
+  }
+  clear_has_server_version();
+}
+inline const ::std::string& ImageVersion::server_version() const {
+  return *server_version_;
+}
+inline void ImageVersion::set_server_version(const ::std::string& value) {
+  set_has_server_version();
+  if (server_version_ == &::google::protobuf::internal::kEmptyString) {
+    server_version_ = new ::std::string;
+  }
+  server_version_->assign(value);
+}
+inline void ImageVersion::set_server_version(const char* value) {
+  set_has_server_version();
+  if (server_version_ == &::google::protobuf::internal::kEmptyString) {
+    server_version_ = new ::std::string;
+  }
+  server_version_->assign(value);
+}
+inline void ImageVersion::set_server_version(const char* value, size_t size) {
+  set_has_server_version();
+  if (server_version_ == &::google::protobuf::internal::kEmptyString) {
+    server_version_ = new ::std::string;
+  }
+  server_version_->assign(reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* ImageVersion::mutable_server_version() {
+  set_has_server_version();
+  if (server_version_ == &::google::protobuf::internal::kEmptyString) {
+    server_version_ = new ::std::string;
+  }
+  return server_version_;
+}
+inline ::std::string* ImageVersion::release_server_version() {
+  clear_has_server_version();
+  if (server_version_ == &::google::protobuf::internal::kEmptyString) {
+    return NULL;
+  } else {
+    ::std::string* temp = server_version_;
+    server_version_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    return temp;
+  }
+}
+
+// required bool mandatory_update = 2;
+inline bool ImageVersion::has_mandatory_update() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void ImageVersion::set_has_mandatory_update() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void ImageVersion::clear_has_mandatory_update() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void ImageVersion::clear_mandatory_update() {
+  mandatory_update_ = false;
+  clear_has_mandatory_update();
+}
+inline bool ImageVersion::mandatory_update() const {
+  return mandatory_update_;
+}
+inline void ImageVersion::set_mandatory_update(bool value) {
+  set_has_mandatory_update();
+  mandatory_update_ = value;
+}
+
+// -------------------------------------------------------------------
+
 // ReplyStatus
 
 // required uint32 status = 1;
@@ -3385,6 +3577,35 @@ inline ::MessageStruct::ChessBoardUser* ReplyStatus::release_user() {
   clear_has_user();
   ::MessageStruct::ChessBoardUser* temp = user_;
   user_ = NULL;
+  return temp;
+}
+
+// optional .MessageStruct.ImageVersion version_info = 3;
+inline bool ReplyStatus::has_version_info() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void ReplyStatus::set_has_version_info() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void ReplyStatus::clear_has_version_info() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void ReplyStatus::clear_version_info() {
+  if (version_info_ != NULL) version_info_->::MessageStruct::ImageVersion::Clear();
+  clear_has_version_info();
+}
+inline const ::MessageStruct::ImageVersion& ReplyStatus::version_info() const {
+  return version_info_ != NULL ? *version_info_ : *default_instance_->version_info_;
+}
+inline ::MessageStruct::ImageVersion* ReplyStatus::mutable_version_info() {
+  set_has_version_info();
+  if (version_info_ == NULL) version_info_ = new ::MessageStruct::ImageVersion;
+  return version_info_;
+}
+inline ::MessageStruct::ImageVersion* ReplyStatus::release_version_info() {
+  clear_has_version_info();
+  ::MessageStruct::ImageVersion* temp = version_info_;
+  version_info_ = NULL;
   return temp;
 }
 

@@ -7,6 +7,7 @@
 #include <map>
 #include "mysqldb.h"
 #include "utils.h"
+#include "state.h"
 
 
 #define COMMAND_NOTIFY_ADD_EVENT    0x10
@@ -97,6 +98,8 @@ public:
     bool UpdateUserEmailToDB(const std::string &account, std::string &email);
 
     bool GetAdPicturesInfoFromDB(const u_int32 id, AdPicturesInfo &ad_info);
+    
+    bool GetImageVersionInfoFromDB(ImageVersions &image_info);
     
 public:
     struct event_base *base;    /* libevent handle this thread uses */

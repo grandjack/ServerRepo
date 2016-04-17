@@ -23,6 +23,9 @@ const ::google::protobuf::internal::GeneratedMessageReflection*
 const ::google::protobuf::Descriptor* LogOnorOut_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   LogOnorOut_reflection_ = NULL;
+const ::google::protobuf::Descriptor* ImageVersion_descriptor_ = NULL;
+const ::google::protobuf::internal::GeneratedMessageReflection*
+  ImageVersion_reflection_ = NULL;
 const ::google::protobuf::Descriptor* ReplyStatus_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   ReplyStatus_reflection_ = NULL;
@@ -139,10 +142,27 @@ void protobuf_AssignDesc_message_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(LogOnorOut));
-  ReplyStatus_descriptor_ = file->message_type(2);
-  static const int ReplyStatus_offsets_[2] = {
+  ImageVersion_descriptor_ = file->message_type(2);
+  static const int ImageVersion_offsets_[2] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ImageVersion, server_version_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ImageVersion, mandatory_update_),
+  };
+  ImageVersion_reflection_ =
+    new ::google::protobuf::internal::GeneratedMessageReflection(
+      ImageVersion_descriptor_,
+      ImageVersion::default_instance_,
+      ImageVersion_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ImageVersion, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ImageVersion, _unknown_fields_),
+      -1,
+      ::google::protobuf::DescriptorPool::generated_pool(),
+      ::google::protobuf::MessageFactory::generated_factory(),
+      sizeof(ImageVersion));
+  ReplyStatus_descriptor_ = file->message_type(3);
+  static const int ReplyStatus_offsets_[3] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ReplyStatus, status_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ReplyStatus, user_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ReplyStatus, version_info_),
   };
   ReplyStatus_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -155,7 +175,7 @@ void protobuf_AssignDesc_message_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(ReplyStatus));
-  Register_descriptor_ = file->message_type(3);
+  Register_descriptor_ = file->message_type(4);
   static const int Register_offsets_[3] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Register, email_account_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Register, password_),
@@ -172,7 +192,7 @@ void protobuf_AssignDesc_message_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(Register));
-  ChessBoardUser_descriptor_ = file->message_type(4);
+  ChessBoardUser_descriptor_ = file->message_type(5);
   static const int ChessBoardUser_offsets_[8] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ChessBoardUser, chess_board_empty_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ChessBoardUser, user_name_),
@@ -194,7 +214,7 @@ void protobuf_AssignDesc_message_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(ChessBoardUser));
-  ChessBoardInfoReq_descriptor_ = file->message_type(5);
+  ChessBoardInfoReq_descriptor_ = file->message_type(6);
   static const int ChessBoardInfoReq_offsets_[2] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ChessBoardInfoReq, chess_board_id_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ChessBoardInfoReq, opcode_),
@@ -210,7 +230,7 @@ void protobuf_AssignDesc_message_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(ChessBoardInfoReq));
-  ChessBoardInfo_descriptor_ = file->message_type(6);
+  ChessBoardInfo_descriptor_ = file->message_type(7);
   static const int ChessBoardInfo_offsets_[5] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ChessBoardInfo, id_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ChessBoardInfo, people_num_),
@@ -229,7 +249,7 @@ void protobuf_AssignDesc_message_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(ChessBoardInfo));
-  HallInfoReq_descriptor_ = file->message_type(7);
+  HallInfoReq_descriptor_ = file->message_type(8);
   static const int HallInfoReq_offsets_[2] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(HallInfoReq, game_hall_id_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(HallInfoReq, opcode_),
@@ -245,7 +265,7 @@ void protobuf_AssignDesc_message_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(HallInfoReq));
-  HallInfo_descriptor_ = file->message_type(8);
+  HallInfo_descriptor_ = file->message_type(9);
   static const int HallInfo_offsets_[5] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(HallInfo, game_hall_id_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(HallInfo, total_people_),
@@ -264,7 +284,7 @@ void protobuf_AssignDesc_message_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(HallInfo));
-  GameHallSumaryReq_descriptor_ = file->message_type(9);
+  GameHallSumaryReq_descriptor_ = file->message_type(10);
   static const int GameHallSumaryReq_offsets_[1] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(GameHallSumaryReq, opcode_),
   };
@@ -279,7 +299,7 @@ void protobuf_AssignDesc_message_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(GameHallSumaryReq));
-  GameHallSumary_descriptor_ = file->message_type(10);
+  GameHallSumary_descriptor_ = file->message_type(11);
   static const int GameHallSumary_offsets_[8] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(GameHallSumary, account_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(GameHallSumary, username_),
@@ -301,7 +321,7 @@ void protobuf_AssignDesc_message_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(GameHallSumary));
-  RequestPlay_descriptor_ = file->message_type(11);
+  RequestPlay_descriptor_ = file->message_type(12);
   static const int RequestPlay_offsets_[3] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RequestPlay, game_hall_id_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RequestPlay, chess_board_id_),
@@ -318,7 +338,7 @@ void protobuf_AssignDesc_message_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(RequestPlay));
-  RequestPlayReply_descriptor_ = file->message_type(12);
+  RequestPlayReply_descriptor_ = file->message_type(13);
   static const int RequestPlayReply_offsets_[3] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RequestPlayReply, status_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RequestPlayReply, first_come_user_locate_),
@@ -335,7 +355,7 @@ void protobuf_AssignDesc_message_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(RequestPlayReply));
-  MoveChess_descriptor_ = file->message_type(13);
+  MoveChess_descriptor_ = file->message_type(14);
   static const int MoveChess_offsets_[9] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MoveChess, src_chess_type_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MoveChess, src_user_locate_),
@@ -358,7 +378,7 @@ void protobuf_AssignDesc_message_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(MoveChess));
-  MoveAction_descriptor_ = file->message_type(14);
+  MoveAction_descriptor_ = file->message_type(15);
   static const int MoveAction_offsets_[3] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MoveAction, src_user_locate_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MoveAction, movechess_),
@@ -375,7 +395,7 @@ void protobuf_AssignDesc_message_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(MoveAction));
-  UserMessage_descriptor_ = file->message_type(15);
+  UserMessage_descriptor_ = file->message_type(16);
   static const int UserMessage_offsets_[2] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UserMessage, src_user_locate_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UserMessage, msgcontent_),
@@ -391,7 +411,7 @@ void protobuf_AssignDesc_message_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(UserMessage));
-  SystemMessage_descriptor_ = file->message_type(16);
+  SystemMessage_descriptor_ = file->message_type(17);
   static const int SystemMessage_offsets_[1] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(SystemMessage, msgcontent_),
   };
@@ -406,7 +426,7 @@ void protobuf_AssignDesc_message_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(SystemMessage));
-  Reconciled_descriptor_ = file->message_type(17);
+  Reconciled_descriptor_ = file->message_type(18);
   static const int Reconciled_offsets_[4] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Reconciled, apply_or_reply_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Reconciled, src_user_locate_),
@@ -424,7 +444,7 @@ void protobuf_AssignDesc_message_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(Reconciled));
-  GiveUp_descriptor_ = file->message_type(18);
+  GiveUp_descriptor_ = file->message_type(19);
   static const int GiveUp_offsets_[2] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(GiveUp, src_user_locate_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(GiveUp, opt_),
@@ -440,7 +460,7 @@ void protobuf_AssignDesc_message_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(GiveUp));
-  Undo_descriptor_ = file->message_type(19);
+  Undo_descriptor_ = file->message_type(20);
   static const int Undo_offsets_[4] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Undo, rep_or_respon_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Undo, src_user_locate_),
@@ -458,7 +478,7 @@ void protobuf_AssignDesc_message_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(Undo));
-  GameReadyReq_descriptor_ = file->message_type(20);
+  GameReadyReq_descriptor_ = file->message_type(21);
   static const int GameReadyReq_offsets_[4] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(GameReadyReq, src_user_locate_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(GameReadyReq, opcode_),
@@ -476,7 +496,7 @@ void protobuf_AssignDesc_message_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(GameReadyReq));
-  GameStatusReply_descriptor_ = file->message_type(21);
+  GameStatusReply_descriptor_ = file->message_type(22);
   static const int GameStatusReply_offsets_[6] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(GameStatusReply, left_user_status_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(GameStatusReply, right_user_status_),
@@ -496,7 +516,7 @@ void protobuf_AssignDesc_message_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(GameStatusReply));
-  FindPassword_descriptor_ = file->message_type(22);
+  FindPassword_descriptor_ = file->message_type(23);
   static const int FindPassword_offsets_[2] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(FindPassword, email_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(FindPassword, opt_),
@@ -512,7 +532,7 @@ void protobuf_AssignDesc_message_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(FindPassword));
-  UpdateUserInfo_descriptor_ = file->message_type(23);
+  UpdateUserInfo_descriptor_ = file->message_type(24);
   static const int UpdateUserInfo_offsets_[6] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UpdateUserInfo, user_name_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UpdateUserInfo, account_),
@@ -532,7 +552,7 @@ void protobuf_AssignDesc_message_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(UpdateUserInfo));
-  AdPictureItemReply_descriptor_ = file->message_type(24);
+  AdPictureItemReply_descriptor_ = file->message_type(25);
   static const int AdPictureItemReply_offsets_[7] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AdPictureItemReply, image_id_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AdPictureItemReply, existed_),
@@ -553,7 +573,7 @@ void protobuf_AssignDesc_message_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(AdPictureItemReply));
-  AdPictureReq_descriptor_ = file->message_type(25);
+  AdPictureReq_descriptor_ = file->message_type(26);
   static const int AdPictureReq_offsets_[3] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AdPictureReq, image_id_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AdPictureReq, req_type_),
@@ -570,7 +590,7 @@ void protobuf_AssignDesc_message_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(AdPictureReq));
-  AdPictureContentReply_descriptor_ = file->message_type(26);
+  AdPictureContentReply_descriptor_ = file->message_type(27);
   static const int AdPictureContentReply_offsets_[2] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AdPictureContentReply, ended_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AdPictureContentReply, content_),
@@ -602,6 +622,8 @@ void protobuf_RegisterTypes(const ::std::string&) {
     Echo_descriptor_, &Echo::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     LogOnorOut_descriptor_, &LogOnorOut::default_instance());
+  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
+    ImageVersion_descriptor_, &ImageVersion::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     ReplyStatus_descriptor_, &ReplyStatus::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
@@ -661,6 +683,8 @@ void protobuf_ShutdownFile_message_2eproto() {
   delete Echo_reflection_;
   delete LogOnorOut::default_instance_;
   delete LogOnorOut_reflection_;
+  delete ImageVersion::default_instance_;
+  delete ImageVersion_reflection_;
   delete ReplyStatus::default_instance_;
   delete ReplyStatus_reflection_;
   delete Register::default_instance_;
@@ -722,76 +746,80 @@ void protobuf_AddDesc_message_2eproto() {
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
     "\n\rmessage.proto\022\rMessageStruct\"\032\n\004Echo\022\022"
     "\n\ntime_stamp\030\001 \001(\t\"/\n\nLogOnorOut\022\017\n\007acco"
-    "unt\030\001 \002(\t\022\020\n\010password\030\002 \002(\t\"J\n\013ReplyStat"
-    "us\022\016\n\006status\030\001 \002(\r\022+\n\004user\030\002 \001(\0132\035.Messa"
-    "geStruct.ChessBoardUser\"E\n\010Register\022\025\n\re"
-    "mail_account\030\001 \002(\t\022\020\n\010password\030\002 \002(\t\022\020\n\010"
-    "username\030\003 \001(\t\"\243\001\n\016ChessBoardUser\022\031\n\021che"
-    "ss_board_empty\030\001 \002(\010\022\021\n\tuser_name\030\002 \001(\t\022"
-    "\017\n\007account\030\003 \001(\t\022\r\n\005score\030\004 \001(\005\022\020\n\010ex_em"
-    "ail\030\005 \001(\t\022\r\n\005phone\030\006 \001(\t\022\022\n\nhead_image\030\007"
-    " \001(\014\022\016\n\006status\030\010 \001(\r\";\n\021ChessBoardInfoRe"
-    "q\022\026\n\016chess_board_id\030\001 \002(\005\022\016\n\006opcode\030\002 \001("
-    "\005\"\311\001\n\016ChessBoardInfo\022\n\n\002id\030\001 \002(\r\022\022\n\npeop"
-    "le_num\030\002 \002(\r\0220\n\tleft_user\030\003 \002(\0132\035.Messag"
-    "eStruct.ChessBoardUser\0221\n\nright_user\030\004 \002"
-    "(\0132\035.MessageStruct.ChessBoardUser\0222\n\013bot"
-    "tom_user\030\005 \002(\0132\035.MessageStruct.ChessBoar"
-    "dUser\"3\n\013HallInfoReq\022\024\n\014game_hall_id\030\001 \002"
-    "(\005\022\016\n\006opcode\030\002 \001(\005\"\231\001\n\010HallInfo\022\024\n\014game_"
-    "hall_id\030\001 \002(\005\022\024\n\014total_people\030\002 \002(\r\022\023\n\013c"
-    "urr_people\030\003 \002(\r\022\030\n\020total_chessboard\030\004 \001"
-    "(\r\0222\n\013chess_board\030\005 \003(\0132\035.MessageStruct."
-    "ChessBoardInfo\"#\n\021GameHallSumaryReq\022\016\n\006o"
-    "pcode\030\001 \001(\005\"\300\001\n\016GameHallSumary\022\017\n\007accoun"
-    "t\030\001 \002(\t\022\020\n\010username\030\002 \002(\t\022\r\n\005score\030\003 \002(\005"
-    "\022\020\n\010hall_num\030\004 \002(\r\022\024\n\014head_picture\030\005 \002(\t"
-    "\022\023\n\013ad_picture1\030\006 \002(\t\022\023\n\013ad_picture2\030\007 \001"
-    "(\t\022*\n\thall_info\030\010 \003(\0132\027.MessageStruct.Ha"
-    "llInfo\"K\n\013RequestPlay\022\024\n\014game_hall_id\030\001 "
-    "\002(\005\022\026\n\016chess_board_id\030\002 \002(\005\022\016\n\006locate\030\003 "
-    "\002(\005\"u\n\020RequestPlayReply\022\016\n\006status\030\001 \002(\005\022"
-    "\036\n\026first_come_user_locate\030\002 \002(\r\0221\n\nchess"
-    "Board\030\003 \001(\0132\035.MessageStruct.ChessBoardIn"
-    "fo\"\334\001\n\tMoveChess\022\026\n\016src_chess_type\030\001 \002(\005"
-    "\022\027\n\017src_user_locate\030\002 \002(\005\022\023\n\013from_pointX"
-    "\030\003 \002(\005\022\023\n\013from_pointY\030\004 \002(\005\022\022\n\ndes_point"
-    "X\030\005 \002(\005\022\022\n\ndes_pointY\030\006 \002(\005\022\021\n\tis_winner"
-    "\030\007 \002(\010\022\035\n\025eat_target_chess_type\030\010 \001(\005\022\032\n"
-    "\022target_user_locate\030\t \001(\r\"h\n\nMoveAction\022"
-    "\027\n\017src_user_locate\030\001 \002(\r\022+\n\tmovechess\030\002 "
-    "\002(\0132\030.MessageStruct.MoveChess\022\024\n\014token_l"
-    "ocate\030\003 \002(\r\":\n\013UserMessage\022\027\n\017src_user_l"
-    "ocate\030\001 \002(\r\022\022\n\nmsgContent\030\002 \002(\t\"#\n\rSyste"
-    "mMessage\022\022\n\nmsgContent\030\001 \002(\t\"f\n\nReconcil"
-    "ed\022\026\n\016apply_or_reply\030\001 \002(\r\022\027\n\017src_user_l"
-    "ocate\030\002 \002(\r\022\027\n\017tar_user_locate\030\003 \002(\r\022\016\n\006"
-    "status\030\004 \001(\t\".\n\006GiveUp\022\027\n\017src_user_locat"
-    "e\030\001 \002(\r\022\013\n\003opt\030\002 \001(\t\"_\n\004Undo\022\025\n\rrep_or_r"
-    "espon\030\001 \002(\r\022\027\n\017src_user_locate\030\002 \002(\r\022\027\n\017"
-    "tar_user_locate\030\003 \002(\r\022\016\n\006status\030\004 \001(\010\"e\n"
-    "\014GameReadyReq\022\027\n\017src_user_locate\030\001 \002(\r\022\016"
-    "\n\006opcode\030\002 \001(\r\022\022\n\ntotal_time\030\003 \001(\r\022\030\n\020si"
-    "ngle_step_time\030\004 \001(\r\"\246\001\n\017GameStatusReply"
-    "\022\030\n\020left_user_status\030\001 \002(\010\022\031\n\021right_user"
-    "_status\030\002 \002(\010\022\032\n\022bottom_user_status\030\003 \002("
-    "\010\022\024\n\014token_locate\030\004 \002(\r\022\022\n\ntotal_time\030\005 "
-    "\002(\r\022\030\n\020single_step_time\030\006 \002(\r\"*\n\014FindPas"
-    "sword\022\r\n\005email\030\001 \002(\t\022\013\n\003opt\030\002 \001(\t\"{\n\016Upd"
-    "ateUserInfo\022\021\n\tuser_name\030\001 \002(\t\022\017\n\007accoun"
-    "t\030\002 \002(\t\022\020\n\010password\030\003 \002(\t\022\020\n\010ex_email\030\004 "
-    "\001(\t\022\r\n\005phone\030\005 \001(\t\022\022\n\nhead_image\030\006 \001(\014\"\230"
-    "\001\n\022AdPictureItemReply\022\020\n\010image_id\030\001 \002(\r\022"
-    "\017\n\007existed\030\002 \002(\010\022\022\n\nimage_type\030\003 \001(\t\022\022\n\n"
-    "image_name\030\004 \001(\t\022\026\n\016image_hashcode\030\005 \001(\t"
-    "\022\013\n\003url\030\006 \001(\t\022\022\n\nimage_size\030\007 \001(\r\"D\n\014AdP"
-    "ictureReq\022\020\n\010image_id\030\001 \002(\r\022\020\n\010req_type\030"
-    "\002 \002(\r\022\020\n\010last_one\030\003 \001(\010\"7\n\025AdPictureCont"
-    "entReply\022\r\n\005ended\030\001 \002(\010\022\017\n\007content\030\002 \001(\014", 2720);
+    "unt\030\001 \002(\t\022\020\n\010password\030\002 \002(\t\"@\n\014ImageVers"
+    "ion\022\026\n\016server_version\030\001 \002(\t\022\030\n\020mandatory"
+    "_update\030\002 \002(\010\"}\n\013ReplyStatus\022\016\n\006status\030\001"
+    " \002(\r\022+\n\004user\030\002 \001(\0132\035.MessageStruct.Chess"
+    "BoardUser\0221\n\014version_info\030\003 \001(\0132\033.Messag"
+    "eStruct.ImageVersion\"E\n\010Register\022\025\n\remai"
+    "l_account\030\001 \002(\t\022\020\n\010password\030\002 \002(\t\022\020\n\010use"
+    "rname\030\003 \001(\t\"\243\001\n\016ChessBoardUser\022\031\n\021chess_"
+    "board_empty\030\001 \002(\010\022\021\n\tuser_name\030\002 \001(\t\022\017\n\007"
+    "account\030\003 \001(\t\022\r\n\005score\030\004 \001(\005\022\020\n\010ex_email"
+    "\030\005 \001(\t\022\r\n\005phone\030\006 \001(\t\022\022\n\nhead_image\030\007 \001("
+    "\014\022\016\n\006status\030\010 \001(\r\";\n\021ChessBoardInfoReq\022\026"
+    "\n\016chess_board_id\030\001 \002(\005\022\016\n\006opcode\030\002 \001(\005\"\311"
+    "\001\n\016ChessBoardInfo\022\n\n\002id\030\001 \002(\r\022\022\n\npeople_"
+    "num\030\002 \002(\r\0220\n\tleft_user\030\003 \002(\0132\035.MessageSt"
+    "ruct.ChessBoardUser\0221\n\nright_user\030\004 \002(\0132"
+    "\035.MessageStruct.ChessBoardUser\0222\n\013bottom"
+    "_user\030\005 \002(\0132\035.MessageStruct.ChessBoardUs"
+    "er\"3\n\013HallInfoReq\022\024\n\014game_hall_id\030\001 \002(\005\022"
+    "\016\n\006opcode\030\002 \001(\005\"\231\001\n\010HallInfo\022\024\n\014game_hal"
+    "l_id\030\001 \002(\005\022\024\n\014total_people\030\002 \002(\r\022\023\n\013curr"
+    "_people\030\003 \002(\r\022\030\n\020total_chessboard\030\004 \001(\r\022"
+    "2\n\013chess_board\030\005 \003(\0132\035.MessageStruct.Che"
+    "ssBoardInfo\"#\n\021GameHallSumaryReq\022\016\n\006opco"
+    "de\030\001 \001(\005\"\300\001\n\016GameHallSumary\022\017\n\007account\030\001"
+    " \002(\t\022\020\n\010username\030\002 \002(\t\022\r\n\005score\030\003 \002(\005\022\020\n"
+    "\010hall_num\030\004 \002(\r\022\024\n\014head_picture\030\005 \002(\t\022\023\n"
+    "\013ad_picture1\030\006 \002(\t\022\023\n\013ad_picture2\030\007 \001(\t\022"
+    "*\n\thall_info\030\010 \003(\0132\027.MessageStruct.HallI"
+    "nfo\"K\n\013RequestPlay\022\024\n\014game_hall_id\030\001 \002(\005"
+    "\022\026\n\016chess_board_id\030\002 \002(\005\022\016\n\006locate\030\003 \002(\005"
+    "\"u\n\020RequestPlayReply\022\016\n\006status\030\001 \002(\005\022\036\n\026"
+    "first_come_user_locate\030\002 \002(\r\0221\n\nchessBoa"
+    "rd\030\003 \001(\0132\035.MessageStruct.ChessBoardInfo\""
+    "\334\001\n\tMoveChess\022\026\n\016src_chess_type\030\001 \002(\005\022\027\n"
+    "\017src_user_locate\030\002 \002(\005\022\023\n\013from_pointX\030\003 "
+    "\002(\005\022\023\n\013from_pointY\030\004 \002(\005\022\022\n\ndes_pointX\030\005"
+    " \002(\005\022\022\n\ndes_pointY\030\006 \002(\005\022\021\n\tis_winner\030\007 "
+    "\002(\010\022\035\n\025eat_target_chess_type\030\010 \001(\005\022\032\n\022ta"
+    "rget_user_locate\030\t \001(\r\"h\n\nMoveAction\022\027\n\017"
+    "src_user_locate\030\001 \002(\r\022+\n\tmovechess\030\002 \002(\013"
+    "2\030.MessageStruct.MoveChess\022\024\n\014token_loca"
+    "te\030\003 \002(\r\":\n\013UserMessage\022\027\n\017src_user_loca"
+    "te\030\001 \002(\r\022\022\n\nmsgContent\030\002 \002(\t\"#\n\rSystemMe"
+    "ssage\022\022\n\nmsgContent\030\001 \002(\t\"f\n\nReconciled\022"
+    "\026\n\016apply_or_reply\030\001 \002(\r\022\027\n\017src_user_loca"
+    "te\030\002 \002(\r\022\027\n\017tar_user_locate\030\003 \002(\r\022\016\n\006sta"
+    "tus\030\004 \001(\t\".\n\006GiveUp\022\027\n\017src_user_locate\030\001"
+    " \002(\r\022\013\n\003opt\030\002 \001(\t\"_\n\004Undo\022\025\n\rrep_or_resp"
+    "on\030\001 \002(\r\022\027\n\017src_user_locate\030\002 \002(\r\022\027\n\017tar"
+    "_user_locate\030\003 \002(\r\022\016\n\006status\030\004 \001(\010\"e\n\014Ga"
+    "meReadyReq\022\027\n\017src_user_locate\030\001 \002(\r\022\016\n\006o"
+    "pcode\030\002 \001(\r\022\022\n\ntotal_time\030\003 \001(\r\022\030\n\020singl"
+    "e_step_time\030\004 \001(\r\"\246\001\n\017GameStatusReply\022\030\n"
+    "\020left_user_status\030\001 \002(\010\022\031\n\021right_user_st"
+    "atus\030\002 \002(\010\022\032\n\022bottom_user_status\030\003 \002(\010\022\024"
+    "\n\014token_locate\030\004 \002(\r\022\022\n\ntotal_time\030\005 \002(\r"
+    "\022\030\n\020single_step_time\030\006 \002(\r\"*\n\014FindPasswo"
+    "rd\022\r\n\005email\030\001 \002(\t\022\013\n\003opt\030\002 \001(\t\"{\n\016Update"
+    "UserInfo\022\021\n\tuser_name\030\001 \002(\t\022\017\n\007account\030\002"
+    " \002(\t\022\020\n\010password\030\003 \002(\t\022\020\n\010ex_email\030\004 \001(\t"
+    "\022\r\n\005phone\030\005 \001(\t\022\022\n\nhead_image\030\006 \001(\014\"\230\001\n\022"
+    "AdPictureItemReply\022\020\n\010image_id\030\001 \002(\r\022\017\n\007"
+    "existed\030\002 \002(\010\022\022\n\nimage_type\030\003 \001(\t\022\022\n\nima"
+    "ge_name\030\004 \001(\t\022\026\n\016image_hashcode\030\005 \001(\t\022\013\n"
+    "\003url\030\006 \001(\t\022\022\n\nimage_size\030\007 \001(\r\"D\n\014AdPict"
+    "ureReq\022\020\n\010image_id\030\001 \002(\r\022\020\n\010req_type\030\002 \002"
+    "(\r\022\020\n\010last_one\030\003 \001(\010\"7\n\025AdPictureContent"
+    "Reply\022\r\n\005ended\030\001 \002(\010\022\017\n\007content\030\002 \001(\014", 2837);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "message.proto", &protobuf_RegisterTypes);
   Echo::default_instance_ = new Echo();
   LogOnorOut::default_instance_ = new LogOnorOut();
+  ImageVersion::default_instance_ = new ImageVersion();
   ReplyStatus::default_instance_ = new ReplyStatus();
   Register::default_instance_ = new Register();
   ChessBoardUser::default_instance_ = new ChessBoardUser();
@@ -819,6 +847,7 @@ void protobuf_AddDesc_message_2eproto() {
   AdPictureContentReply::default_instance_ = new AdPictureContentReply();
   Echo::default_instance_->InitAsDefaultInstance();
   LogOnorOut::default_instance_->InitAsDefaultInstance();
+  ImageVersion::default_instance_->InitAsDefaultInstance();
   ReplyStatus::default_instance_->InitAsDefaultInstance();
   Register::default_instance_->InitAsDefaultInstance();
   ChessBoardUser::default_instance_->InitAsDefaultInstance();
@@ -1364,8 +1393,272 @@ void LogOnorOut::Swap(LogOnorOut* other) {
 // ===================================================================
 
 #ifndef _MSC_VER
+const int ImageVersion::kServerVersionFieldNumber;
+const int ImageVersion::kMandatoryUpdateFieldNumber;
+#endif  // !_MSC_VER
+
+ImageVersion::ImageVersion()
+  : ::google::protobuf::Message() {
+  SharedCtor();
+}
+
+void ImageVersion::InitAsDefaultInstance() {
+}
+
+ImageVersion::ImageVersion(const ImageVersion& from)
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  MergeFrom(from);
+}
+
+void ImageVersion::SharedCtor() {
+  _cached_size_ = 0;
+  server_version_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+  mandatory_update_ = false;
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+}
+
+ImageVersion::~ImageVersion() {
+  SharedDtor();
+}
+
+void ImageVersion::SharedDtor() {
+  if (server_version_ != &::google::protobuf::internal::kEmptyString) {
+    delete server_version_;
+  }
+  if (this != default_instance_) {
+  }
+}
+
+void ImageVersion::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* ImageVersion::descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return ImageVersion_descriptor_;
+}
+
+const ImageVersion& ImageVersion::default_instance() {
+  if (default_instance_ == NULL) protobuf_AddDesc_message_2eproto();  return *default_instance_;
+}
+
+ImageVersion* ImageVersion::default_instance_ = NULL;
+
+ImageVersion* ImageVersion::New() const {
+  return new ImageVersion;
+}
+
+void ImageVersion::Clear() {
+  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    if (has_server_version()) {
+      if (server_version_ != &::google::protobuf::internal::kEmptyString) {
+        server_version_->clear();
+      }
+    }
+    mandatory_update_ = false;
+  }
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+  mutable_unknown_fields()->Clear();
+}
+
+bool ImageVersion::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!(EXPRESSION)) return false
+  ::google::protobuf::uint32 tag;
+  while ((tag = input->ReadTag()) != 0) {
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // required string server_version = 1;
+      case 1: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_server_version()));
+          ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+            this->server_version().data(), this->server_version().length(),
+            ::google::protobuf::internal::WireFormat::PARSE);
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(16)) goto parse_mandatory_update;
+        break;
+      }
+      
+      // required bool mandatory_update = 2;
+      case 2: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
+         parse_mandatory_update:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &mandatory_update_)));
+          set_has_mandatory_update();
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectAtEnd()) return true;
+        break;
+      }
+      
+      default: {
+      handle_uninterpreted:
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          return true;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+  return true;
+#undef DO_
+}
+
+void ImageVersion::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // required string server_version = 1;
+  if (has_server_version()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->server_version().data(), this->server_version().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    ::google::protobuf::internal::WireFormatLite::WriteString(
+      1, this->server_version(), output);
+  }
+  
+  // required bool mandatory_update = 2;
+  if (has_mandatory_update()) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(2, this->mandatory_update(), output);
+  }
+  
+  if (!unknown_fields().empty()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        unknown_fields(), output);
+  }
+}
+
+::google::protobuf::uint8* ImageVersion::SerializeWithCachedSizesToArray(
+    ::google::protobuf::uint8* target) const {
+  // required string server_version = 1;
+  if (has_server_version()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->server_version().data(), this->server_version().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+        1, this->server_version(), target);
+  }
+  
+  // required bool mandatory_update = 2;
+  if (has_mandatory_update()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(2, this->mandatory_update(), target);
+  }
+  
+  if (!unknown_fields().empty()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        unknown_fields(), target);
+  }
+  return target;
+}
+
+int ImageVersion::ByteSize() const {
+  int total_size = 0;
+  
+  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    // required string server_version = 1;
+    if (has_server_version()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::StringSize(
+          this->server_version());
+    }
+    
+    // required bool mandatory_update = 2;
+    if (has_mandatory_update()) {
+      total_size += 1 + 1;
+    }
+    
+  }
+  if (!unknown_fields().empty()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        unknown_fields());
+  }
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = total_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void ImageVersion::MergeFrom(const ::google::protobuf::Message& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  const ImageVersion* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const ImageVersion*>(
+      &from);
+  if (source == NULL) {
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+    MergeFrom(*source);
+  }
+}
+
+void ImageVersion::MergeFrom(const ImageVersion& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    if (from.has_server_version()) {
+      set_server_version(from.server_version());
+    }
+    if (from.has_mandatory_update()) {
+      set_mandatory_update(from.mandatory_update());
+    }
+  }
+  mutable_unknown_fields()->MergeFrom(from.unknown_fields());
+}
+
+void ImageVersion::CopyFrom(const ::google::protobuf::Message& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void ImageVersion::CopyFrom(const ImageVersion& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool ImageVersion::IsInitialized() const {
+  if ((_has_bits_[0] & 0x00000003) != 0x00000003) return false;
+  
+  return true;
+}
+
+void ImageVersion::Swap(ImageVersion* other) {
+  if (other != this) {
+    std::swap(server_version_, other->server_version_);
+    std::swap(mandatory_update_, other->mandatory_update_);
+    std::swap(_has_bits_[0], other->_has_bits_[0]);
+    _unknown_fields_.Swap(&other->_unknown_fields_);
+    std::swap(_cached_size_, other->_cached_size_);
+  }
+}
+
+::google::protobuf::Metadata ImageVersion::GetMetadata() const {
+  protobuf_AssignDescriptorsOnce();
+  ::google::protobuf::Metadata metadata;
+  metadata.descriptor = ImageVersion_descriptor_;
+  metadata.reflection = ImageVersion_reflection_;
+  return metadata;
+}
+
+
+// ===================================================================
+
+#ifndef _MSC_VER
 const int ReplyStatus::kStatusFieldNumber;
 const int ReplyStatus::kUserFieldNumber;
+const int ReplyStatus::kVersionInfoFieldNumber;
 #endif  // !_MSC_VER
 
 ReplyStatus::ReplyStatus()
@@ -1375,6 +1668,7 @@ ReplyStatus::ReplyStatus()
 
 void ReplyStatus::InitAsDefaultInstance() {
   user_ = const_cast< ::MessageStruct::ChessBoardUser*>(&::MessageStruct::ChessBoardUser::default_instance());
+  version_info_ = const_cast< ::MessageStruct::ImageVersion*>(&::MessageStruct::ImageVersion::default_instance());
 }
 
 ReplyStatus::ReplyStatus(const ReplyStatus& from)
@@ -1387,6 +1681,7 @@ void ReplyStatus::SharedCtor() {
   _cached_size_ = 0;
   status_ = 0u;
   user_ = NULL;
+  version_info_ = NULL;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -1397,6 +1692,7 @@ ReplyStatus::~ReplyStatus() {
 void ReplyStatus::SharedDtor() {
   if (this != default_instance_) {
     delete user_;
+    delete version_info_;
   }
 }
 
@@ -1425,6 +1721,9 @@ void ReplyStatus::Clear() {
     status_ = 0u;
     if (has_user()) {
       if (user_ != NULL) user_->::MessageStruct::ChessBoardUser::Clear();
+    }
+    if (has_version_info()) {
+      if (version_info_ != NULL) version_info_->::MessageStruct::ImageVersion::Clear();
     }
   }
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
@@ -1462,6 +1761,20 @@ bool ReplyStatus::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
+        if (input->ExpectTag(26)) goto parse_version_info;
+        break;
+      }
+      
+      // optional .MessageStruct.ImageVersion version_info = 3;
+      case 3: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
+         parse_version_info:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_version_info()));
+        } else {
+          goto handle_uninterpreted;
+        }
         if (input->ExpectAtEnd()) return true;
         break;
       }
@@ -1495,6 +1808,12 @@ void ReplyStatus::SerializeWithCachedSizes(
       2, this->user(), output);
   }
   
+  // optional .MessageStruct.ImageVersion version_info = 3;
+  if (has_version_info()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      3, this->version_info(), output);
+  }
+  
   if (!unknown_fields().empty()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
@@ -1513,6 +1832,13 @@ void ReplyStatus::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
         2, this->user(), target);
+  }
+  
+  // optional .MessageStruct.ImageVersion version_info = 3;
+  if (has_version_info()) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        3, this->version_info(), target);
   }
   
   if (!unknown_fields().empty()) {
@@ -1538,6 +1864,13 @@ int ReplyStatus::ByteSize() const {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
           this->user());
+    }
+    
+    // optional .MessageStruct.ImageVersion version_info = 3;
+    if (has_version_info()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          this->version_info());
     }
     
   }
@@ -1573,6 +1906,9 @@ void ReplyStatus::MergeFrom(const ReplyStatus& from) {
     if (from.has_user()) {
       mutable_user()->::MessageStruct::ChessBoardUser::MergeFrom(from.user());
     }
+    if (from.has_version_info()) {
+      mutable_version_info()->::MessageStruct::ImageVersion::MergeFrom(from.version_info());
+    }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
@@ -1595,6 +1931,9 @@ bool ReplyStatus::IsInitialized() const {
   if (has_user()) {
     if (!this->user().IsInitialized()) return false;
   }
+  if (has_version_info()) {
+    if (!this->version_info().IsInitialized()) return false;
+  }
   return true;
 }
 
@@ -1602,6 +1941,7 @@ void ReplyStatus::Swap(ReplyStatus* other) {
   if (other != this) {
     std::swap(status_, other->status_);
     std::swap(user_, other->user_);
+    std::swap(version_info_, other->version_info_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);

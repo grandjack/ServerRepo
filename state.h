@@ -64,6 +64,13 @@ typedef enum
     MSG_TYPE_MAX
 }MessageType;
 
+typedef struct {
+    string version;
+    bool mandatory_update;
+    string info;
+    string locate_path;
+}ImageVersions;
+
 class State
 {
 public:

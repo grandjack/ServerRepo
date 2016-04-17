@@ -95,6 +95,7 @@ bool StateAuth::HandleLogin(const string &msg)
     string data;
     UsersInfo  *user_info = &stateMachine->user_info;
     bool ret = false;
+    ImageVersions image_info;
         
     if (login.ParseFromString(msg)) {
         LOG_DEBUG(MODULE_COMMON, "account %s", login.account().c_str());
@@ -118,6 +119,12 @@ bool StateAuth::HandleLogin(const string &msg)
                 user->set_ex_email(user_info->email);
                 user->set_phone(user_info->phone);
                 user->set_head_image(user_info->head_photo);
+
+                if (stateMachine->thread->GetImageVersionInfoFromDB(image_info) && (image_info.version.length() > 0)) {
+                    ImageVersion *version  = status.mutable_version_info();
+                    version->set_server_version(image_info.version);
+                    version->set_mandatory_update(image_info.mandatory_update);
+                }
                 
                 ret = true;
             } else {

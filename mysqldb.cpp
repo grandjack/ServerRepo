@@ -218,6 +218,26 @@ int creat_ad_pictures_table(MYSQL *mysql) {
 	return 0;
 }
 
+int creat_image_version_table(MYSQL *mysql) {
+	char sql[1024] = { 0 };
+	snprintf(sql, sizeof(sql)-1, "CREATE TABLE if NOT exists image_version (\
+		id int NOT NULL auto_increment,\
+		version varchar(100) NOT NULL,\
+		mandatory_update int NOT NULL,\
+		image_info varchar(250),\
+		locate_path varchar(250),\
+		PRIMARY KEY (id)\
+		)ENGINE=InnoDB;");
+
+	if(mysql_query(mysql, sql)) {
+        LOG_ERROR(MODULE_DB,"create table image_version failed[%s].", mysql_error(mysql));
+		return -1;
+    }
+
+	return 0;
+}
+
+
 int mysql_db_query_ad_info(MYSQL *connection, const char * sql, AdPicturesInfo &ad_info) {
 	MYSQL_ROW row;
 	MYSQL_RES *result = NULL;
@@ -249,6 +269,43 @@ int mysql_db_query_ad_info(MYSQL *connection, const char * sql, AdPicturesInfo &
             ad_info.image_size = row[5] ? atoi(row[5]) : 0;
             ad_info.link_url = row[6] ? row[6] : "";
             ad_info.locate_path = row[7] ? row[7] : "";
+			n++; 
+		} 
+		ret = n;
+		mysql_free_result(result);
+    }  
+	
+    return ret;
+}
+
+int mysql_db_query_image_version(MYSQL *connection, const char * sql, ImageVersions &image_info) {
+	MYSQL_ROW row;
+	MYSQL_RES *result = NULL;
+	int ret = 0;
+	
+    if(mysql_query(connection, sql)) {
+        LOG_ERROR(MODULE_DB,"mysql_query error[%s]", mysql_error(connection));
+		return -1;
+    } else {
+        result = mysql_use_result(connection);
+		if (result == NULL) {
+			LOG_INFO(MODULE_DB, "mysql_use_result false[%s].", sql);
+			return -1;
+		}
+		unsigned int num_fileds = mysql_num_fields(result);
+  
+		int n = 0;
+		while((row = mysql_fetch_row(result))) {
+			unsigned int j;
+			   
+			for(j=0; j < num_fileds; ++j) {
+				LOG_DEBUG(MODULE_DB, "%s", row[j]);
+			}
+            image_info.version = row[0] ? row[0] : "";
+            image_info.mandatory_update = (atoi(row[1]) == 1) ? true : false;
+            image_info.info = row[2] ? row[2] : "";
+            image_info.locate_path = row[3] ? row[3] : "";
+            
 			n++; 
 		} 
 		ret = n;

@@ -149,6 +149,8 @@ bool WorkThread::IniSQLConnection()
     creat_users_info_table(pdb_con);
 
     creat_ad_pictures_table(pdb_con);
+    
+    creat_image_version_table(pdb_con);
 
     return true;
 }
@@ -686,6 +688,25 @@ bool WorkThread::GetAdPicturesInfoFromDB(const u_int32 id, AdPicturesInfo &ad_in
     if (ret <= 0) {
         ad_info.existed = false;
         LOG_ERROR(MODULE_DB, "mysql_db_query_ad_info failed, ret[%d]", ret);
+        return false;
+    }
+    
+    return true;
+}
+
+bool WorkThread::GetImageVersionInfoFromDB(ImageVersions &image_info)
+{
+    char select_cmd[255] = { 0 };
+    int ret = -1;
+    
+    strncpy(select_cmd, "SELECT version, mandatory_update, image_info, locate_path FROM image_version ORDER BY id DESC limit 1", sizeof(select_cmd)-1);
+
+    LOG_DEBUG(MODULE_DB, "select_cmd[%s]", select_cmd);
+
+    ret = mysql_db_query_image_version(pdb_con, select_cmd, image_info);
+    if (ret <= 0) {
+        image_info.version = "";
+        LOG_ERROR(MODULE_DB, "mysql_db_query_image_version failed, ret[%d]", ret);
         return false;
     }
     

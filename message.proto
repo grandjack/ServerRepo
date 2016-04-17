@@ -10,9 +10,15 @@ message LogOnorOut{
     required string password = 2;
 }
 
+message ImageVersion {
+    required string server_version = 1;
+    required bool mandatory_update = 2;
+}
+
 message ReplyStatus {
     required uint32 status = 1;//0 error;1 OK
     optional ChessBoardUser user = 2;
+    optional ImageVersion version_info = 3;//
 }
 
 message Register {
