@@ -394,14 +394,14 @@ bool StateAdPictureDownload::AdPictureItemHandle(const string &msg)
 
     if (item.ParseFromString(msg)) {
         
-        info.image_id = item.image_id();
-        stateMachine->thread->GetAdPicturesInfoFromDB(item.image_id(), info);
-
         if (item.req_type() == 1) {//get image info
+            stateMachine->thread->GetAdPicturesInfoFromDB(item.image_id(), info);
             DownloadImageInfo(info);
         } else if (item.req_type() == 2) {//get image content
-            if (stateMachine->ad_img_fp == NULL) {                
-                stateMachine->ad_img_fp = fopen(info.locate_path.c_str(), "r");
+            if (stateMachine->ad_img_fp == NULL) {
+                if (stateMachine->thread->GetAdPicturesInfoFromDB(item.image_id(), info)) {
+                    stateMachine->ad_img_fp = fopen(info.locate_path.c_str(), "r");
+                }
             }
 
             ret = SendImageContent();
