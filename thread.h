@@ -55,6 +55,10 @@ public:
     static void OnRead(int iCliFd, short iEvent, void *arg);
     static void TimerOutHandle(int iCliFd, short iEvent, void *arg);
 
+    static void OnReadCb(struct bufferevent *bev, void *arg);
+
+    static void OnEventCb(struct bufferevent *bev, short events, void *arg);
+
     void ResetTimer(UserSession *session);
     
     bool OnWrite(int iCliFd, const u_int32 msg_type, const std::string &data, void *arg);

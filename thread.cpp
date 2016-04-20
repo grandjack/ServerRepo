@@ -209,13 +209,31 @@ void WorkThread::NotifyReceivedProcess(int fd, short which, void *arg)
         if (session != NULL)
         {
             session->thread = pThread;
-            AddEventForBase(pThread->base, &session->event, session->clifd, EV_READ | EV_PERSIST, OnRead, arg);
+            //AddEventForBase(pThread->base, &session->event, session->clifd, EV_READ | EV_PERSIST, OnRead, arg);
             pThread->fdSessionMap.insert(pair<int, UserSession*>(session->clifd, session));
 
             //initialize the timer
             evtimer_set(&session->timer_ev, TimerOutHandle, (void*)session);
             event_base_set(pThread->base, &session->timer_ev);
             evtimer_add(&session->timer_ev, &session->tv);
+
+            session->bufev = bufferevent_new(session->clifd, WorkThread::OnReadCb, NULL, WorkThread::OnEventCb, session);
+            if (session->bufev != NULL) {
+                bufferevent_base_set(pThread->base, session->bufev);
+                bufferevent_enable(session->bufev, EV_WRITE);
+                bufferevent_enable(session->bufev, EV_READ);
+                bufferevent_enable(session->bufev, EV_TIMEOUT);
+
+                session->buf_info.total_size = 0;
+                session->buf_info.msg_type = 0;
+                session->buf_info.got_head = false;
+
+                struct timeval timeout;
+                timeout.tv_sec = 3;
+                timeout.tv_usec = 0;
+
+                bufferevent_set_timeouts(session->bufev, NULL, &timeout);
+            }
     
         }
         break;
@@ -263,11 +281,11 @@ bool WorkThread::OnWrite(int iCliFd, const u_int32 msg_type, const string &data,
     u_int8 *buf = &buffer[0];
     u_int8 *pBuf = NULL;
     u_int32 totalSize = data.size() + DATA_HEAD_LENGTH;
-    u_int32 sendLen = 0;
-    int iLen = 0;
+//    u_int32 sendLen = 0;
+//    int iLen = 0;
     bool ret = true;
-    fd_set send_set;
-    int select_counter = -1;
+//    fd_set send_set;
+//    int select_counter = -1;
 
     struct timeval time_out;
     struct timeval * timeout = &time_out;
@@ -300,6 +318,8 @@ bool WorkThread::OnWrite(int iCliFd, const u_int32 msg_type, const string &data,
 
     LOG_DEBUG(MODULE_NET, "Send totalSize[%u] msg_type %u for user[%s]", totalSize, msg_type, user->user_info.account.c_str());
 
+    bufferevent_write(user->bufev, buf, totalSize);
+    #if 0
     do
     {
         FD_ZERO(&send_set);
@@ -353,6 +373,8 @@ bool WorkThread::OnWrite(int iCliFd, const u_int32 msg_type, const string &data,
     }else {
         user->SetHandleResult(ret);
     }
+
+    #endif
 
     if (pBuf != NULL) {
         delete []pBuf;
@@ -528,8 +550,9 @@ bool WorkThread::ClosingClientCon(int fd)
             fdSessionMap.erase(l_it);
             LOG_INFO(MODULE_COMMON, "Destrory user[%s]...\r\n", session->user_info.account.empty() ? "Unknown" : session->user_info.account.c_str());
             session->DestructResource();
-            event_del(&session->event);
+            //event_del(&session->event);
             event_del(&session->timer_ev);
+            bufferevent_free(session->bufev);
             close(fd);
             delete session;
         }
@@ -797,6 +820,87 @@ bool WorkThread::GetImageVersionInfoFromDB(ImageVersions &image_info)
     }
     
     return true;
+}
+
+void WorkThread::OnReadCb(struct bufferevent *bev, void *arg)
+{
+    UserSession *session = static_cast<UserSession *>(arg);
+    WorkThread *thread = session->thread;
+
+    if ((!session->buf_info.got_head) && (evbuffer_get_length(bev->input) >= DATA_HEAD_LENGTH)) {
+
+        char head[DATA_HEAD_LENGTH] = { 0 };
+        evbuffer_copyout(bev->input, head, DATA_HEAD_LENGTH);
+
+        session->buf_info.total_size = *((u_int32 *)(head));
+        session->buf_info.msg_type = *(((u_int32 *)(head))+1);
+
+        LOG_DEBUG(MODULE_COMMON, "Got message total size : %u msg_type %u", session->buf_info.total_size, session->buf_info.msg_type);
+        if ( session->buf_info.msg_type > MSG_TYPE_MAX || session->buf_info.total_size > 512*MAX_DATA_LENGTH) {
+            LOG_ERROR(MODULE_NET, "Received invalid message, ignore it!");
+            thread->ClosingClientCon(session->clifd);
+            return;
+        } else {
+            session->buf_info.got_head = true;
+        }
+    }
+
+    if ((evbuffer_get_length(bev->input) == session->buf_info.total_size) && (session->buf_info.got_head)) {
+
+        u_int8 buffer[MAX_DATA_LENGTH] = { 0 };
+        u_int8 *buf = &buffer[0];
+        u_int8 *pBuf = NULL;
+
+        if (session->buf_info.total_size > MAX_DATA_LENGTH) {
+            try {
+                pBuf = new u_int8[session->buf_info.total_size];
+            } catch (exception &e) {
+                LOG_ERROR(MODULE_NET, "New pBuf failed.");
+                return;
+            }
+            buf = pBuf;
+        }
+
+        bufferevent_read(bev, buf, session->buf_info.total_size);
+
+        const string data((char *)&buf[DATA_HEAD_LENGTH], session->buf_info.total_size - DATA_HEAD_LENGTH);
+
+        //reset the session flag
+        session->buf_info.total_size = 0;
+        session->buf_info.got_head = false;
+
+        session->thread->MessageHandle(session->clifd, session->buf_info.msg_type, data);
+
+        if (pBuf != NULL) {
+            delete pBuf;
+            pBuf = NULL;
+        }
+    }
+}
+
+void WorkThread::OnEventCb(struct bufferevent *bev, short events, void *arg)
+{
+    UserSession* session = static_cast<UserSession *>(arg);
+    bool ret = true;
+    WorkThread *thread = session->thread;
+
+    if (events & BEV_EVENT_EOF) {
+        LOG_DEBUG(MODULE_NET,"Connection closed Or Read/Write Over ?");
+    } else if (events & BEV_EVENT_ERROR) {
+        LOG_DEBUG(MODULE_NET,"Got an error on the connection: %s", strerror(errno));
+        ret = false;
+    } else if (events & (BEV_EVENT_TIMEOUT|BEV_EVENT_READING)) {
+        LOG_DEBUG(MODULE_NET,"timeout when reading");
+        ret = false;
+    } else if (events & (BEV_EVENT_TIMEOUT|BEV_EVENT_WRITING)) {
+        LOG_DEBUG(MODULE_NET,"timeout when writing");
+        ret = false;
+    }
+
+   if (!ret) {
+        session->SetHandleResult(ret);
+        thread->ClosingClientCon(session->clifd);
+   }
 }
 
 void WorkThread::Run()

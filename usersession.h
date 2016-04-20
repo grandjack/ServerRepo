@@ -64,6 +64,12 @@ struct AdPicturesInfo
     u_int32 image_size;    
 };
 
+typedef struct {
+    u_int32 total_size;
+    u_int8  msg_type;
+    bool got_head;
+}ReadBufInfo;
+
 class UserSession
 {
 public:
@@ -99,6 +105,9 @@ public:
     UserGameStatus status;
 
     FILE *ad_img_fp;
+
+    bufferevent *bufev;
+    ReadBufInfo buf_info;
 
 private:
     bool send_status;
