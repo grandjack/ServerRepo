@@ -6,7 +6,6 @@
 #include <errno.h>
 #include "chessboard.h"
 
-extern void AddEventForBase(struct event_base *base, struct event *ev, evutil_socket_t fd, short events,void (*callback)(evutil_socket_t, short, void *), void *arg);
 MainThread* MainThread::mainThread = NULL;
 
 MainThread::~MainThread()
@@ -32,7 +31,7 @@ MainThread::MainThread() : lastSelectIndex(0),threadNum(0)
     pthread_cond_init(&init_cond, NULL);
     
     thread_id = pthread_self();
-    mainEventBase = event_init();
+    mainEventBase = event_base_new();
 
     for (u_int32 i=1; i<= gameHallMaxNum; i++) {
         GameHall *pGameHall = new GameHall(i, chessBoardMaxNum);
@@ -172,6 +171,8 @@ void MainThread::AcceptHandler(const int fd, const short which, void *arg)
     session = new UserSession();
     session->clifd = iCliFd;
     
+    evutil_make_socket_nonblocking(session->clifd);
+
     pThread->PushSessionBack(session);
     
     work = pThread->GetOneThread();

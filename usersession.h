@@ -104,5 +104,4 @@ private:
     bool send_status;
     
 };
-
 #endif/*__USER_SESSION_HEAD__*/

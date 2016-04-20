@@ -14,7 +14,9 @@ int main()
     struct event signal_int, signal_term;
     MainThread *mainThread = NULL;
     
-    log_init(LOG_FILE, 102400,DEBUG);
+    log_init(LOG_FILE, 102400, DEBUG);
+
+    sig_ignore(SIGPIPE);
     
     LOG_DEBUG(MODULE_COMMON, "Begain create main thread...");
     

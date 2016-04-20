@@ -110,7 +110,7 @@ bool WorkThread::SetupThread()
     bool ret = false;
     int fds[2];
     
-    base = event_init();
+    base = event_base_new();
     
     if (!base) {
         return ret;
@@ -266,6 +266,13 @@ bool WorkThread::OnWrite(int iCliFd, const u_int32 msg_type, const string &data,
     u_int32 sendLen = 0;
     int iLen = 0;
     bool ret = true;
+    fd_set send_set;
+    int select_counter = -1;
+
+    struct timeval time_out;
+    struct timeval * timeout = &time_out;
+    timeout->tv_sec = 3;
+    timeout->tv_usec = 0;
 
     if (user == NULL || iCliFd < 0) {
         LOG_ERROR(MODULE_NET, "Got parameter failed.");
@@ -293,24 +300,61 @@ bool WorkThread::OnWrite(int iCliFd, const u_int32 msg_type, const string &data,
 
     LOG_DEBUG(MODULE_NET, "Send totalSize[%u] msg_type %u for user[%s]", totalSize, msg_type, user->user_info.account.c_str());
 
-    while(sendLen < totalSize)
+    do
     {
-        iLen = send(iCliFd, &buf[sendLen], totalSize-sendLen, 0);
-        if (iLen <= 0) {
-            if ((errno == EAGAIN) || (errno == EINTR) || (errno == EWOULDBLOCK)) {
-                LOG_INFO(MODULE_NET, "errno EINTR, will continue");
-                continue;
-            } else {
-                LOG_ERROR(MODULE_NET, "send() return err: %d,[%s]\n", errno, strerror(errno));
-                //ClosingClientCon(iCliFd);
+        FD_ZERO(&send_set);
+        FD_SET(iCliFd, &send_set);
+
+        select_counter = select(iCliFd + 1, NULL, &send_set, NULL, timeout);
+        if (select_counter == 0) {
+            if (timeout != NULL) {
+                /* Time out... */
+                LOG_ERROR(MODULE_NET, "select() timeout for send() err: %d,[%s]\n", errno, strerror(errno));
                 ret = false;
                 user->SetHandleResult(ret);
-                break;
+                goto done;
+            } else {
+                usleep(100);
+                continue;
             }
-        } else {
-            sendLen += iLen;
+        } else if (select_counter < 0) {
+            /* select be interrupt? */
+            if (errno != EINTR) {
+                LOG_ERROR(MODULE_NET, "select() return %d, err: %d,[%s]\n", select_counter, errno, strerror(errno));
+                ret = false;
+                user->SetHandleResult(ret);
+                goto done;
+            } else {
+                usleep(100);
+                continue;
+            }
         }
-    }
+
+
+        if (FD_ISSET(iCliFd, &send_set)) {
+            iLen = send(iCliFd, &buf[sendLen], totalSize-sendLen, 0);
+            if (iLen <= 0) {
+                if ((errno == EAGAIN) || (errno == EINTR) || (errno == EWOULDBLOCK)) {
+                    LOG_INFO(MODULE_NET, "errno EINTR, will continue, current send length;%d, %d,[%s]", sendLen, errno, strerror(errno));
+                    usleep(100);
+                    continue;
+                } else {
+                    LOG_ERROR(MODULE_NET, "send() return err: %d,[%s]\n", errno, strerror(errno));
+                    //ClosingClientCon(iCliFd);
+                    ret = false;
+                    user->SetHandleResult(ret);
+                    goto done;
+                }
+            } else {
+                sendLen += iLen;
+            }
+        }
+    }while(sendLen < totalSize);
+
+
+    LOG_DEBUG(MODULE_NET, "Send successfully.");
+
+done:
 
     if (pBuf != NULL) {
         delete []pBuf;
@@ -372,6 +416,7 @@ void WorkThread::OnRead(int iCliFd, short iEvent, void *arg)
         } else if (iLen <= 0) {
             if ((errno == EAGAIN) || (errno == EINTR) || (errno == EWOULDBLOCK)) {
                 LOG_INFO(MODULE_NET, "errno EINTR, will continue");
+                usleep(100);
                 continue;
             } else {
                 LOG_ERROR(MODULE_NET, "recv() return err: %d,[%s]", errno, strerror(errno));
