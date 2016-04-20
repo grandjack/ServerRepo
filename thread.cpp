@@ -311,8 +311,7 @@ bool WorkThread::OnWrite(int iCliFd, const u_int32 msg_type, const string &data,
                 /* Time out... */
                 LOG_ERROR(MODULE_NET, "select() timeout for send() err: %d,[%s]\n", errno, strerror(errno));
                 ret = false;
-                user->SetHandleResult(ret);
-                goto done;
+                break;
             } else {
                 usleep(100);
                 continue;
@@ -322,8 +321,7 @@ bool WorkThread::OnWrite(int iCliFd, const u_int32 msg_type, const string &data,
             if (errno != EINTR) {
                 LOG_ERROR(MODULE_NET, "select() return %d, err: %d,[%s]\n", select_counter, errno, strerror(errno));
                 ret = false;
-                user->SetHandleResult(ret);
-                goto done;
+                break;
             } else {
                 usleep(100);
                 continue;
@@ -340,10 +338,8 @@ bool WorkThread::OnWrite(int iCliFd, const u_int32 msg_type, const string &data,
                     continue;
                 } else {
                     LOG_ERROR(MODULE_NET, "send() return err: %d,[%s]\n", errno, strerror(errno));
-                    //ClosingClientCon(iCliFd);
                     ret = false;
-                    user->SetHandleResult(ret);
-                    goto done;
+                    break;
                 }
             } else {
                 sendLen += iLen;
@@ -352,9 +348,11 @@ bool WorkThread::OnWrite(int iCliFd, const u_int32 msg_type, const string &data,
     }while(sendLen < totalSize);
 
 
-    LOG_DEBUG(MODULE_NET, "Send successfully.");
-
-done:
+    if (true == ret) {
+        LOG_DEBUG(MODULE_NET, "Send successfully.");
+    }else {
+        user->SetHandleResult(ret);
+    }
 
     if (pBuf != NULL) {
         delete []pBuf;
@@ -376,64 +374,107 @@ void WorkThread::OnRead(int iCliFd, short iEvent, void *arg)
     u_int32 totalSize = leftLen;
     bool gotHead = false;
     u_int32 msg_type = 0;
+    bool ret = true;
 
-    while(recvLen < totalSize) {
-        iLen = recv(iCliFd, &buf[recvLen], leftLen, 0);
-        if (iLen > 0) {
-            recvLen += iLen;
-            
-            if (!gotHead) {
-                if (recvLen >= DATA_HEAD_LENGTH) {
-                    totalSize = *((u_int32 *)(buf));
-                    msg_type = *(((u_int32 *)(buf))+1);
-                    
-                    LOG_DEBUG(MODULE_COMMON, "Got message total size : %u msg_type %u", totalSize, msg_type);
-                    if ( msg_type > MSG_TYPE_MAX || totalSize > 500*MAX_DATA_LENGTH) {
-                        LOG_ERROR(MODULE_NET, "Received invalid message, ignore it!");
-                        pThread->ClosingClientCon(iCliFd);
-                        return;
-                    }
-                    
-                    gotHead = true;
+    fd_set read_set;
+    int select_counter = -1;
 
-                    if (totalSize > MAX_DATA_LENGTH) {
-                        try {
-                            pBuf = new u_int8[totalSize];
-                        } catch (exception &e) {
-                            LOG_ERROR(MODULE_NET, "New pBuf failed.");
-                            return;
-                        }
-                        memcpy(pBuf, buf, recvLen);
-                        buf = pBuf;
-                    }
-                }
-            }
+    struct timeval time_out;
+    struct timeval * timeout = &time_out;
+    timeout->tv_sec = 3;
+    timeout->tv_usec = 0;
 
-            //LOG_DEBUG(MODULE_NET, "Current recv Len %u", iLen);
-            
-            leftLen = totalSize - recvLen;
-            
-        } else if (iLen <= 0) {
-            if ((errno == EAGAIN) || (errno == EINTR) || (errno == EWOULDBLOCK)) {
-                LOG_INFO(MODULE_NET, "errno EINTR, will continue");
+    do {
+        FD_ZERO(&read_set);
+        FD_SET(iCliFd, &read_set);
+
+        select_counter = select(iCliFd + 1, &read_set, NULL, NULL, timeout);
+        if (select_counter == 0) {
+            if (timeout != NULL) {
+                /* Time out... */
+                LOG_ERROR(MODULE_NET, "select() timeout for send() err: %d,[%s]\n", errno, strerror(errno));
+                ret = false;
+                break;
+            } else {
                 usleep(100);
                 continue;
-            } else {
-                LOG_ERROR(MODULE_NET, "recv() return err: %d,[%s]", errno, strerror(errno));
-                pThread->ClosingClientCon(iCliFd);
+            }
+        } else if (select_counter < 0) {
+            /* select be interrupt? */
+            if (errno != EINTR) {
+                LOG_ERROR(MODULE_NET, "select() return %d, err: %d,[%s]\n", select_counter, errno, strerror(errno));
+                ret = false;
                 break;
+            } else {
+                usleep(100);
+                continue;
             }
         }
+
+
+        if (FD_ISSET(iCliFd, &read_set)) {
+            iLen = recv(iCliFd, &buf[recvLen], leftLen, 0);
+            if (iLen > 0) {
+                recvLen += iLen;
+
+                if (!gotHead) {
+                    if (recvLen >= DATA_HEAD_LENGTH) {
+                        totalSize = *((u_int32 *)(buf));
+                        msg_type = *(((u_int32 *)(buf))+1);
+
+                        LOG_DEBUG(MODULE_COMMON, "Got message total size : %u msg_type %u", totalSize, msg_type);
+                        if ( msg_type > MSG_TYPE_MAX || totalSize > 500*MAX_DATA_LENGTH) {
+                            LOG_ERROR(MODULE_NET, "Received invalid message, ignore it!");
+                            ret = false;
+                            break;
+                        }
+
+                        gotHead = true;
+
+                        if (totalSize > MAX_DATA_LENGTH) {
+                            try {
+                                pBuf = new u_int8[totalSize];
+                            } catch (exception &e) {
+                                LOG_ERROR(MODULE_NET, "New pBuf failed.");
+                                ret = false;
+                                break;
+                            }
+                            memcpy(pBuf, buf, recvLen);
+                            buf = pBuf;
+                        }
+                    }
+                }
+
+                //LOG_DEBUG(MODULE_NET, "Current recv Len %u", iLen);
+
+                leftLen = totalSize - recvLen;
+
+            } else if (iLen <= 0) {
+                if ((errno == EAGAIN) || (errno == EINTR) || (errno == EWOULDBLOCK)) {
+                    LOG_INFO(MODULE_NET, "errno EINTR, will continue");
+                    usleep(100);
+                    continue;
+                } else {
+                    LOG_ERROR(MODULE_NET, "recv() return err: %d,[%s]", errno, strerror(errno));
+                    ret = false;
+                    break;
+                }
+            }
+        }
+    }while(recvLen < totalSize);
+
+
+    if (true == ret) {
+        const string data((char *)&buf[DATA_HEAD_LENGTH], totalSize - DATA_HEAD_LENGTH);
+        pThread->MessageHandle(iCliFd, msg_type, data);
+    } else {
+        pThread->ClosingClientCon(iCliFd);
     }
 
-    const string data((char *)&buf[DATA_HEAD_LENGTH], totalSize - DATA_HEAD_LENGTH);
-    
     if (pBuf != NULL) {
         delete []pBuf;
         pBuf = NULL;
     }
-
-    pThread->MessageHandle(iCliFd, msg_type, data);
 } 
 
 int WorkThread::GetSessionsNum() const
