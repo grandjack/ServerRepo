@@ -24,12 +24,17 @@ FindPwdViaEmail::~FindPwdViaEmail()
 bool FindPwdViaEmail::FindPwdViaAccount(const string &account)
 {
     if (instance_ == NULL) {
-        instance_ = new FindPwdViaEmail();
-        if (instance_ != NULL) {
-            pthread_mutex_lock(&instance_->mutex_);
-            timer_init();
-            pthread_mutex_unlock(&instance_->mutex_);
+        pthread_mutex_lock(&instance_->mutex_);
+        if (instance_ == NULL) {
+            instance_ = new FindPwdViaEmail();
+            if (instance_ != NULL) {
+                timer_init();
+            } else {
+                pthread_mutex_unlock(&instance_->mutex_);
+                return false;
+            }
         }
+        pthread_mutex_unlock(&instance_->mutex_);
     }
 
     return instance_->AddToTimerList(account);
@@ -38,9 +43,6 @@ bool FindPwdViaEmail::FindPwdViaAccount(const string &account)
 
 bool FindPwdViaEmail::AddToTimerList(const string &account)
 {
-
-    pthread_mutex_lock(&instance_->mutex_);
-
     FpwUserInfo *user = new FpwUserInfo();
     char buffer[33] = { 0 };
     sprintf(buffer, "%u", (unsigned int)time(NULL));
@@ -54,9 +56,7 @@ bool FindPwdViaEmail::AddToTimerList(const string &account)
             delete user;
         }
     }
-    
-    pthread_mutex_unlock(&instance_->mutex_);
-    
+
     return true;
 }
 

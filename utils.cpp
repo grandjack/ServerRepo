@@ -6,7 +6,7 @@ void signal_handle(evutil_socket_t sig, short events, void *arg)
 {
     struct event_base *base = (event_base*)arg;
 
-    LOG_INFO(MODULE_COMMON, "Caught an SIGINT signal; exiting cleanly immediately.");
+    LOG_INFO(MODULE_COMMON, "Caught an SIGINT[%d] signal; exiting cleanly immediately.", sig);
 
     event_base_loopexit(base, NULL);
 }

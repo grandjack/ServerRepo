@@ -309,122 +309,6 @@ bool WorkThread::OnWrite(int iCliFd, const u_int32 msg_type, const string &data,
 
     return ret;
 }
-#if 0
-void WorkThread::OnRead(int iCliFd, short iEvent, void *arg)
-{
-    WorkThread * pThread = static_cast<WorkThread *>(arg);
-    int iLen = 0; 
-    u_int8 buffer[MAX_DATA_LENGTH] = { 0 };
-    u_int8 *buf = &buffer[0];
-    u_int8 *pBuf = NULL;
-    u_int32 recvLen = 0;
-    u_int32 leftLen = DATA_HEAD_LENGTH;
-    u_int32 totalSize = leftLen;
-    bool gotHead = false;
-    u_int32 msg_type = 0;
-    bool ret = true;
-
-    fd_set read_set;
-    int select_counter = -1;
-
-    struct timeval time_out;
-    struct timeval * timeout = &time_out;
-    timeout->tv_sec = 3;
-    timeout->tv_usec = 0;
-
-    do {
-        FD_ZERO(&read_set);
-        FD_SET(iCliFd, &read_set);
-
-        select_counter = select(iCliFd + 1, &read_set, NULL, NULL, timeout);
-        if (select_counter == 0) {
-            if (timeout != NULL) {
-                /* Time out... */
-                LOG_ERROR(MODULE_NET, "select() timeout for send() err: %d,[%s]\n", errno, strerror(errno));
-                ret = false;
-                break;
-            } else {
-                usleep(100);
-                continue;
-            }
-        } else if (select_counter < 0) {
-            /* select be interrupt? */
-            if (errno != EINTR) {
-                LOG_ERROR(MODULE_NET, "select() return %d, err: %d,[%s]\n", select_counter, errno, strerror(errno));
-                ret = false;
-                break;
-            } else {
-                usleep(100);
-                continue;
-            }
-        }
-
-
-        if (FD_ISSET(iCliFd, &read_set)) {
-            iLen = recv(iCliFd, &buf[recvLen], leftLen, 0);
-            if (iLen > 0) {
-                recvLen += iLen;
-
-                if (!gotHead) {
-                    if (recvLen >= DATA_HEAD_LENGTH) {
-                        totalSize = *((u_int32 *)(buf));
-                        msg_type = *(((u_int32 *)(buf))+1);
-
-                        LOG_DEBUG(MODULE_COMMON, "Got message total size : %u msg_type %u", totalSize, msg_type);
-                        if ( msg_type > MSG_TYPE_MAX || totalSize > 500*MAX_DATA_LENGTH) {
-                            LOG_ERROR(MODULE_NET, "Received invalid message, ignore it!");
-                            ret = false;
-                            break;
-                        }
-
-                        gotHead = true;
-
-                        if (totalSize > MAX_DATA_LENGTH) {
-                            try {
-                                pBuf = new u_int8[totalSize];
-                            } catch (exception &e) {
-                                LOG_ERROR(MODULE_NET, "New pBuf failed.");
-                                ret = false;
-                                break;
-                            }
-                            memcpy(pBuf, buf, recvLen);
-                            buf = pBuf;
-                        }
-                    }
-                }
-
-                //LOG_DEBUG(MODULE_NET, "Current recv Len %u", iLen);
-
-                leftLen = totalSize - recvLen;
-
-            } else if (iLen <= 0) {
-                if ((errno == EAGAIN) || (errno == EINTR) || (errno == EWOULDBLOCK)) {
-                    LOG_INFO(MODULE_NET, "errno EINTR, will continue");
-                    usleep(100);
-                    continue;
-                } else {
-                    LOG_ERROR(MODULE_NET, "recv() return err: %d,[%s]", errno, strerror(errno));
-                    ret = false;
-                    break;
-                }
-            }
-        }
-    }while(recvLen < totalSize);
-
-
-    if (true == ret) {
-        const string data((char *)&buf[DATA_HEAD_LENGTH], totalSize - DATA_HEAD_LENGTH);
-        pThread->MessageHandle(iCliFd, msg_type, data);
-    } else {
-        pThread->ClosingClientCon(iCliFd);
-    }
-
-    if (pBuf != NULL) {
-        delete []pBuf;
-        pBuf = NULL;
-    }
-} 
-#endif
 
 int WorkThread::GetSessionsNum() const
 {
@@ -807,18 +691,16 @@ void WorkThread::OnEventCb(struct bufferevent *bev, short events, void *arg)
     bool ret = true;
     WorkThread *thread = session->thread;
 
-    if (events & BEV_EVENT_EOF) {
-        LOG_DEBUG(MODULE_NET,"Connection closed Or Read/Write Over ?");
-    } else if (events & BEV_EVENT_ERROR) {
+    if (events & (BEV_EVENT_EOF|BEV_EVENT_ERROR)) {
         LOG_DEBUG(MODULE_NET,"Got an error on the connection: %s", strerror(errno));
         ret = false;
     } else if ((events == (BEV_EVENT_TIMEOUT|BEV_EVENT_READING)) ||
               ((events & BEV_EVENT_TIMEOUT) && (events & BEV_EVENT_READING))) {
-        LOG_DEBUG(MODULE_NET,"timeout when reading");
+        LOG_DEBUG(MODULE_NET,"timeout when reading!");
         ret = false;
     } else if ((events == (BEV_EVENT_TIMEOUT|BEV_EVENT_WRITING)) ||
               ((events & BEV_EVENT_TIMEOUT) && (events & BEV_EVENT_WRITING))) {
-        LOG_DEBUG(MODULE_NET,"timeout when writing");
+        LOG_DEBUG(MODULE_NET,"timeout when writing!");
         ret = false;
     }
 

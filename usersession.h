@@ -18,7 +18,7 @@ class State;
 #endif
 
 #ifndef MAX_DATA_LENGTH
-#define MAX_DATA_LENGTH (DATA_HEAD_LENGTH + 2048)
+#define MAX_DATA_LENGTH (DATA_HEAD_LENGTH + (0x01<<13))
 #endif
 
 

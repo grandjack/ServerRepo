@@ -219,113 +219,6 @@ bool StateAdPictureDownload::MsgHandle(const u_int32 msg_type, const string &msg
     return ret;
 }
 
-#if 0
-bool StateAdPictureDownload::AdPictureItemHandle(const string &msg)
-{
-    bool ret = true;
-    //AdPictureItemReply item;
-    AdPicturesInfo info;
-    AdPictureContentReply reply;
-    AdPictureReq item;
-    string data;
-
-    if (item.ParseFromString(msg)) {
-        
-        info.image_id = item.image_id();
-        stateMachine->thread->GetAdPicturesInfoFromDB(item.image_id(), info);
-        
-        //if (item.has_image_hashcode()) 
-        {
-            if (info.existed) {
-                if (item.has_image_hashcode()) {
-                    if (info.image_hashcode.compare(item.image_hashcode())) {//not equal
-                        //download the image
-                        DownloadImage(info.locate_path);
-                        if ((item.has_last_one()) && (item.last_one())) {
-                            reply.set_synced(false);
-                            reply.set_ended(true);
-                            reply.SerializeToString(&data);
-                            ret = stateMachine->MessageReply(MSG_AD_IMAGE_CONTENT, data);
-                        }
-                    } else {
-                        //ignore
-                        DownloadImageInfo(info);
-                        if ((item.has_last_one()) && (item.last_one())) {
-                            reply.set_synced(false);
-                            reply.set_ended(true);
-                            reply.SerializeToString(&data);
-                            ret = stateMachine->MessageReply(MSG_AD_IMAGE_CONTENT, data);
-                        }
-                    }
-                } else {
-                    //download the image info
-                    DownloadImageInfo(info);
-                    if ((item.has_last_one()) && (item.last_one())) {
-                        reply.set_synced(false);
-                        reply.set_ended(true);
-                        reply.SerializeToString(&data);
-                        ret = stateMachine->MessageReply(MSG_AD_IMAGE_CONTENT, data);
-                    }
-                }
-            } else {
-                //download the image info
-                DownloadImageInfo(info);
-                if ((item.has_last_one()) && (item.last_one())) {
-                    reply.set_synced(false);
-                    reply.set_ended(true);
-                    reply.SerializeToString(&data);
-                    ret = stateMachine->MessageReply(MSG_AD_IMAGE_CONTENT, data);
-                }
-            }
-        }
-
-        if (item.has_last_one()) {
-            if (item.last_one()) {
-                stateMachine->SetNextState(new StateGameReady(stateMachine));
-            }
-        }
-    }
-
-    return ret;
-}
-
-bool StateAdPictureDownload::DownloadImage(const string &file_path)
-{
-    FILE *fptr = NULL;
-    AdPictureContentReply reply;
-    string data;
-    char buf[1024] = { 0 };
-    size_t rdSize = 0;
-    bool ret = true;
-
-    fptr = fopen(file_path.c_str(), "r");
-    if (fptr != NULL) {
-        while((rdSize = fread(buf, 1, sizeof(buf), fptr)) > 0) {
-            const string sub_data(buf, rdSize);
-            reply.set_synced(true);
-            reply.set_content(sub_data);
-            reply.SerializeToString(&data);
-            ret = stateMachine->MessageReply(MSG_AD_IMAGE_CONTENT, data);
-            if (!ret) {
-                fclose(fptr);
-                return ret;
-            }
-        }
-
-        reply.set_synced(true);
-        reply.set_ended(true);
-        reply.SerializeToString(&data);
-        stateMachine->MessageReply(MSG_AD_IMAGE_CONTENT, data);
-
-        fclose(fptr);
-    }else {
-        LOG_DEBUG(MODULE_COMMON, "Open %s failed !", file_path.c_str());
-        ret = false;
-    }
-
-    return ret;
-}
-#endif
 bool StateAdPictureDownload::DownloadImageInfo(const AdPicturesInfo &ad_info)
 {
     AdPictureItemReply reply;
@@ -353,7 +246,7 @@ bool StateAdPictureDownload::SendImageContent()
 {
     bool ret = true;
     size_t rdSize = 0;
-    char buf[1024] = { 0 };
+    char buf[MAX_DATA_LENGTH - 3*DATA_HEAD_LENGTH] = { 0 };
     AdPictureContentReply reply;
     string data;
     
