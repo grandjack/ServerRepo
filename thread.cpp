@@ -224,15 +224,7 @@ void WorkThread::NotifyReceivedProcess(int fd, short which, void *arg)
                 bufferevent_enable(session->bufev, EV_READ);
                 bufferevent_enable(session->bufev, EV_TIMEOUT);
 
-                session->buf_info.total_size = 0;
-                session->buf_info.msg_type = 0;
-                session->buf_info.got_head = false;
-
-                struct timeval timeout;
-                timeout.tv_sec = 3;
-                timeout.tv_usec = 0;
-
-                bufferevent_set_timeouts(session->bufev, NULL, &timeout);
+                bufferevent_set_timeouts(session->bufev, NULL, &session->timeout);
             }
     
         }

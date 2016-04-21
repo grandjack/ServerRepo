@@ -9,10 +9,17 @@
 UserSession::UserSession():clifd(0),thread(NULL),locate(LOCATION_UNKNOWN),
     currChessBoard(NULL),stateMachine(NULL),nextState(NULL),status(STATUS_NOT_START),ad_img_fp(NULL),bufev(NULL),send_status(true)
 {
-    tv.tv_sec = 60;//every 10 seconds trigger the timer
+    tv.tv_sec = 60;//every 60 seconds trigger the timer
     tv.tv_usec = 0;
     stateMachine = new StateAuth(this);
     nextState = stateMachine;
+
+    buf_info.total_size = 0;
+    buf_info.msg_type = 0;
+    buf_info.got_head = false;
+
+    timeout.tv_sec = 30;//send msg timeout
+    timeout.tv_usec = 0;
 }
 
 UserSession::~UserSession()
