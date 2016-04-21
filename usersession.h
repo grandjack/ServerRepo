@@ -66,7 +66,7 @@ struct AdPicturesInfo
 
 typedef struct {
     u_int32 total_size;
-    u_int8  msg_type;
+    u_int32 msg_type;
     bool got_head;
 }ReadBufInfo;
 
