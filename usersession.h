@@ -89,7 +89,6 @@ public:
 
 public:
     int clifd;
-    struct event event;
     struct event timer_ev;
     struct timeval tv;
     WorkThread *thread;

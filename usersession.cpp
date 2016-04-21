@@ -4,6 +4,7 @@
 #include "debug.h"
 #include "thread.h"
 #include "chessboard.h"
+#include "mainthread.h"
 
 UserSession::UserSession():clifd(0),thread(NULL),locate(LOCATION_UNKNOWN),
     currChessBoard(NULL),stateMachine(NULL),nextState(NULL),status(STATUS_NOT_START),ad_img_fp(NULL),bufev(NULL),send_status(true)
@@ -70,6 +71,9 @@ void UserSession::DestructResource()
     
     thread = NULL;
 
+    event_del(&this->timer_ev);
+    bufferevent_free(this->bufev);
+    ::close(clifd);
 }
 
 void UserSession::IncreaseScore(u_int32 score)

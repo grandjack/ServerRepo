@@ -266,8 +266,7 @@ void WorkThread::DestrotiedSessions()
         //free the user sessions
         session = iter->second;
         if (session != NULL) {
-            event_del(&session->event);
-            close(session->clifd);
+            session->DestructResource();
             delete session;
         }
     }
@@ -281,16 +280,7 @@ bool WorkThread::OnWrite(int iCliFd, const u_int32 msg_type, const string &data,
     u_int8 *buf = &buffer[0];
     u_int8 *pBuf = NULL;
     u_int32 totalSize = data.size() + DATA_HEAD_LENGTH;
-//    u_int32 sendLen = 0;
-//    int iLen = 0;
     bool ret = true;
-//    fd_set send_set;
-//    int select_counter = -1;
-
-    struct timeval time_out;
-    struct timeval * timeout = &time_out;
-    timeout->tv_sec = 3;
-    timeout->tv_usec = 0;
 
     if (user == NULL || iCliFd < 0) {
         LOG_ERROR(MODULE_NET, "Got parameter failed.");
@@ -319,62 +309,6 @@ bool WorkThread::OnWrite(int iCliFd, const u_int32 msg_type, const string &data,
     LOG_DEBUG(MODULE_NET, "Send totalSize[%u] msg_type %u for user[%s]", totalSize, msg_type, user->user_info.account.c_str());
 
     bufferevent_write(user->bufev, buf, totalSize);
-    #if 0
-    do
-    {
-        FD_ZERO(&send_set);
-        FD_SET(iCliFd, &send_set);
-
-        select_counter = select(iCliFd + 1, NULL, &send_set, NULL, timeout);
-        if (select_counter == 0) {
-            if (timeout != NULL) {
-                /* Time out... */
-                LOG_ERROR(MODULE_NET, "select() timeout for send() err: %d,[%s]\n", errno, strerror(errno));
-                ret = false;
-                break;
-            } else {
-                usleep(100);
-                continue;
-            }
-        } else if (select_counter < 0) {
-            /* select be interrupt? */
-            if (errno != EINTR) {
-                LOG_ERROR(MODULE_NET, "select() return %d, err: %d,[%s]\n", select_counter, errno, strerror(errno));
-                ret = false;
-                break;
-            } else {
-                usleep(100);
-                continue;
-            }
-        }
-
-
-        if (FD_ISSET(iCliFd, &send_set)) {
-            iLen = send(iCliFd, &buf[sendLen], totalSize-sendLen, 0);
-            if (iLen <= 0) {
-                if ((errno == EAGAIN) || (errno == EINTR) || (errno == EWOULDBLOCK)) {
-                    LOG_INFO(MODULE_NET, "errno EINTR, will continue, current send length;%d, %d,[%s]", sendLen, errno, strerror(errno));
-                    usleep(100);
-                    continue;
-                } else {
-                    LOG_ERROR(MODULE_NET, "send() return err: %d,[%s]\n", errno, strerror(errno));
-                    ret = false;
-                    break;
-                }
-            } else {
-                sendLen += iLen;
-            }
-        }
-    }while(sendLen < totalSize);
-
-
-    if (true == ret) {
-        LOG_DEBUG(MODULE_NET, "Send successfully.");
-    }else {
-        user->SetHandleResult(ret);
-    }
-
-    #endif
 
     if (pBuf != NULL) {
         delete []pBuf;
@@ -383,7 +317,7 @@ bool WorkThread::OnWrite(int iCliFd, const u_int32 msg_type, const string &data,
 
     return ret;
 }
-
+#if 0
 void WorkThread::OnRead(int iCliFd, short iEvent, void *arg)
 {
     WorkThread * pThread = static_cast<WorkThread *>(arg);
@@ -498,6 +432,7 @@ void WorkThread::OnRead(int iCliFd, short iEvent, void *arg)
         pBuf = NULL;
     }
 } 
+#endif
 
 int WorkThread::GetSessionsNum() const
 {
@@ -550,10 +485,6 @@ bool WorkThread::ClosingClientCon(int fd)
             fdSessionMap.erase(l_it);
             LOG_INFO(MODULE_COMMON, "Destrory user[%s]...\r\n", session->user_info.account.empty() ? "Unknown" : session->user_info.account.c_str());
             session->DestructResource();
-            //event_del(&session->event);
-            event_del(&session->timer_ev);
-            bufferevent_free(session->bufev);
-            close(fd);
             delete session;
         }
     }
@@ -889,10 +820,12 @@ void WorkThread::OnEventCb(struct bufferevent *bev, short events, void *arg)
     } else if (events & BEV_EVENT_ERROR) {
         LOG_DEBUG(MODULE_NET,"Got an error on the connection: %s", strerror(errno));
         ret = false;
-    } else if (events & (BEV_EVENT_TIMEOUT|BEV_EVENT_READING)) {
+    } else if ((events == (BEV_EVENT_TIMEOUT|BEV_EVENT_READING)) ||
+              ((events & BEV_EVENT_TIMEOUT) && (events & BEV_EVENT_READING))) {
         LOG_DEBUG(MODULE_NET,"timeout when reading");
         ret = false;
-    } else if (events & (BEV_EVENT_TIMEOUT|BEV_EVENT_WRITING)) {
+    } else if ((events == (BEV_EVENT_TIMEOUT|BEV_EVENT_WRITING)) ||
+              ((events & BEV_EVENT_TIMEOUT) && (events & BEV_EVENT_WRITING))) {
         LOG_DEBUG(MODULE_NET,"timeout when writing");
         ret = false;
     }

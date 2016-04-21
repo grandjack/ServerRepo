@@ -52,7 +52,7 @@ public:
     ~WorkThread();
 
     static void NotifyReceivedProcess(int fd, short which, void *arg);
-    static void OnRead(int iCliFd, short iEvent, void *arg);
+    //static void OnRead(int iCliFd, short iEvent, void *arg);
     static void TimerOutHandle(int iCliFd, short iEvent, void *arg);
 
     static void OnReadCb(struct bufferevent *bev, void *arg);
