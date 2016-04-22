@@ -18,8 +18,8 @@ UserSession::UserSession():clifd(0),thread(NULL),locate(LOCATION_UNKNOWN),
     buf_info.msg_type = 0;
     buf_info.got_head = false;
 
-    timeout.tv_sec = 30;//send msg timeout
-    timeout.tv_usec = 0;
+    send_tv.tv_sec = 50;
+    send_tv.tv_usec = 0;
 }
 
 UserSession::~UserSession()

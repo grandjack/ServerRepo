@@ -168,7 +168,7 @@ void WorkThread::TimerOutHandle(int iCliFd, short iEvent, void *arg)
 
     //Send the message to the client user
 
-    LOG_DEBUG(MODULE_COMMON, "User[%s] timer out, we will get him rid off.", session->user_info.account.c_str());
+    LOG_DEBUG(MODULE_COMMON, "User[%s] timer out, we will get him rid off.", session->user_info.account.size() ? session->user_info.account.c_str() : "Unknown");
 
     thread->ClosingClientCon(session->clifd);
 }
@@ -180,12 +180,12 @@ void WorkThread::ResetTimer(UserSession *session)
     }
 
     try {
-        event_del(&session->timer_ev);
+        //event_del(&session->timer_ev);
 
-        LOG_DEBUG(MODULE_COMMON, "ResetTimer for user[%s]...", session->user_info.account.c_str());
+        LOG_DEBUG(MODULE_COMMON, "ResetTimer for user[%s]...", session->user_info.account.size() ? session->user_info.account.c_str() : "Unknown");
         
-        evtimer_set(&session->timer_ev, TimerOutHandle, (void*)session);
-        event_base_set(session->thread->base, &session->timer_ev);
+        //evtimer_set(&session->timer_ev, TimerOutHandle, (void*)session);
+        //event_base_set(session->thread->base, &session->timer_ev);
         evtimer_add(&session->timer_ev, &session->tv);
     } catch(exception &e) {
         LOG_ERROR(MODULE_COMMON, "Update timer failed.");
@@ -224,7 +224,7 @@ void WorkThread::NotifyReceivedProcess(int fd, short which, void *arg)
                 bufferevent_enable(session->bufev, EV_READ);
                 bufferevent_enable(session->bufev, EV_TIMEOUT);
 
-                bufferevent_set_timeouts(session->bufev, NULL, &session->timeout);
+                bufferevent_set_timeouts(session->bufev, NULL, &session->send_tv);
             }
     
         }
@@ -280,7 +280,7 @@ bool WorkThread::OnWrite(int iCliFd, const u_int32 msg_type, const string &data,
     }
 
     if(!user->GetHandleResult()) {
-        LOG_ERROR(MODULE_NET, "Can NOT send, this session[%s] will be over!", user->user_info.account.c_str());
+        LOG_ERROR(MODULE_NET, "Can NOT send, this session[%s] will be closed!", user->user_info.account.c_str());
         return false;
     }
 
@@ -351,7 +351,7 @@ bool WorkThread::ClosingClientCon(int fd)
     }
     catch (const exception &e) {
         LOG_ERROR(MODULE_COMMON, "Get session failed.");
-        close(fd);
+        ::close(fd);
         return false;
     }
 
@@ -633,8 +633,11 @@ void WorkThread::OnReadCb(struct bufferevent *bev, void *arg)
 {
     UserSession *session = static_cast<UserSession *>(arg);
     WorkThread *thread = session->thread;
+    size_t input_len = 0;
 
-    if ((!session->buf_info.got_head) && (evbuffer_get_length(bev->input) >= DATA_HEAD_LENGTH)) {
+    input_len = evbuffer_get_length(bev->input);
+
+    if ((!session->buf_info.got_head) && (input_len >= DATA_HEAD_LENGTH)) {
 
         char head[DATA_HEAD_LENGTH] = { 0 };
         evbuffer_copyout(bev->input, head, DATA_HEAD_LENGTH);
@@ -652,7 +655,7 @@ void WorkThread::OnReadCb(struct bufferevent *bev, void *arg)
         }
     }
 
-    if ((evbuffer_get_length(bev->input) == session->buf_info.total_size) && (session->buf_info.got_head)) {
+    if ((input_len == session->buf_info.total_size) && (session->buf_info.got_head)) {
 
         u_int8 buffer[MAX_DATA_LENGTH] = { 0 };
         u_int8 *buf = &buffer[0];

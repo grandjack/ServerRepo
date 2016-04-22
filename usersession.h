@@ -107,7 +107,7 @@ public:
 
     bufferevent *bufev;
     ReadBufInfo buf_info;
-    struct timeval timeout;
+    struct timeval send_tv;
 
 private:
     bool send_status;
