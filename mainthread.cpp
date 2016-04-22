@@ -159,7 +159,7 @@ void MainThread::AcceptHandler(const int fd, const short which, void *arg)
     MainThread * pThread = static_cast<MainThread *>(arg);
     int iCliFd = -1; 
     struct sockaddr_in sCliAddr;
-   
+
     socklen_t iSinSize = sizeof(sCliAddr); 
     iCliFd = accept(fd, (struct sockaddr*)&sCliAddr, &iSinSize);
     if (iCliFd < 0)
@@ -170,7 +170,7 @@ void MainThread::AcceptHandler(const int fd, const short which, void *arg)
 
     session = new UserSession();
     session->clifd = iCliFd;
-    
+
     evutil_make_socket_nonblocking(session->clifd);
 
     pThread->PushSessionBack(session);
@@ -178,7 +178,7 @@ void MainThread::AcceptHandler(const int fd, const short which, void *arg)
     work = pThread->GetOneThread();
     work->NotifyThread(COMMAND_NOTIFY_ADD_EVENT);
 
-    LOG_DEBUG(MODULE_COMMON,"############### a New client connect: %d #################### ",iCliFd);
+    LOG_DEBUG(MODULE_COMMON,"############### Got a new connection: %d [%s:%d] #################### ",iCliFd, inet_ntoa(sCliAddr.sin_addr), sCliAddr.sin_port);
 
 }
 

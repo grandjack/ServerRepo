@@ -78,8 +78,11 @@ void UserSession::DestructResource()
     
     thread = NULL;
 
-    event_del(&this->timer_ev);
-    bufferevent_free(this->bufev);
+    if (bufev != NULL) {
+        bufferevent_free(bufev);
+    }
+
+    event_del(&timer_ev);
     ::close(clifd);
 }
 

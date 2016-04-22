@@ -315,16 +315,18 @@ int WorkThread::GetSessionsNum() const
     return fdSessionMap.size();
 }
 
-void WorkThread::MessageHandle(int fd, const u_int32 msg_type, const string &msg)
+bool WorkThread::MessageHandle(int fd, const u_int32 msg_type, const string &msg)
 {
     map<int ,UserSession* >::iterator l_it;
     UserSession *session = NULL;
+    bool ret = false;
     
     try {
         l_it = fdSessionMap.find(fd);
     } catch (const exception &e) {
         LOG_ERROR(MODULE_COMMON, "Get session failed.");
-        return ;
+        ::close(fd);
+        return ret;
     }
       
     if(l_it != fdSessionMap.end()) {
@@ -335,9 +337,14 @@ void WorkThread::MessageHandle(int fd, const u_int32 msg_type, const string &msg
                 ClosingClientCon(fd);
             } else {
                 ResetTimer(session);
+                ret = true;
             }
+        } else {
+            ::close(fd);
         }
     }
+
+    return ret;
 
 }
 
@@ -675,11 +682,12 @@ void WorkThread::OnReadCb(struct bufferevent *bev, void *arg)
 
         const string data((char *)&buf[DATA_HEAD_LENGTH], session->buf_info.total_size - DATA_HEAD_LENGTH);
 
-        //reset the session flag
-        session->buf_info.total_size = 0;
-        session->buf_info.got_head = false;
-
-        session->thread->MessageHandle(session->clifd, session->buf_info.msg_type, data);
+        if (thread->MessageHandle(session->clifd, session->buf_info.msg_type, data)) {
+            //reset the session flag after executing MessageHandle() only when it executed successfully
+            session->buf_info.total_size = 0;
+            session->buf_info.msg_type = 0;
+            session->buf_info.got_head = false;
+        }
 
         if (pBuf != NULL) {
             delete pBuf;
