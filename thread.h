@@ -22,6 +22,8 @@ private:
     pthread_mutex_t init_lock;
     pthread_cond_t init_cond;
     bool beInitialed;
+
+    bool joinable;
     
     static void* run0(void* pVoid);  
     static void * thread_proxy_func(void * args);

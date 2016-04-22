@@ -84,6 +84,9 @@ void UserSession::DestructResource()
 
     event_del(&timer_ev);
     ::close(clifd);
+
+    LOG_INFO(MODULE_COMMON, "################### User[%s] Destroried! ###################\r\n", user_info.account.empty() ? "Unknown" : user_info.account.c_str());
+
 }
 
 void UserSession::IncreaseScore(u_int32 score)

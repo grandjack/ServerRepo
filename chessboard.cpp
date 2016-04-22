@@ -18,6 +18,17 @@ GameHall::GameHall(u_int32 id, u_int32 num):gameHallID(id),chessBoardMaxNum(num)
 GameHall::~GameHall()
 {
     pthread_mutex_destroy(&mutex);
+
+    std::map<u_int32, ChessBoard*>::iterator iter;
+    for ( iter = chessBoardInfo.begin(); iter != chessBoardInfo.end(); iter++ ) {
+        ChessBoard *pChessBoard = iter->second;
+        if (pChessBoard != NULL) {
+            LOG_INFO(MODULE_COMMON, "Destrory ChessBoard[%d]", pChessBoard->GetChessBoardID())
+            delete pChessBoard;
+        }
+    }
+
+    chessBoardInfo.clear();
 }
 
 u_int32 GameHall::GetChessValidBoardNum() const

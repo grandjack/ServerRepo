@@ -21,6 +21,15 @@ FindPwdViaEmail::~FindPwdViaEmail()
     pthread_mutex_destroy(&mutex_);
 }
 
+void FindPwdViaEmail::Destrory()
+{
+    if (instance_ != NULL) {
+        timer_destroy();
+        delete instance_;
+        instance_ = NULL;
+    }
+}
+
 bool FindPwdViaEmail::FindPwdViaAccount(const string &account)
 {
     if (instance_ == NULL) {

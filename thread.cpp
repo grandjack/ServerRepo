@@ -11,7 +11,7 @@
 
 using namespace std;
 
-Thread::Thread(): tid(0),threadStatus(THREAD_STATUS_NEW),beInitialed(false)
+Thread::Thread(): tid(0),threadStatus(THREAD_STATUS_NEW),beInitialed(false),joinable(true)
 {
     pthread_mutex_init(&init_lock, NULL);
     pthread_cond_init(&init_cond, NULL);
@@ -50,7 +50,7 @@ int Thread::getState()
   
 void Thread::join()
 {  
-    if (tid > 0)  
+    if ((tid > 0) && joinable)
     {  
         pthread_join(tid, NULL);
     }  
@@ -76,7 +76,7 @@ void * Thread::thread_proxy_func(void * args)
     return NULL;
 }  
   
-void Thread::join(unsigned long millisTime)  
+void Thread::join(unsigned long millisTime)
 {  
     if (tid == 0)  
     {  
@@ -98,7 +98,14 @@ void Thread::join(unsigned long millisTime)
 }
 bool Thread::detach()
 {
-    return (pthread_detach(tid)==0);
+    bool ret = false;
+
+    if (pthread_detach(tid) == 0) {
+        joinable = false;
+        ret = true;
+    }
+
+    return (ret);
 }
 
 WorkThread::~WorkThread(){}
@@ -366,7 +373,6 @@ bool WorkThread::ClosingClientCon(int fd)
         session = static_cast<UserSession *>(l_it->second);
         if (session != NULL) {
             fdSessionMap.erase(l_it);
-            LOG_INFO(MODULE_COMMON, "Destrory user[%s]...\r\n", session->user_info.account.empty() ? "Unknown" : session->user_info.account.c_str());
             session->DestructResource();
             delete session;
         }

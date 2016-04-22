@@ -22,6 +22,7 @@ public:
     static void SendMail(void * arg);
     static void TimeOutHandle(void * arg);
     static bool WriteUserTokentoFile(const string &account, const string &token);
+    static void Destrory();
 
 private:
     FindPwdViaEmail();

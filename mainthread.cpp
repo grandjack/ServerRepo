@@ -5,6 +5,7 @@
 #include <netinet/tcp.h>
 #include <errno.h>
 #include "chessboard.h"
+#include "findpwd.h"
 
 MainThread* MainThread::mainThread = NULL;
 
@@ -80,10 +81,12 @@ void MainThread::DestructMainThreadObj()
                 thread->NotifyThread(COMMAND_NOTIFY_QUIT_LOOP);
                 thread->join();
                 delete thread;
-            } catch (const exception & e){
+            } catch (const exception & e) {
                 LOG_ERROR(MODULE_COMMON, "catch a exception!");
             }
         }
+
+        FindPwdViaEmail::Destrory();
         
         delete mainThread;
     }
