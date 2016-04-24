@@ -23,7 +23,6 @@ GameHall::~GameHall()
     for ( iter = chessBoardInfo.begin(); iter != chessBoardInfo.end(); iter++ ) {
         ChessBoard *pChessBoard = iter->second;
         if (pChessBoard != NULL) {
-            LOG_INFO(MODULE_COMMON, "Destrory ChessBoard[%d]", pChessBoard->GetChessBoardID())
             delete pChessBoard;
         }
     }
@@ -499,10 +498,11 @@ bool ChessBoard::GiveUpHandle(const string &msg)
             if ((giveup.has_opt()) && (0 == giveup.opt().compare("exit"))) {//exit from the game room            
                 LeaveRoomHandle(user, true);
                 user->SetNextState(new StateGameReady(user));
+                user->currChessBoard = NULL;
                 LOG_DEBUG(MODULE_COMMON, "%s exit current game room, and will go to Ready State.", user->user_info.account.c_str());
             }else {
                 LeaveRoomHandle(user, false);
-            }            
+            }
         }
 
      }
@@ -772,7 +772,7 @@ void ChessBoard::LeaveRoomHandle(UserSession *user, bool really_leave)
         give_up.set_opt("exit");
         user->status = STATUS_EXITED;
         LeaveOutRoom(user);
-    }else {            
+    }else {
         user->status = STATUS_ENDED;
     }
 
@@ -854,7 +854,7 @@ bool ChessBoard::GameAgainHandle(const string &msg)
     RequestPlayReply requestReply;
     bool added_ok = false;
     UserSession *user = NULL;
-    bool should_update_hall = true;
+    u_int8 should_update_hall = 1;
     
     if (requestPlay.ParseFromString(msg)) {
         gameHall = MainThread::GetMainThreadObj()->GetGameHall(requestPlay.game_hall_id());
@@ -887,13 +887,13 @@ bool ChessBoard::GameAgainHandle(const string &msg)
                     user->currChessBoard->BroadCastMsg(MSG_REQUEST_PLAY_REPLY, data, (int)user->locate);
 
                     if (chessBoard->leftUser != NULL) {
-                        should_update_hall &= (chessBoard->leftUser->status == STATUS_READY) ? true : false;
+                        should_update_hall &= (chessBoard->leftUser->status == STATUS_READY) ? 1 : 0;
                     }
                     if (chessBoard->rightUser != NULL) {
-                        should_update_hall &= (chessBoard->rightUser->status == STATUS_READY) ? true : false;
+                        should_update_hall &= (chessBoard->rightUser->status == STATUS_READY) ? 1 : 0;
                     }
                     if (chessBoard->bottomUser != NULL) {
-                        should_update_hall &= (chessBoard->bottomUser->status == STATUS_READY) ? true : false;
+                        should_update_hall &= (chessBoard->bottomUser->status == STATUS_READY) ? 1 : 0;
                     }
 
                     if (should_update_hall) {

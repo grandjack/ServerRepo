@@ -29,7 +29,7 @@ int main()
 
     AddEventForBase(mainThread->mainEventBase,&signal_term,SIGTERM, EV_SIGNAL|EV_PERSIST, 
         signal_handle, (void*)mainThread->mainEventBase);
-    
+
     mainThread->Run();
     
     MainThread::DestructMainThreadObj();

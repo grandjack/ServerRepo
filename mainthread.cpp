@@ -23,8 +23,12 @@ MainThread::~MainThread()
             delete pGameHall;
         }
     }
-    
+
     GameHallMap.clear();
+
+    FindPwdViaEmail::Destrory();
+
+    DestrorySessionsFromPool(0, true);
 }
 MainThread::MainThread() : lastSelectIndex(0),threadNum(0)
 {
@@ -85,8 +89,6 @@ void MainThread::DestructMainThreadObj()
                 LOG_ERROR(MODULE_COMMON, "catch a exception!");
             }
         }
-
-        FindPwdViaEmail::Destrory();
         
         delete mainThread;
     }
@@ -157,7 +159,6 @@ void MainThread::IniServerEnv(int port)
 
 void MainThread::AcceptHandler(const int fd, const short which, void *arg)
 {
-    UserSession *session = NULL;
     WorkThread *work = NULL;
     MainThread * pThread = static_cast<MainThread *>(arg);
     int iCliFd = -1; 
@@ -171,18 +172,12 @@ void MainThread::AcceptHandler(const int fd, const short which, void *arg)
         return;
     }
 
-    session = new UserSession();
-    session->clifd = iCliFd;
-
-    evutil_make_socket_nonblocking(session->clifd);
-
-    pThread->PushSessionBack(session);
-    
-    work = pThread->GetOneThread();
-    work->NotifyThread(COMMAND_NOTIFY_ADD_EVENT);
-
     LOG_DEBUG(MODULE_COMMON,"############### Got a new connection: %d [%s:%d] #################### ",iCliFd, inet_ntoa(sCliAddr.sin_addr), sCliAddr.sin_port);
 
+    evutil_make_socket_nonblocking(iCliFd);
+
+    work = pThread->GetOneThread();
+    work->NotifyThread(COMMAND_NOTIFY_ADD_EVENT, iCliFd);
 }
 
 WorkThread *MainThread::GetOneThread()
@@ -208,25 +203,6 @@ WorkThread *MainThread::GetOneThreadByIndex(u_int8 index)
     return thread;
 }
 
-void MainThread::PushSessionBack(UserSession *session)
-{
-    pthread_mutex_lock(&init_lock);
-    sessionList.push_back(session);
-    pthread_mutex_unlock(&init_lock);
-}
-
-UserSession* MainThread::PopFrontSession()
-{
-    UserSession* session = NULL;
-    
-    pthread_mutex_lock(&init_lock);
-    session = sessionList.front();
-    sessionList.pop_front();
-    pthread_mutex_unlock(&init_lock);
-    
-    return session;
-}
-
 const int MainThread::GetUnhandledSessionsSize()
 {
     int size = 0;
@@ -234,6 +210,87 @@ const int MainThread::GetUnhandledSessionsSize()
     size = sessionList.size();
     pthread_mutex_unlock(&init_lock);
     return size;
+}
+
+void MainThread::CreatSessionsPool(u_int16 num)
+{
+    while(num--) {
+        UserSession *session = new UserSession();
+        sessionList.push_back(session);
+    }
+}
+
+void MainThread::DestrorySessionsFromPool(u_int16 num, bool del_all)
+{
+    UserSession* session = NULL;
+    list<UserSession*>::iterator iter;
+
+    if (del_all) {
+        for ( iter = sessionList.begin(); iter != sessionList.end(); iter++ ) {
+            session = static_cast<UserSession*>(*iter);
+            if (session != NULL) {
+                if (session->buffer != NULL) {
+                    free(session->buffer);
+                    session->buffer = NULL;
+                    session->buf_size = 0;
+                }
+                delete session;
+            }
+        }
+        sessionList.clear();
+
+    } else if (num > 0) {
+        num = (sessionList.size() < num) ? sessionList.size() : num;
+        while(num--) {
+            session = sessionList.back();
+            if (session != NULL) {
+                if (session->buffer != NULL) {
+                    free(session->buffer);
+                    session->buffer = NULL;
+                    session->buf_size = 0;
+                }
+                delete session;
+            }
+            sessionList.pop_back();
+        }
+    }
+}
+
+void MainThread::RecycleSession(UserSession *session)
+{
+    if (session != NULL) {
+        session->DestructResource();
+        pthread_mutex_lock(&init_lock);
+        sessionList.push_front(session);
+        if (sessionList.size() >= 2*connectionMaxStep) {
+            DestrorySessionsFromPool(connectionMaxStep);
+        }
+        pthread_mutex_unlock(&init_lock);
+    }
+}
+
+UserSession* MainThread::GetOneSessionFromPool(void)
+{
+    UserSession* session = NULL;
+    int size = 0;
+
+    pthread_mutex_lock(&init_lock);
+    if ((size = sessionList.size()) > 0) {
+        session = sessionList.front();
+        sessionList.pop_front();
+
+        if ((size - 1) < connectionMaxStep/2) {
+            CreatSessionsPool();
+        }
+    } else {
+        CreatSessionsPool();
+        session = sessionList.front();
+        sessionList.pop_front();
+    }
+    pthread_mutex_unlock(&init_lock);
+
+    return session;
+
 }
 
 void MainThread::Run()

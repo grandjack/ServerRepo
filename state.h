@@ -71,6 +71,11 @@ typedef struct {
     string locate_path;
 }ImageVersions;
 
+typedef struct {
+    u_int8 command;
+    int fd;
+}PipeMsg;
+
 class State
 {
 public:

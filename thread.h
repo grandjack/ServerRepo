@@ -69,7 +69,7 @@ public:
 
     bool IniSQLConnection();
 
-    void NotifyThread(const char command);
+    void NotifyThread(const u_int8 command, int fd=-1);
 
     void Run();
 

@@ -246,13 +246,13 @@ bool StateAdPictureDownload::SendImageContent()
 {
     bool ret = true;
     size_t rdSize = 0;
-    char buf[MAX_DATA_LENGTH - 3*DATA_HEAD_LENGTH] = { 0 };
+    u_int8 *buf = stateMachine->GetBuffer();
     AdPictureContentReply reply;
     string data;
     
     if (stateMachine->ad_img_fp != NULL) {
-        if((rdSize = fread(buf, 1, sizeof(buf), stateMachine->ad_img_fp)) > 0) {
-            const string sub_data(buf, rdSize);
+        if((rdSize = fread(buf, 1, stateMachine->GetBufferSize(), stateMachine->ad_img_fp)) > 0) {
+            const string sub_data((const char*)buf, rdSize);
             reply.set_ended(false);
             reply.set_content(sub_data);
             reply.SerializeToString(&data);

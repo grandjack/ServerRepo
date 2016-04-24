@@ -74,6 +74,9 @@ bool StateGameReady::GameRequestHandle(const string &msg)
             } else {
                 //reply chessBoardInfo & set status 1
                 LOG_DEBUG(MODULE_COMMON, "Add user OK, the chessboard id[%d]", chessBoard->GetChessBoardID());
+
+                stateMachine->status = STATUS_READY;
+                
                 requestReply.set_status(1);
                 stateMachine->currChessBoard = chessBoard;
 
@@ -83,7 +86,7 @@ bool StateGameReady::GameRequestHandle(const string &msg)
 
                 requestReply.set_first_come_user_locate(chessBoard->first_come_user_locate);
 
-                
+
                 chessBoardInfo = requestReply.mutable_chessboard();
 
                 chessBoard->WrapChessBoardInfo(*chessBoardInfo);
@@ -91,7 +94,6 @@ bool StateGameReady::GameRequestHandle(const string &msg)
                 /* handle successfully,then return next state*/
                 State *state = new StateGamePlay(stateMachine);
                 stateMachine->SetNextState(state);
-                stateMachine->status = STATUS_READY;
                 added_ok = true;
             }
 

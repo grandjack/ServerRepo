@@ -37,12 +37,15 @@ public:
     void Run();
 
     WorkThread *GetOneThread();
-    void PushSessionBack(UserSession *session);
-    UserSession* PopFrontSession();
     const int GetUnhandledSessionsSize();
     GameHall* GetGameHall(const u_int32 id);
     int GetThreadsNum() const;
     WorkThread *GetOneThreadByIndex(u_int8 index);
+
+    void CreatSessionsPool(u_int16 num = connectionMaxStep);
+    void RecycleSession(UserSession *session);
+    UserSession* GetOneSessionFromPool(void);
+    void DestrorySessionsFromPool(u_int16 num = 0, bool del_all = false);
     
 private:
     MainThread();
@@ -62,12 +65,13 @@ private:
     u_int32 listenFd;
     struct sockaddr_in svrAddr;   
     pthread_mutex_t init_lock;
-    pthread_cond_t init_cond;    
+    pthread_cond_t init_cond;
     std::map<u_int32, GameHall*> GameHallMap;
 
 public:
     static const u_int32 gameHallMaxNum = 5;
     static const u_int32 chessBoardMaxNum = 60;
+    static const u_int16 connectionMaxStep = 10;
 };
 
 #endif /*__MAIN_THREAD_HEAD__*/

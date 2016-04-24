@@ -43,6 +43,7 @@ typedef enum
 
 struct UsersInfo
 {
+public:
     string account;
     string password;
     u_int32 score;
@@ -50,6 +51,14 @@ struct UsersInfo
     string head_photo;
     string user_name;
     string phone;
+
+    UsersInfo(){Initial();}
+
+    void Initial()
+    {
+        account=password=email=head_photo=user_name=phone="";
+        score=0;
+    }
 };
 
 struct AdPicturesInfo
@@ -84,8 +93,8 @@ public:
     void IncreaseScore(u_int32 score=10);
     void ReduceScore(u_int32 score=10);
 
-    bool GetHandleResult() const;
-    void SetHandleResult(bool result);
+    u_int8 *GetBuffer(const size_t size=MAX_DATA_LENGTH);
+    size_t GetBufferSize(void) const;
 
 public:
     int clifd;
@@ -109,8 +118,8 @@ public:
     ReadBufInfo buf_info;
     struct timeval send_tv;
 
-private:
-    bool send_status;
+    u_int8 *buffer;
+    size_t buf_size;
     
 };
 #endif/*__USER_SESSION_HEAD__*/

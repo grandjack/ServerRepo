@@ -6,13 +6,11 @@
 #include "chessboard.h"
 #include "mainthread.h"
 
-UserSession::UserSession():clifd(0),thread(NULL),locate(LOCATION_UNKNOWN),
-    currChessBoard(NULL),stateMachine(NULL),nextState(NULL),status(STATUS_NOT_START),ad_img_fp(NULL),bufev(NULL),send_status(true)
+UserSession::UserSession():clifd(-1),thread(NULL),locate(LOCATION_UNKNOWN),
+    currChessBoard(NULL),stateMachine(NULL),nextState(NULL),status(STATUS_NOT_START),ad_img_fp(NULL),bufev(NULL)
 {
     tv.tv_sec = 60;//every 60 seconds trigger the timer
     tv.tv_usec = 0;
-    stateMachine = new StateAuth(this);
-    nextState = stateMachine;
 
     buf_info.total_size = 0;
     buf_info.msg_type = 0;
@@ -20,6 +18,9 @@ UserSession::UserSession():clifd(0),thread(NULL),locate(LOCATION_UNKNOWN),
 
     send_tv.tv_sec = 50;
     send_tv.tv_usec = 0;
+
+    buffer = NULL;
+    buf_size = 0;
 }
 
 UserSession::~UserSession()
@@ -33,6 +34,11 @@ void UserSession::SetNextState(State * state)
 
 bool UserSession::MessageHandle(const u_int32 msg_type, const string &msg)
 {
+    if (stateMachine == NULL) {
+        stateMachine = new StateAuth(this);
+        nextState = stateMachine;
+    }
+
     if (stateMachine->MsgHandle(msg_type, msg) != true) {
         LOG_ERROR(MODULE_COMMON, "MsgHandle failed. current state[%d]", stateMachine->GetType());
         return false;
@@ -55,7 +61,12 @@ bool UserSession::MessageReply(const u_int32 msg_type, const string &msg)
 void UserSession::DestructResource()
 {
     if (currChessBoard != NULL) {
-        currChessBoard->LeaveRoomHandle(this);
+        try {
+            currChessBoard->LeaveRoomHandle(this);
+        } catch(exception &e) {
+            LOG_ERROR(MODULE_COMMON, "LeaveRoomHandle failed.");
+        }
+        
         currChessBoard = NULL;
     }
 
@@ -75,18 +86,52 @@ void UserSession::DestructResource()
             }
         }
     }
-    
-    thread = NULL;
+
 
     if (bufev != NULL) {
         bufferevent_free(bufev);
+        bufev = NULL;
     }
 
     event_del(&timer_ev);
     ::close(clifd);
 
-    LOG_INFO(MODULE_COMMON, "################### User[%s] Destroried! ###################\r\n", user_info.account.empty() ? "Unknown" : user_info.account.c_str());
+    if (ad_img_fp != NULL) {
+        fclose(ad_img_fp);
+        ad_img_fp = NULL;
+    }
 
+    LOG_INFO(MODULE_COMMON, "################### User[%s] Destroried ###################\r\n", user_info.account.empty() ? "Unknown" : user_info.account.c_str());
+
+    thread = NULL;
+    clifd = -1;
+    user_info.Initial();
+
+    //the following handling would let UserSession object crached when descontruct
+    //memset(&user_info, 0, sizeof(UsersInfo));
+
+}
+
+u_int8 *UserSession::GetBuffer(const size_t size)
+{
+    if ((buf_size == 0) && (size < MAX_DATA_LENGTH)) {
+        buffer = (u_int8*)calloc(1, MAX_DATA_LENGTH);
+        buf_size = MAX_DATA_LENGTH;
+    } else if (size > buf_size) {
+        buffer = (u_int8*)realloc(buffer, size);
+        buf_size = size;
+    }
+
+    if (buffer == NULL) {
+        LOG_ERROR(MODULE_COMMON, "alloc memery failed!");
+    }
+
+    return buffer;
+}
+
+size_t UserSession::GetBufferSize(void) const
+{
+    return buf_size;
 }
 
 void UserSession::IncreaseScore(u_int32 score)
@@ -98,15 +143,5 @@ void UserSession::ReduceScore(u_int32 score)
 {
     user_info.score -= score;
     thread->UpdateUserScoreToDB(this->user_info.account, this->user_info.score);
-}
-
-bool UserSession::GetHandleResult() const
-{
-    return send_status;
-}
-
-void UserSession::SetHandleResult(bool result)
-{
-    send_status = result;
 }
 

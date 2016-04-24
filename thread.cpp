@@ -108,9 +108,13 @@ bool Thread::detach()
     return (ret);
 }
 
-WorkThread::~WorkThread(){}
+WorkThread::~WorkThread()
+{
+    ::close(notify_receive_fd);
+    ::close(notify_send_fd);
+}
 
-WorkThread::WorkThread():base(NULL),pdb_con(NULL){}
+WorkThread::WorkThread():base(NULL),notify_receive_fd(-1), notify_send_fd(-1),pdb_con(NULL){}
 
 bool WorkThread::SetupThread()
 {
@@ -128,10 +132,10 @@ bool WorkThread::SetupThread()
     }
 
     notify_receive_fd = fds[0];
-    notify_send_fd = fds[1];        
+    notify_send_fd = fds[1];
 
     /* Listen for notifications from other threads */
-    
+
     AddEventForBase(base, &notify_event, notify_receive_fd, EV_READ | EV_PERSIST, NotifyReceivedProcess, (void*)this);
 
     return true;
@@ -202,19 +206,21 @@ void WorkThread::ResetTimer(UserSession *session)
 void WorkThread::NotifyReceivedProcess(int fd, short which, void *arg)
 {
     WorkThread * pThread = static_cast<WorkThread *>(arg);
-    char buf[1] ={0};
     UserSession *session = NULL;
     MainThread *mainThread = MainThread::GetMainThreadObj();
- 
-    if (::read(fd, buf, 1) != 1)
+    PipeMsg msg;
+
+    if (::read(fd, &msg, sizeof(PipeMsg)) <= 0) {
         return;
-    
-    switch(buf[0])
+    }
+
+    switch(msg.command)
     {
         case COMMAND_NOTIFY_ADD_EVENT:
-        session = mainThread->PopFrontSession();
+        session = mainThread->GetOneSessionFromPool();
         if (session != NULL)
         {
+            session->clifd = msg.fd;
             session->thread = pThread;
             //AddEventForBase(pThread->base, &session->event, session->clifd, EV_READ | EV_PERSIST, OnRead, arg);
             pThread->fdSessionMap.insert(pair<int, UserSession*>(session->clifd, session));
@@ -233,7 +239,7 @@ void WorkThread::NotifyReceivedProcess(int fd, short which, void *arg)
 
                 bufferevent_set_timeouts(session->bufev, NULL, &session->send_tv);
             }
-    
+            LOG_DEBUG(MODULE_COMMON, "Initial the session successfully.");
         }
         break;
 
@@ -247,12 +253,13 @@ void WorkThread::NotifyReceivedProcess(int fd, short which, void *arg)
 
 }
 
-void WorkThread::NotifyThread(const char command)
+void WorkThread::NotifyThread(const u_int8 command, int fd)
 {
-    char buf[1] = {0};
-    buf[0] = command;
+    PipeMsg msg;
+    msg.command = command;
+    msg.fd = fd;
     
-    if (write(this->notify_send_fd, buf, 1) != 1) {
+    if (write(this->notify_send_fd, &msg, sizeof(PipeMsg)) <= 0) {
         LOG_ERROR(MODULE_COMMON, "Writing to thread notify pipe failed");
     }
 }
@@ -261,12 +268,14 @@ void WorkThread::DestrotiedSessions()
 {
     map <int, UserSession*>::iterator iter;
     UserSession *session = NULL;
-    for ( iter = fdSessionMap.begin(); iter != fdSessionMap.end(); iter++ ) {
+    for ( iter = fdSessionMap.begin(); iter != fdSessionMap.end();) {
         //free the user sessions
         session = iter->second;
         if (session != NULL) {
-            session->DestructResource();
-            delete session;
+            MainThread::GetMainThreadObj()->RecycleSession(session);
+            iter = fdSessionMap.erase(iter);
+        } else {
+            iter++;
         }
     }
     fdSessionMap.clear();
@@ -275,32 +284,15 @@ void WorkThread::DestrotiedSessions()
 bool WorkThread::OnWrite(int iCliFd, const u_int32 msg_type, const string &data, void *arg)
 {
     UserSession *user = static_cast<UserSession *>(arg);
-    u_int8 buffer[MAX_DATA_LENGTH] = { 0 };
-    u_int8 *buf = &buffer[0];
-    u_int8 *pBuf = NULL;
+    u_int8 *buf = user->GetBuffer(data.size() + DATA_HEAD_LENGTH);
     u_int32 totalSize = data.size() + DATA_HEAD_LENGTH;
     bool ret = true;
 
     if (user == NULL || iCliFd < 0) {
-        LOG_ERROR(MODULE_NET, "Got parameter failed.");
+        LOG_ERROR(MODULE_NET, "Got parameter failed iCliFd[%d] user[%p].", iCliFd, user);
         return false;
     }
 
-    if(!user->GetHandleResult()) {
-        LOG_ERROR(MODULE_NET, "Can NOT send, this session[%s] will be closed!", user->user_info.account.c_str());
-        return false;
-    }
-
-    if (totalSize > MAX_DATA_LENGTH) {
-        try {
-            pBuf = new u_int8[totalSize];
-        } catch (exception &e) {
-            LOG_ERROR(MODULE_NET, "New pBuf failed.");
-            return false;
-        }
-        buf = pBuf;
-    }
-    
     memcpy(buf, &totalSize, DATA_HEAD_LENGTH/2);
     memcpy(buf + DATA_HEAD_LENGTH/2 , &msg_type, DATA_HEAD_LENGTH/2);
     memcpy(buf + DATA_HEAD_LENGTH, data.c_str(), data.size());
@@ -308,11 +300,6 @@ bool WorkThread::OnWrite(int iCliFd, const u_int32 msg_type, const string &data,
     LOG_DEBUG(MODULE_NET, "Send totalSize[%u] msg_type %u for user[%s]", totalSize, msg_type, user->user_info.account.c_str());
 
     bufferevent_write(user->bufev, buf, totalSize);
-
-    if (pBuf != NULL) {
-        delete []pBuf;
-        pBuf = NULL;
-    }
 
     return ret;
 }
@@ -339,7 +326,7 @@ bool WorkThread::MessageHandle(int fd, const u_int32 msg_type, const string &msg
     if(l_it != fdSessionMap.end()) {
         session = static_cast<UserSession *>(l_it->second);
         if (session != NULL) {
-            if ((!session->MessageHandle(msg_type, msg)) || (!session->GetHandleResult())) {
+            if (!session->MessageHandle(msg_type, msg)) {
                 LOG_ERROR(MODULE_COMMON, "MessageHandle failed,close the connection for [%s].",session->user_info.account.c_str());
                 ClosingClientCon(fd);
             } else {
@@ -373,8 +360,7 @@ bool WorkThread::ClosingClientCon(int fd)
         session = static_cast<UserSession *>(l_it->second);
         if (session != NULL) {
             fdSessionMap.erase(l_it);
-            session->DestructResource();
-            delete session;
+            MainThread::GetMainThreadObj()->RecycleSession(session);
         }
     }
 
@@ -670,19 +656,7 @@ void WorkThread::OnReadCb(struct bufferevent *bev, void *arg)
 
     if ((input_len == session->buf_info.total_size) && (session->buf_info.got_head)) {
 
-        u_int8 buffer[MAX_DATA_LENGTH] = { 0 };
-        u_int8 *buf = &buffer[0];
-        u_int8 *pBuf = NULL;
-
-        if (session->buf_info.total_size > MAX_DATA_LENGTH) {
-            try {
-                pBuf = new u_int8[session->buf_info.total_size];
-            } catch (exception &e) {
-                LOG_ERROR(MODULE_NET, "New pBuf failed.");
-                return;
-            }
-            buf = pBuf;
-        }
+        u_int8 *buf = session->GetBuffer(session->buf_info.total_size);
 
         bufferevent_read(bev, buf, session->buf_info.total_size);
 
@@ -693,11 +667,6 @@ void WorkThread::OnReadCb(struct bufferevent *bev, void *arg)
             session->buf_info.total_size = 0;
             session->buf_info.msg_type = 0;
             session->buf_info.got_head = false;
-        }
-
-        if (pBuf != NULL) {
-            delete pBuf;
-            pBuf = NULL;
         }
     }
 }
@@ -722,7 +691,6 @@ void WorkThread::OnEventCb(struct bufferevent *bev, short events, void *arg)
     }
 
    if (!ret) {
-        session->SetHandleResult(ret);
         thread->ClosingClientCon(session->clifd);
    }
 }
@@ -730,7 +698,7 @@ void WorkThread::OnEventCb(struct bufferevent *bev, short events, void *arg)
 void WorkThread::Run()
 {
     LOG_INFO(MODULE_COMMON, "Start run thread[%lu]", getThreadID());
-    
+
     SetupThread();
 
     if (!IniSQLConnection()) {
@@ -739,13 +707,13 @@ void WorkThread::Run()
     }
 
     event_base_dispatch(base);
-    
-    event_base_free(base);
 
-    this->DestrotiedSessions();
+    DestrotiedSessions();
 
     mysql_db_close(pdb_con);
-    
+
+    event_base_free(base);
+
     LOG_INFO(MODULE_COMMON, "End run thread[%lu]", getThreadID());
 }
 
