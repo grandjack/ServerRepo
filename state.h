@@ -64,17 +64,23 @@ typedef enum
     MSG_TYPE_MAX
 }MessageType;
 
-typedef struct {
+struct ImageVersions
+{
     string version;
     bool mandatory_update;
     string info;
     string locate_path;
-}ImageVersions;
 
-typedef struct {
+    ImageVersions():version(""),mandatory_update(false),info(""),locate_path(""){}
+};
+
+struct PipeMsg
+{
     u_int8 command;
     int fd;
-}PipeMsg;
+
+    PipeMsg():command(0),fd(-1){}
+};
 
 class State
 {

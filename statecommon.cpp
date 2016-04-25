@@ -281,7 +281,6 @@ bool StateAdPictureDownload::AdPictureItemHandle(const string &msg)
 {
     bool ret = true;
     AdPicturesInfo info;
-    AdPictureContentReply reply;
     AdPictureReq item;
     string data;
 

@@ -70,7 +70,15 @@ struct AdPicturesInfo
     string image_type;
     string link_url;
     string locate_path;
-    u_int32 image_size;    
+    u_int32 image_size;
+
+    AdPicturesInfo(){Reset();}
+    void Reset()
+    {
+        image_hashcode=image_name=image_type=link_url=locate_path="";
+        image_id=image_size=0;
+        existed = false;
+    }
 };
 
 struct ReadBufInfo

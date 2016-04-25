@@ -14,8 +14,6 @@ MainThread::~MainThread()
     pthread_mutex_destroy(&init_lock);
     pthread_cond_destroy(&init_cond);
 
-    event_base_free(mainEventBase);
-
     std::map<u_int32, GameHall *>::iterator iter;
     for ( iter = GameHallMap.begin(); iter != GameHallMap.end(); iter++ ) {
         GameHall *pGameHall = iter->second;
@@ -29,6 +27,9 @@ MainThread::~MainThread()
     FindPwdViaEmail::Destrory();
 
     DestrorySessionsFromPool(0, true);
+
+    event_base_free(mainEventBase);
+    ::close(listenFd);
 }
 MainThread::MainThread() : lastSelectIndex(0),threadNum(0)
 {
