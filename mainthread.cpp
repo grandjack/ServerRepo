@@ -229,6 +229,7 @@ void MainThread::DestrorySessionsFromPool(u_int16 num, bool del_all)
         for ( iter = sessionList.begin(); iter != sessionList.end(); iter++ ) {
             session = static_cast<UserSession*>(*iter);
             if (session != NULL) {
+                session->DestructResource();
                 if (session->buffer != NULL) {
                     free(session->buffer);
                     session->buffer = NULL;
@@ -244,6 +245,7 @@ void MainThread::DestrorySessionsFromPool(u_int16 num, bool del_all)
         while(num--) {
             session = sessionList.back();
             if (session != NULL) {
+                session->DestructResource();
                 if (session->buffer != NULL) {
                     free(session->buffer);
                     session->buffer = NULL;
@@ -279,7 +281,7 @@ UserSession* MainThread::GetOneSessionFromPool(void)
         session = sessionList.front();
         sessionList.pop_front();
 
-        if ((size - 1) < connectionMaxStep/2) {
+        if ((size - 1) <= 0) {
             CreatSessionsPool();
         }
     } else {

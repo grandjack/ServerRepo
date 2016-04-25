@@ -87,25 +87,26 @@ void UserSession::DestructResource()
         }
     }
 
+    if (ad_img_fp != NULL) {
+        fclose(ad_img_fp);
+        ad_img_fp = NULL;
+    }
 
     if (bufev != NULL) {
         bufferevent_free(bufev);
         bufev = NULL;
     }
 
-    event_del(&timer_ev);
-    ::close(clifd);
+    if (clifd != -1) {
+        event_del(&timer_ev);
+        ::close(clifd);
+        clifd = -1;
 
-    if (ad_img_fp != NULL) {
-        fclose(ad_img_fp);
-        ad_img_fp = NULL;
+        LOG_INFO(MODULE_COMMON, "################### User[%s] Destroried ###################\r\n", user_info.account.empty() ? "Unknown" : user_info.account.c_str());
+
+        thread = NULL;
+        user_info.Initial();
     }
-
-    LOG_INFO(MODULE_COMMON, "################### User[%s] Destroried ###################\r\n", user_info.account.empty() ? "Unknown" : user_info.account.c_str());
-
-    thread = NULL;
-    clifd = -1;
-    user_info.Initial();
 
     //the following handling would let UserSession object crached when descontruct
     //memset(&user_info, 0, sizeof(UsersInfo));
