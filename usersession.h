@@ -52,9 +52,9 @@ public:
     string user_name;
     string phone;
 
-    UsersInfo(){Initial();}
+    UsersInfo(){Reset();}
 
-    void Initial()
+    void Reset()
     {
         account=password=email=head_photo=user_name=phone="";
         score=0;
@@ -73,11 +73,20 @@ struct AdPicturesInfo
     u_int32 image_size;    
 };
 
-typedef struct {
+struct ReadBufInfo
+{
     u_int32 total_size;
     u_int32 msg_type;
     bool got_head;
-}ReadBufInfo;
+
+    ReadBufInfo(){Reset();}
+
+    void Reset()
+    {
+        total_size=msg_type=0;
+        got_head=false;
+    }
+};
 
 class UserSession
 {

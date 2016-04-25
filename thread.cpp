@@ -266,16 +266,19 @@ void WorkThread::NotifyThread(const u_int8 command, int fd)
 
 void WorkThread::DestrotiedSessions()
 {
-    map <int, UserSession*>::iterator iter;
+    map <int, UserSession*>::iterator iter, tmp;
     UserSession *session = NULL;
     for ( iter = fdSessionMap.begin(); iter != fdSessionMap.end();) {
         //free the user sessions
         session = iter->second;
         if (session != NULL) {
             MainThread::GetMainThreadObj()->RecycleSession(session);
-            iter = fdSessionMap.erase(iter);
+            tmp = iter;
+            ++iter;
+            fdSessionMap.erase(tmp);
+            //for c++11, just use iter=fdSessionMap.erase(iter);
         } else {
-            iter++;
+            ++iter;
         }
     }
     fdSessionMap.clear();
@@ -662,11 +665,9 @@ void WorkThread::OnReadCb(struct bufferevent *bev, void *arg)
 
         const string data((char *)&buf[DATA_HEAD_LENGTH], session->buf_info.total_size - DATA_HEAD_LENGTH);
 
-        if (thread->MessageHandle(session->clifd, session->buf_info.msg_type, data)) {
+        if (true == thread->MessageHandle(session->clifd, session->buf_info.msg_type, data)) {
             //reset the session flag after executing MessageHandle() only when it executed successfully
-            session->buf_info.total_size = 0;
-            session->buf_info.msg_type = 0;
-            session->buf_info.got_head = false;
+            session->buf_info.Reset();
         }
     }
 }

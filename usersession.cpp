@@ -12,10 +12,6 @@ UserSession::UserSession():clifd(-1),thread(NULL),locate(LOCATION_UNKNOWN),
     tv.tv_sec = 60;//every 60 seconds trigger the timer
     tv.tv_usec = 0;
 
-    buf_info.total_size = 0;
-    buf_info.msg_type = 0;
-    buf_info.got_head = false;
-
     send_tv.tv_sec = 50;
     send_tv.tv_usec = 0;
 
@@ -105,7 +101,8 @@ void UserSession::DestructResource()
         LOG_INFO(MODULE_COMMON, "################### User[%s] Destroried ###################\r\n", user_info.account.empty() ? "Unknown" : user_info.account.c_str());
 
         thread = NULL;
-        user_info.Initial();
+        user_info.Reset();
+        buf_info.Reset();
     }
 
     //the following handling would let UserSession object crached when descontruct
