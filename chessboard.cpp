@@ -831,7 +831,9 @@ void ChessBoard::BroadCastHallInfo(UserSession *user)
             std::map<int,UserSession*>::iterator iter;
             for ( iter = thread->fdSessionMap.begin(); iter != thread->fdSessionMap.end(); iter++ ) {                
                 UserSession *tmp_user = iter->second;
-                if (tmp_user != NULL) {
+                if ((tmp_user != NULL) && (tmp_user->stateMachine != NULL) &&
+                    ((tmp_user->stateMachine->GetType() == STATE_GAME_READY) ||
+                     (tmp_user->stateMachine->GetType() == STATE_GAME_PLAY))) {
                     tmp_user->MessageReply(MSG_HALL_INFO,data);
                     tmp_user->stateMachine->GameHallSumaryHandle(data);
                 }

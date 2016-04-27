@@ -239,7 +239,6 @@ void WorkThread::NotifyReceivedProcess(int fd, short which, void *arg)
 
                 bufferevent_set_timeouts(session->bufev, NULL, &session->send_tv);
             }
-            LOG_DEBUG(MODULE_COMMON, "Initial the session successfully.");
         }
         break;
 

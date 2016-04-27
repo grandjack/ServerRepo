@@ -152,6 +152,8 @@ void MainThread::IniServerEnv(int port)
     if (listen(listenFd, 32) < 0)
     {
         LOG_ERROR(MODULE_COMMON, "listen failed");
+        ::close(listenFd);
+        return;
     }
 
     AddEventForBase(mainEventBase, &listenEvent, listenFd, EV_READ | EV_PERSIST, AcceptHandler, (void*)this);
