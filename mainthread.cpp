@@ -277,21 +277,15 @@ void MainThread::RecycleSession(UserSession *session)
 UserSession* MainThread::GetOneSessionFromPool(void)
 {
     UserSession* session = NULL;
-    int size = 0;
 
     pthread_mutex_lock(&init_lock);
-    if ((size = sessionList.size()) > 0) {
+    if (sessionList.size() > 0) {
         session = sessionList.front();
-        sessionList.pop_front();
-
-        if ((size - 1) <= 0) {
-            CreatSessionsPool();
-        }
     } else {
         CreatSessionsPool();
         session = sessionList.front();
-        sessionList.pop_front();
     }
+    sessionList.pop_front();
     pthread_mutex_unlock(&init_lock);
 
     return session;
