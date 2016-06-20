@@ -14,11 +14,9 @@ FindPwdViaEmail* FindPwdViaEmail::instance_ = NULL;
 
 FindPwdViaEmail::FindPwdViaEmail()
 {
-    pthread_mutex_init(&mutex_, NULL);
 }
 FindPwdViaEmail::~FindPwdViaEmail()
 {
-    pthread_mutex_destroy(&mutex_);
 }
 
 void FindPwdViaEmail::Destrory()
@@ -33,17 +31,12 @@ void FindPwdViaEmail::Destrory()
 bool FindPwdViaEmail::FindPwdViaAccount(const string &account)
 {
     if (instance_ == NULL) {
-        pthread_mutex_lock(&instance_->mutex_);
-        if (instance_ == NULL) {
-            instance_ = new FindPwdViaEmail();
-            if (instance_ != NULL) {
-                timer_init();
-            } else {
-                pthread_mutex_unlock(&instance_->mutex_);
-                return false;
-            }
+        instance_ = new FindPwdViaEmail();
+        if (instance_ != NULL) {
+            timer_init();
+        } else {
+            return false;
         }
-        pthread_mutex_unlock(&instance_->mutex_);
     }
 
     return instance_->AddToTimerList(account);
@@ -111,13 +104,13 @@ bool FindPwdViaEmail::WriteUserTokentoFile(const string &account, const string &
     bool ret_var = true;
 
     strncpy(buf, token.c_str(), sizeof(buf) - 1);
-    
+
     fptr = fopen(path.c_str(), "w+");
     if (fptr != NULL) {
         if (fwrite(buf, 1, token.size(), fptr) < 0 ) {
             LOG_ERROR(MODULE_COMMON, "fwrite token failed for user[%s]", account.c_str());
         }
-        
+
         fclose(fptr);
     }
 

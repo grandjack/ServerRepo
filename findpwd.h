@@ -32,7 +32,6 @@ private:
 
 private:
     static FindPwdViaEmail *instance_;
-    pthread_mutex_t mutex_;
 };
 
 #endif /*__FIND_PASSWORD_HEAD__*/
